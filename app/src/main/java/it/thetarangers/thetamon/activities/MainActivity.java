@@ -10,6 +10,8 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.apache.commons.io.FileUtils;
@@ -38,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 ((TextView) findViewById(R.id.tv_hello)).setText("Unzip Completed");
+                ((ProgressBar) findViewById(R.id.progressBar)).setVisibility(View.GONE);
             }
         };
         final Thread t = new Thread() {
@@ -61,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
         FileDownloader fd = new FileDownloader();
 
-        fd.downloadFile(getApplicationContext(),
+        fd.downloadFile(getApplicationContext(), // TODO static strings
                 "https://github.com/ThetaRangers/Thetamon/blob/master/sprites.zip?raw=true",
                 "Sprites", "sprites.zip");
 
