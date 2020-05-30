@@ -13,4 +13,9 @@ public class Pokemon {
 
     @ColumnInfo(name = "name")
     public String name;
+
+    public Pokemon(int id, String name){
+        this.id = id;
+        this.name = name;
+    }
 }
