@@ -6,6 +6,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,9 +14,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Adapter;
 import android.widget.ImageView;
+import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
@@ -38,14 +42,23 @@ public class PokedexActivity extends AppCompatActivity {
         new Holder();
     }
 
+    private void search(String searchedString){
+        Log.v("SC","Searched "+searchedString);
+
+    }
+
+
     class Holder {
         final RecyclerView rvPokedex;
+        final SearchView svSearch;
 
         public Holder(){
             rvPokedex = findViewById(R.id.rvPokedex);
             rvPokedex.setLayoutManager(new LinearLayoutManager(PokedexActivity.this));
+            svSearch = findViewById(R.id.svSearch);
             final PokemonAdapter adapter = new PokemonAdapter();
-
+            SearchViewListener svl = new SearchViewListener();
+            svSearch.setOnQueryTextListener(svl);
 
             final Thread t = new Thread() {
                 @Override
@@ -63,6 +76,33 @@ public class PokedexActivity extends AppCompatActivity {
 
             t.start();
         }
+    }
+
+    class SearchViewListener implements SearchView.OnQueryTextListener{
+
+        @Override
+        public boolean onQueryTextChange(String newText){
+            //DUMP
+            return true;
+        }
+
+        @Override
+        public boolean onQueryTextSubmit(String query){
+            search(query);
+            hideKeyboard(PokedexActivity.this);
+            return true;
+        }
+
+        public void hideKeyboard(Activity activity) {
+            InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+            View view = activity.getCurrentFocus();
+            if (view == null) {
+                view = new View(activity);
+            }
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+
+
     }
 
     class PokemonAdapter extends RecyclerView.Adapter<ViewHolder>{
