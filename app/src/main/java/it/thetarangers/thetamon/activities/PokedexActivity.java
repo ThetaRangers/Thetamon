@@ -22,10 +22,10 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import it.thetarangers.thetamon.R;
-import it.thetarangers.thetamon.database.PokemonDao;
-import it.thetarangers.thetamon.database.PokemonDb;
+import it.thetarangers.thetamon.database.DaoThread;
 import it.thetarangers.thetamon.model.Pokemon;
 import it.thetarangers.thetamon.utilities.ImageManager;
 
@@ -42,15 +42,20 @@ public class PokedexActivity extends AppCompatActivity {
         setContentView(R.layout.activity_pokedex);
         handler = new Handler();
 
+        final DaoThread daoThread = new DaoThread();
+
         update = new Runnable() {
             @Override
             public void run() {
+                list = daoThread.getList();
                 holder.adapter.setPokemonList(list);
-                holder.rvPokedex.setAdapter(holder.adapter);
             }
         };
 
         holder = new Holder();
+
+        daoThread.getPokemons(PokedexActivity.this, handler, update);
+
     }
 
     private void search(String searchedString){
@@ -68,27 +73,13 @@ public class PokedexActivity extends AppCompatActivity {
             rvPokedex = findViewById(R.id.rvPokedex);
             rvPokedex.setLayoutManager(new LinearLayoutManager(PokedexActivity.this));
             adapter = new PokemonAdapter();
+            rvPokedex.setAdapter(adapter);
 
 
             svSearch = findViewById(R.id.svSearch);
-            final PokemonAdapter adapter = new PokemonAdapter();
             SearchViewListener svl = new SearchViewListener();
             svSearch.setOnQueryTextListener(svl);
 
-            final Thread t = new Thread() {
-                @Override
-                public void run() {
-                    PokemonDb db = PokemonDb.getInstance(PokedexActivity.this);
-                    PokemonDao dao = db.pokemonDao();
-
-                    list = dao.getPokemons();
-
-                    Log.w("POKE", list.size() + "");
-                    handler.post(update);
-                }
-            };
-
-            t.start();
         }
     }
 
@@ -113,7 +104,7 @@ public class PokedexActivity extends AppCompatActivity {
             if (view == null) {
                 view = new View(activity);
             }
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            Objects.requireNonNull(imm).hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
 
 
@@ -122,10 +113,6 @@ public class PokedexActivity extends AppCompatActivity {
     class PokemonAdapter extends RecyclerView.Adapter<ViewHolder>{
         private List<Pokemon> pokemonList;
         private ImageManager imageManager = new ImageManager();
-
-        public PokemonAdapter(List<Pokemon> pokemonList){
-            this.pokemonList = pokemonList;
-        }
 
         public PokemonAdapter(){
             this.pokemonList = new ArrayList<>();
@@ -164,7 +151,7 @@ public class PokedexActivity extends AppCompatActivity {
         }
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder{
+    static class ViewHolder extends RecyclerView.ViewHolder{
         ImageView ivSprite;
         TextView tvName;
         TextView tvId;
