@@ -2,7 +2,7 @@ package it.thetarangers.thetamon.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.BroadcastReceiver;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -13,7 +13,6 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -38,6 +37,10 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 ((TextView) findViewById(R.id.tv_hello)).setText("Unzip Completed");
                 findViewById(R.id.progressBar).setVisibility(View.GONE);
+
+                Intent intent = new Intent(MainActivity.this, PokedexActivity.class);
+                startActivity(intent);
+                finish();
             }
         };
 
@@ -53,8 +56,6 @@ public class MainActivity extends AppCompatActivity {
                 h.post(update);
             }
         };
-
-        t.start();
 
         VolleyPokemon volley = new VolleyPokemon(MainActivity.this) {
             @Override
@@ -74,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                         Log.w("POKE", "Inserted " + dao.getPokemons().size() + " in the database");
-                        h.post(update);
+                        t.start();
                     }
                 };
 

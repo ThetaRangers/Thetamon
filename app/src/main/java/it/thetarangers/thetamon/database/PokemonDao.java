@@ -9,20 +9,25 @@ import java.util.List;
 import it.thetarangers.thetamon.model.Pokemon;
 
 @Dao
-public interface PokemonDao {
+public abstract class PokemonDao {
     @Query("SELECT * FROM Pokemon")
-    List<Pokemon> getPokemons();
+    public abstract List<Pokemon> getPokemons();
 
     @Insert
-    void insertPokemon(Pokemon pokemon);
+    public abstract void insertPokemon(Pokemon pokemon);
 
     @Query("DELETE FROM Pokemon")
-    void deleteAll();
+    public abstract void deleteAll();
 
     @Query("SELECT DISTINCT id, name FROM Pokemon WHERE id = :pokemonId")
-    Pokemon getPokemonFromId(int pokemonId);
+    public abstract Pokemon getPokemonFromId(int pokemonId);
 
     //TODO ricerca da parte di nome
     @Query("SELECT id, name FROM Pokemon WHERE name LIKE :name")
-    List<Pokemon> getPokemonFromName(String name);
+    abstract List<Pokemon> getPokemonFromNameInterface(String name);
+
+    public List<Pokemon> getPokemonsFromName(String name){
+        return getPokemonFromNameInterface(name + "%");
+    }
+
 }
