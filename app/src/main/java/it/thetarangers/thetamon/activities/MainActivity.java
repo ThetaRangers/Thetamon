@@ -19,8 +19,7 @@ import java.util.List;
 import java.util.Objects;
 
 import it.thetarangers.thetamon.R;
-import it.thetarangers.thetamon.database.PokemonDao;
-import it.thetarangers.thetamon.database.PokemonDb;
+import it.thetarangers.thetamon.database.DaoThread;
 import it.thetarangers.thetamon.model.Pokemon;
 import it.thetarangers.thetamon.utilities.FileDownloader;
 import it.thetarangers.thetamon.utilities.FileUnzipper;
@@ -79,23 +78,11 @@ public class MainActivity extends AppCompatActivity {
                 Log.w("POKE", pokemonList.size() + "");
 
                 final List<Pokemon> pokemons = pokemonList;
-                final Thread tDao = new Thread(){
-                    @Override
-                    public void run() {
-                        PokemonDb db = PokemonDb.getInstance(MainActivity.this.getApplicationContext());
-                        final PokemonDao dao = db.pokemonDao();
+                final DaoThread daoThread = new DaoThread();
 
-                        dao.deleteAll();
-                        for(int i = 0; i < pokemons.size(); i++){
-                            dao.insertPokemon(pokemons.get(i));
-                        }
+                daoThread.fill(MainActivity.this, pokemons, null, null);
 
-                        Log.w("POKE", "Inserted " + dao.getPokemons().size() + " in the database");
-                        t.start();
-                    }
-                };
-
-                tDao.start();
+                t.start();
             }
         };
 
