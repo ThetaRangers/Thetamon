@@ -2,7 +2,9 @@ package it.thetarangers.thetamon.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -31,12 +33,26 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        SharedPreferences sharedPreferences = getPreferences(Context.MODE_PRIVATE);
+        final SharedPreferences.Editor editor = sharedPreferences.edit();
+        Boolean isFirstUse = sharedPreferences.getBoolean("FirstUse", true);
+
+        if (!isFirstUse) {
+            Log.d("POKE", "Bypassed Download");
+            Intent intent = new Intent(MainActivity.this, PokedexActivity.class);
+            startActivity(intent);
+            finish();
+            return;
+        }
+
         final Handler h = new Handler();
         final Runnable update = new Runnable() {
             @Override
             public void run() {
                 ((TextView) findViewById(R.id.tv_hello)).setText("Unzip Completed");
                 findViewById(R.id.progressBar).setVisibility(View.GONE);
+                editor.putBoolean("FirstUse", false);
+                editor.apply();
 
                 Intent intent = new Intent(MainActivity.this, PokedexActivity.class);
                 startActivity(intent);

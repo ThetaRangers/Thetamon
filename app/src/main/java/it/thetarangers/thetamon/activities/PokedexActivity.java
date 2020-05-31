@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -15,13 +14,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Adapter;
 import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,12 +29,26 @@ import it.thetarangers.thetamon.utilities.ImageManager;
 
 public class PokedexActivity extends AppCompatActivity {
 
+    Handler handler;
+    Runnable update;
+    Holder holder;
+    List<Pokemon> list;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pokedex);
+        handler = new Handler();
 
-        new Holder();
+        update = new Runnable() {
+            @Override
+            public void run() {
+                holder.adapter.setPokemonList(list);
+                holder.rvPokedex.setAdapter(holder.adapter);
+            }
+        };
+
+        holder = new Holder();
     }
 
     private void search(String searchedString){
@@ -50,11 +59,14 @@ public class PokedexActivity extends AppCompatActivity {
 
     class Holder {
         final RecyclerView rvPokedex;
+        final PokemonAdapter adapter;
         final SearchView svSearch;
 
         public Holder(){
             rvPokedex = findViewById(R.id.rvPokedex);
             rvPokedex.setLayoutManager(new LinearLayoutManager(PokedexActivity.this));
+            adapter = new PokemonAdapter();
+
             svSearch = findViewById(R.id.svSearch);
             final PokemonAdapter adapter = new PokemonAdapter();
             SearchViewListener svl = new SearchViewListener();
@@ -66,11 +78,10 @@ public class PokedexActivity extends AppCompatActivity {
                     PokemonDb db = PokemonDb.getInstance(PokedexActivity.this);
                     PokemonDao dao = db.pokemonDao();
 
-                    List<Pokemon> list = dao.getPokemons();
+                    list = dao.getPokemons();
 
                     Log.w("POKE", list.size() + "");
-                    adapter.setPokemonList(list);
-                    rvPokedex.setAdapter(adapter);
+                    handler.post(update);
                 }
             };
 
