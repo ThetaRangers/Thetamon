@@ -25,7 +25,7 @@ public abstract class PokemonDb extends RoomDatabase {
         if(instance == null){
             //TODO remove allowMainThreadQueries()
             instance = Room.databaseBuilder(context.getApplicationContext(),
-                    PokemonDb.class, "pokemonDb").allowMainThreadQueries().build();
+                    PokemonDb.class, "pokemonDb").build();
         }
         return instance;
     }

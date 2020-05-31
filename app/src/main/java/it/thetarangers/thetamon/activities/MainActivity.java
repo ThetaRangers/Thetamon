@@ -13,6 +13,8 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import it.thetarangers.thetamon.R;
@@ -21,6 +23,7 @@ import it.thetarangers.thetamon.database.PokemonDb;
 import it.thetarangers.thetamon.model.Pokemon;
 import it.thetarangers.thetamon.utilities.FileDownloader;
 import it.thetarangers.thetamon.utilities.FileUnzipper;
+import it.thetarangers.thetamon.utilities.VolleyPokemon;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         final Handler h = new Handler();
         final Runnable update = new Runnable() {
             @Override
@@ -36,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
                 findViewById(R.id.progressBar).setVisibility(View.GONE);
             }
         };
+
         final Thread t = new Thread() {
             @Override
             public void run() {
@@ -51,15 +56,34 @@ public class MainActivity extends AppCompatActivity {
 
         t.start();
 
-        PokemonDb db = PokemonDb.getInstance(this.getApplicationContext());
+        VolleyPokemon volley = new VolleyPokemon(MainActivity.this) {
+            @Override
+            public void fill(List<Pokemon> pokemonList) {
+                Log.w("POKE", pokemonList.size() + "");
 
-        PokemonDao dao = db.pokemonDao();
+                final List<Pokemon> pokemons = pokemonList;
+                final Thread tDao = new Thread(){
+                    @Override
+                    public void run() {
+                        PokemonDb db = PokemonDb.getInstance(MainActivity.this.getApplicationContext());
+                        final PokemonDao dao = db.pokemonDao();
 
+                        dao.deleteAll();
+                        for(int i = 0; i < pokemons.size(); i++){
+                            dao.insertPokemon(pokemons.get(i));
+                        }
 
-        dao.deleteAll();
-        dao.insertPokemon(new Pokemon(1, "charmander"));
+                        Log.w("POKE", "Inserted " + dao.getPokemons().size() + " in the database");
+                        h.post(update);
+                    }
+                };
 
-        Log.w("POKE", dao.getPokemons().get(0).name);
+                tDao.start();
+            }
+        };
+
+        volley.getPokemonList();
+
     }
 
     private void unpack() {

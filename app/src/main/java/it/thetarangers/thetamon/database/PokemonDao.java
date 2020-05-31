@@ -1,7 +1,6 @@
 package it.thetarangers.thetamon.database;
 
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 
@@ -12,12 +11,18 @@ import it.thetarangers.thetamon.model.Pokemon;
 @Dao
 public interface PokemonDao {
     @Query("SELECT * FROM Pokemon")
-    public List<Pokemon> getPokemons();
+    List<Pokemon> getPokemons();
 
     @Insert
-    public void insertPokemon(Pokemon pokemon);
+    void insertPokemon(Pokemon pokemon);
 
     @Query("DELETE FROM Pokemon")
-    public void deleteAll();
+    void deleteAll();
 
+    @Query("SELECT DISTINCT id, name FROM Pokemon WHERE id = :pokemonId")
+    Pokemon getPokemonFromId(int pokemonId);
+
+    //TODO ricerca da parte di nome
+    @Query("SELECT id, name FROM Pokemon WHERE name LIKE :name")
+    List<Pokemon> getPokemonFromName(String name);
 }
