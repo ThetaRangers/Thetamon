@@ -6,15 +6,21 @@ import android.graphics.BitmapFactory;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class ImageManager {
 
     public Bitmap loadFromDisk (String path, String filename) {
-        try {
-            File f = new File(path, filename);
-            return BitmapFactory.decodeStream(new BufferedInputStream(new FileInputStream(f)));
-        } catch (FileNotFoundException e) {
+
+        File f = new File(path, filename);
+        try (FileInputStream fileInputStream = new FileInputStream(f)) {
+            try (BufferedInputStream bufferedInputStream =
+                         new BufferedInputStream(fileInputStream)) {
+                return BitmapFactory.decodeStream(bufferedInputStream);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
