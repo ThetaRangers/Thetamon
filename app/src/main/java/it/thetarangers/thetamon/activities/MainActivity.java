@@ -1,15 +1,17 @@
 package it.thetarangers.thetamon.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.apache.commons.io.FileUtils;
 
@@ -23,10 +25,12 @@ import it.thetarangers.thetamon.database.DaoThread;
 import it.thetarangers.thetamon.model.Pokemon;
 import it.thetarangers.thetamon.utilities.FileDownloader;
 import it.thetarangers.thetamon.utilities.FileUnzipper;
+import it.thetarangers.thetamon.utilities.ImageManager;
 import it.thetarangers.thetamon.utilities.VolleyPokemon;
 
 public class MainActivity extends AppCompatActivity {
 
+    private List<Pokemon> pokemonListOna;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         final SharedPreferences.Editor editor = sharedPreferences.edit();
         Boolean isFirstUse = sharedPreferences.getBoolean("FirstUse", true);
 
+        /*
         if (!isFirstUse) {
             Log.d("POKE", "Bypassed Download");
             Intent intent = new Intent(MainActivity.this, PokedexActivity.class);
@@ -43,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
             finish();
             return;
         }
+         */
 
         final Handler h = new Handler();
         final Runnable update = new Runnable() {
@@ -68,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
                         "https://github.com/ThetaRangers/Thetamon/blob/master/sprites.zip?raw=true",
                         "Sprites", "sprites.zip");
                 unpack();
+
                 h.post(update);
             }
         };
@@ -79,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
 
                 final List<Pokemon> pokemons = pokemonList;
                 final DaoThread daoThread = new DaoThread();
-
+                pokemonListOna = pokemonList;
                 daoThread.fill(MainActivity.this, pokemons, null, null);
 
                 t.start();
@@ -101,6 +108,17 @@ public class MainActivity extends AppCompatActivity {
                     .getExternalFilesDir(null)));
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void avgColor(List<Pokemon> pokemons) {
+        ImageManager imageManager = new ImageManager();
+
+        for (int i = 0; i < pokemons.size(); i++) {
+            Bitmap bitmap = imageManager.loadFromDisk(MainActivity.this.getFilesDir() +
+                    "/sprites_front", pokemons.get(i).id + ".png");
+
+            pokemons.get(i).setAverageColor(imageManager.getDesaturatedColor(bitmap, 0.15f));
         }
     }
 

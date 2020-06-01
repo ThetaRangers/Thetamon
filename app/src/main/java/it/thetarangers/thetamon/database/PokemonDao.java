@@ -19,11 +19,11 @@ public abstract class PokemonDao {
     @Query("DELETE FROM Pokemon")
     public abstract void deleteAll();
 
-    @Query("SELECT DISTINCT id, name FROM Pokemon WHERE id = :pokemonId")
+    @Query("SELECT DISTINCT * FROM Pokemon WHERE id = :pokemonId")
     public abstract Pokemon getPokemonFromId(int pokemonId);
 
     //TODO ricerca da parte di nome
-    @Query("SELECT id, name FROM Pokemon WHERE name LIKE :name")
+    @Query("SELECT * FROM Pokemon WHERE name LIKE :name")
     abstract List<Pokemon> getPokemonFromNameInterface(String name);
 
     public List<Pokemon> getPokemonsFromName(String name){

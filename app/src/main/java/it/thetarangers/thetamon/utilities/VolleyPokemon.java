@@ -1,6 +1,7 @@
 package it.thetarangers.thetamon.utilities;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -23,6 +24,7 @@ import it.thetarangers.thetamon.model.Pokemon;
 
 public abstract class VolleyPokemon implements Response.ErrorListener, Response.Listener<String>{
     private final String URL = "https://pokeapi.co/api/v2/pokemon?limit=10000";
+    private final String URL_TYPE = "https://pokeapi.co/api/v2/type/%s";
     private final int POKEDEX_LENGHT = 807;
     private final Context context;
 
@@ -48,12 +50,11 @@ public abstract class VolleyPokemon implements Response.ErrorListener, Response.
         //TODO make error Response
         Toast.makeText(context, "Error", Toast.LENGTH_LONG).show();
     }
-
     @Override
     public void onResponse(String response) {
         Gson gson = new Gson();
 
-        try{
+        try {
             JSONObject jsonObject = new JSONObject(response);
             String result = jsonObject.getJSONArray("results").toString();
 
@@ -62,12 +63,16 @@ public abstract class VolleyPokemon implements Response.ErrorListener, Response.
 
             List<Pokemon> pokemonList = gson.fromJson(result, listType);
             pokemonList = pokemonList.subList(0, POKEDEX_LENGHT);
-            for(int i = 0; i < pokemonList.size(); i++){
-                pokemonList.get(i).setId(i+1);
+
+            Log.w("POKE", pokemonList.get(2).url);
+
+            for (int i = 0; i < pokemonList.size(); i++) {
+                //pokemonList.get(i).setId(i+1);
+                pokemonList.get(i).setIdFromUrl();
             }
 
             fill(pokemonList);
-        } catch (JSONException exception){
+        } catch (JSONException exception) {
             exception.printStackTrace();
         }
     }
