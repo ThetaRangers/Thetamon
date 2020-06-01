@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -19,6 +20,8 @@ import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
+
+import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -139,6 +142,7 @@ public class PokedexActivity extends AppCompatActivity {
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             //TODO usare getter
             Pokemon pokemon = pokemonList.get(position);
+            holder.cvPokemon.setCardBackgroundColor(Color.parseColor(pokemon.averageColor));
             holder.tvId.setText(pokemon.id + "");
             holder.tvName.setText(pokemon.name);
             holder.ivSprite.setImageBitmap(imageManager.loadFromDisk(
@@ -155,10 +159,12 @@ public class PokedexActivity extends AppCompatActivity {
         ImageView ivSprite;
         TextView tvName;
         TextView tvId;
+        MaterialCardView cvPokemon;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
+            cvPokemon = itemView.findViewById(R.id.cvPokemon);
             ivSprite = itemView.findViewById(R.id.ivSprite);
             tvName = itemView.findViewById(R.id.tvName);
             tvId = itemView.findViewById(R.id.tvId);
