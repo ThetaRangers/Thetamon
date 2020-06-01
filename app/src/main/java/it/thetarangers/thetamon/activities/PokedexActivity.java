@@ -2,6 +2,7 @@ package it.thetarangers.thetamon.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,6 +18,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +54,7 @@ public class PokedexActivity extends AppCompatActivity {
     }
 
     private void search(String searchedString){
-        Log.v("SC","Searched "+searchedString);
+        Log.v("SC","Searched " + searchedString);
 
     }
 
@@ -66,6 +68,7 @@ public class PokedexActivity extends AppCompatActivity {
             rvPokedex = findViewById(R.id.rvPokedex);
             rvPokedex.setLayoutManager(new LinearLayoutManager(PokedexActivity.this));
             adapter = new PokemonAdapter();
+
 
             svSearch = findViewById(R.id.svSearch);
             final PokemonAdapter adapter = new PokemonAdapter();
