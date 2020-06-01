@@ -40,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
         final SharedPreferences.Editor editor = sharedPreferences.edit();
         Boolean isFirstUse = sharedPreferences.getBoolean("FirstUse", true);
 
-        /*
         if (!isFirstUse) {
             Log.d("POKE", "Bypassed Download");
             Intent intent = new Intent(MainActivity.this, PokedexActivity.class);
@@ -48,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
             finish();
             return;
         }
-         */
 
         final Handler h = new Handler();
         final Runnable update = new Runnable() {
@@ -65,6 +63,19 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
+        final VolleyPokemon volley = new VolleyPokemon(MainActivity.this) {
+            @Override
+            public void fill(List<Pokemon> pokemonList) {
+                Log.w("POKE", pokemonList.size() + "");
+
+                final DaoThread daoThread = new DaoThread();
+                pokemonListOna = pokemonList;
+                avgColor(pokemonList);
+                daoThread.fill(MainActivity.this, pokemonList, h, update);
+
+            }
+        };
+
         final Thread t = new Thread() {
             @Override
             public void run() {
@@ -75,25 +86,12 @@ public class MainActivity extends AppCompatActivity {
                         "Sprites", "sprites.zip");
                 unpack();
 
-                h.post(update);
+                volley.getPokemonList();
+
             }
         };
 
-        VolleyPokemon volley = new VolleyPokemon(MainActivity.this) {
-            @Override
-            public void fill(List<Pokemon> pokemonList) {
-                Log.w("POKE", pokemonList.size() + "");
-
-                final List<Pokemon> pokemons = pokemonList;
-                final DaoThread daoThread = new DaoThread();
-                pokemonListOna = pokemonList;
-                daoThread.fill(MainActivity.this, pokemons, null, null);
-
-                t.start();
-            }
-        };
-
-        volley.getPokemonList();
+        t.start();
 
     }
 
@@ -118,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
             Bitmap bitmap = imageManager.loadFromDisk(MainActivity.this.getFilesDir() +
                     "/sprites_front", pokemons.get(i).id + ".png");
 
-            pokemons.get(i).setAverageColor(imageManager.getDesaturatedColor(bitmap, 0.15f));
+            pokemons.get(i).setAverageColor(imageManager.getDesaturatedColor(bitmap, -1));
         }
     }
 

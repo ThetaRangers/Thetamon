@@ -41,10 +41,12 @@ public class ImageManager {
             for (int x = 0; x < bitmap.getWidth(); x++)
             {
                 int c = bitmap.getPixel(x, y);
-                pixelCount++;
-                redColors += Color.red(c);
-                greenColors += Color.green(c);
-                blueColors += Color.blue(c);
+                if (c != Color.TRANSPARENT) {
+                    pixelCount++;
+                    redColors += Color.red(c);
+                    greenColors += Color.green(c);
+                    blueColors += Color.blue(c);
+                }
             }
         }
 
@@ -52,13 +54,17 @@ public class ImageManager {
         int green = (greenColors/pixelCount);
         int blue = (blueColors/pixelCount);
 
-        float f = desaturation; // desaturate by 20%
-        float L = (float) (0.3 * red + 0.6 * green + 0.1 * blue);
-        float new_r = red + f * (L - red);
-        float new_g = green + f * (L - green);
-        float new_b = blue + f * (L - blue);
+        if (desaturation != -1) {
+            float f = desaturation; // desaturate by 20%
+            float L = (float) (0.3 * red + 0.6 * green + 0.1 * blue);
+            float new_r = red + f * (L - red);
+            float new_g = green + f * (L - green);
+            float new_b = blue + f * (L - blue);
 
-        int color = Color.rgb(new_r, new_g, new_b);
-        return "#" + Integer.toHexString(color).substring(2);
+            int color = Color.rgb(new_r, new_g, new_b);
+            return "#" + Integer.toHexString(color).substring(2);
+        } else {
+            return "#" + Integer.toHexString(Color.rgb(red, green, blue)).substring(2);
+        }
     }
 }
