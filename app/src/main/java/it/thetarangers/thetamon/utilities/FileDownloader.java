@@ -73,6 +73,7 @@ public class FileDownloader extends BroadcastReceiver {
                     // TODO
                 }
             }
+            c.close();
         }
     }
 
