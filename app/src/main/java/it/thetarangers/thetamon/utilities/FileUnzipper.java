@@ -2,37 +2,53 @@ package it.thetarangers.thetamon.utilities;
 
 import org.apache.commons.io.IOUtils;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Enumeration;
+import java.util.Objects;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 public class FileUnzipper {
 
-    public void unzip(File file, String outputDir) {
-        try (java.util.zip.ZipFile zipFile = new ZipFile(file)) {
+    public Boolean unzip(File file, String outputDir) {
+
+        try (ZipFile zipFile = new ZipFile(file)) {
             Enumeration<? extends ZipEntry> entries = zipFile.entries();
+
             while (entries.hasMoreElements()) {
                 ZipEntry entry = entries.nextElement();
-                File entryDestination = new File(outputDir,  entry.getName());
+                File entryDestination = new File(outputDir, entry.getName());
+
                 if (entry.isDirectory()) {
-                    entryDestination.mkdirs();
+                    if (!entryDestination.mkdirs())
+                        return false;
+
                 } else {
-                    entryDestination.getParentFile().mkdirs();
-                    try (InputStream in = zipFile.getInputStream(entry);
-                         OutputStream out = new FileOutputStream(entryDestination)) {
+                    if (!Objects.requireNonNull(entryDestination.getParentFile()).mkdirs())
+                        return false;
+
+                    try (InputStream inputStream = zipFile.getInputStream(entry);
+                         BufferedInputStream in = new BufferedInputStream(inputStream);
+                         FileOutputStream fileOutputStream = new FileOutputStream(entryDestination);
+                         BufferedOutputStream out = new BufferedOutputStream(fileOutputStream)) {
+
                         IOUtils.copy(in, out);
+
                     } catch (IOException e) {
                         e.printStackTrace();
+                        return false;
                     }
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
+        return true;
     }
 }
