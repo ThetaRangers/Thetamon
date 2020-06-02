@@ -40,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
         final SharedPreferences.Editor editor = sharedPreferences.edit();
         Boolean isFirstUse = sharedPreferences.getBoolean("FirstUse", true);
 
-        /*
         if (!isFirstUse) {
             Log.d("POKE", "Bypassed Download");
             Intent intent = new Intent(MainActivity.this, PokedexActivity.class);
@@ -48,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
             finish();
             return;
         }
-         */
 
         final Handler h = new Handler();
         final Runnable update = new Runnable() {
