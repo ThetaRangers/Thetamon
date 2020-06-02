@@ -9,9 +9,9 @@
         android:id="@+id/cvPokemon"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/card_padding_horizonal"
+        android:layout_marginStart="@dimen/card_padding_horizontal"
         android:layout_marginTop="@dimen/card_padding_vertical"
-        android:layout_marginEnd="@dimen/card_padding_horizonal"
+        android:layout_marginEnd="@dimen/card_padding_horizontal"
         android:layout_marginBottom="@dimen/card_padding_vertical"
         app:cardCornerRadius="@dimen/corner_radius"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -25,14 +25,27 @@
             android:background="@color/colorTest2">
 
             <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintEnd_toStartOf="@+id/guideline2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/sprite_background" />
+
+            <ImageView
                 android:id="@+id/ivSprite"
-                android:layout_width="128dp"
-                android:layout_height="128dp"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
                 android:layout_marginStart="@dimen/sprite_padding"
                 android:layout_marginTop="@dimen/sprite_padding"
+                android:layout_marginEnd="@dimen/sprite_padding"
                 android:layout_marginBottom="@dimen/sprite_padding"
                 android:contentDescription="Pokemon Sprite"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/imageView"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/pikachu" />
@@ -53,31 +66,46 @@
                 android:id="@+id/tvName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/sprite_padding"
                 android:background="@drawable/tv_background"
                 android:text="TextView"
                 android:textColor="@android:color/black"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/ivSprite"
+                app:layout_constraintBottom_toTopOf="@+id/tvType1"
+                app:layout_constraintStart_toStartOf="@+id/tvType1"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/tvType1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/tv_type_padding"
+                android:background="@drawable/tv_type_background"
                 android:text="TextView"
-                app:layout_constraintEnd_toStartOf="@+id/tvId"
-                app:layout_constraintStart_toEndOf="@+id/tvName"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:textColor="@android:color/white"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imageView"
+                app:layout_constraintTop_toBottomOf="@+id/tvName" />
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/tvType2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/tv_type_padding"
+                android:background="@drawable/tv_type_background"
                 android:text="TextView"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/tvId"
-                app:layout_constraintStart_toEndOf="@+id/tvName" />
+                android:textColor="@android:color/white"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@+id/tvType1"
+                app:layout_constraintStart_toEndOf="@+id/tvType1"
+                app:layout_constraintTop_toTopOf="@+id/tvType1" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.38" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.card.MaterialCardView>

@@ -4,6 +4,26 @@
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
     <color name="colorTest1">#CCFFFFFF</color>
-    <color name="colorTest2">#60FFFFFF</color>
-    <color name="filterColor">#345387</color>
+    <color name="colorTest2">#40FFFFFF</color>
+    <color name="colorTest3">#80FFFFFF</color>
+    <color name="colorFilter">#345387</color>
+    <!-- Type Palette -->
+    <color name="colorTypeNormal">#7D858D</color>
+    <color name="colorTypeFighting">#B8345B</color>
+    <color name="colorTypeFlying">#7794CE</color>
+    <color name="colorTypePoison">#9B5ABB</color>
+    <color name="colorTypeGround">#C96A36</color>
+    <color name="colorTypeRock">#AEA073</color>
+    <color name="colorTypeBug">#81AD23</color>
+    <color name="colorTypeGhost">#435A9E</color>
+    <color name="colorTypeSteel">#47798C</color>
+    <color name="colorTypeFire">#E7863E</color>
+    <color name="colorTypeWater">#3E7CBE</color>
+    <color name="colorTypeGrass">#46963F</color>
+    <color name="colorTypeElectric">#D5B62C</color>
+    <color name="colorTypePsychic">#DC5258</color>
+    <color name="colorTypeIce">#57B5A5</color>
+    <color name="colorTypeDragon">#085DA6</color>
+    <color name="colorTypeDark">#474150</color>
+    <color name="colorTypeFairy">#D676D1</color>
 </resources>

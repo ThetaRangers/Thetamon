@@ -1,7 +1,7 @@
 package it.thetarangers.thetamon.activities;
 
-import android.app.Activity;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -70,6 +70,8 @@ public class PokedexActivity extends AppCompatActivity {
         ImageView ivSprite;
         TextView tvName;
         TextView tvId;
+        TextView tvType1;
+        TextView tvType2;
         MaterialCardView cvPokemon;
 
         public ViewHolder(@NonNull View itemView) {
@@ -79,6 +81,9 @@ public class PokedexActivity extends AppCompatActivity {
             ivSprite = itemView.findViewById(R.id.ivSprite);
             tvName = itemView.findViewById(R.id.tvName);
             tvId = itemView.findViewById(R.id.tvId);
+            tvType1 = itemView.findViewById(R.id.tvType1);
+            tvType2 = itemView.findViewById(R.id.tvType2);
+
         }
     }
 
@@ -112,7 +117,7 @@ public class PokedexActivity extends AppCompatActivity {
         public void onClick(View v) {
             if (v.getId() == R.id.fabSearch) {
                 fabSearch.setExpanded(true);
-            } else if(v.getId() == R.id.ibClose){
+            } else if (v.getId() == R.id.ibClose) {
                 fabSearch.setExpanded(false);
             }
         }
@@ -133,8 +138,9 @@ public class PokedexActivity extends AppCompatActivity {
             return true;
         }
 
-        public void hideKeyboard(Activity activity) {
-            InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        public void hideKeyboard(AppCompatActivity activity) {
+            InputMethodManager imm = (InputMethodManager) activity
+                    .getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE);
             View view = activity.getCurrentFocus();
             if (view == null) {
                 view = new View(activity);
@@ -175,15 +181,47 @@ public class PokedexActivity extends AppCompatActivity {
             //TODO usare getter
             Pokemon pokemon = pokemonList.get(position);
             holder.cvPokemon.setCardBackgroundColor(Color.parseColor(pokemon.averageColor));
-            holder.tvId.setText(pokemon.id + "");
-            holder.tvName.setText(pokemon.name);
+            holder.tvId.setText(String.valueOf(pokemon.id));
+            holder.tvName.setText(capitalize(pokemon.name));
             holder.ivSprite.setImageBitmap(imageManager.loadFromDisk(
                     PokedexActivity.this.getFilesDir() + "/sprites_front", pokemon.id + ".png"));
+
+            String type1 = pokemon.type1;
+            type1 = capitalize(type1);
+            String color1 = "colorType" + type1;
+            int color1ID = getResources().getIdentifier(color1, "color", getPackageName());
+            GradientDrawable bg1 = (GradientDrawable) holder.tvType1.getBackground();
+            bg1.setColor(getColor(color1ID));
+            if (type1.equals("Dark"))
+                bg1.setStroke(3, Color.WHITE);
+            else
+                bg1.setStroke(3, Color.DKGRAY);
+            holder.tvType1.setText(type1.toUpperCase());
+
+            String type2 = pokemon.type2;
+            if (type2 != null) {
+                type2 = capitalize(type2);
+                String color2 = "colorType" + type2;
+                int color2ID = getResources().getIdentifier(color2, "color", getPackageName());
+                GradientDrawable bg2 = (GradientDrawable) holder.tvType2.getBackground();
+                bg2.setColor(getColor(color2ID));
+                if (type2.equals("Dark"))
+                    bg2.setStroke(3, Color.WHITE);
+                else
+                    bg2.setStroke(3, Color.DKGRAY);
+                holder.tvType2.setText(type2.toUpperCase());
+            } else {
+                holder.tvType2.setVisibility(View.GONE);
+            }
         }
 
         @Override
         public int getItemCount() {
             return pokemonList.size();
         }
+    }
+
+    public String capitalize(String in) { // TODO maybe put this somewhere else
+        return in.substring(0, 1).toUpperCase() + in.substring(1);
     }
 }
