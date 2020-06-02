@@ -99,7 +99,11 @@ public class MainActivity extends AppCompatActivity {
         File file = new File(getApplicationContext().getExternalFilesDir(null),
                 "Sprites/sprites.zip");
         FileUnzipper fu = new FileUnzipper();
-        fu.unzip(file, getApplicationContext().getFilesDir().getAbsolutePath());
+
+        if (!fu.unzip(file, getApplicationContext().getFilesDir().getAbsolutePath())) {
+            // TODO
+        }
+
         try {
             Log.d("POKE", "Cleaning up");
             FileUtils.forceDelete(Objects.requireNonNull(getApplicationContext()
