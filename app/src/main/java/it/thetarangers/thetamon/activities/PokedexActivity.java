@@ -1,12 +1,5 @@
 package it.thetarangers.thetamon.activities;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -20,6 +13,11 @@ import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.card.MaterialCardView;
 
@@ -61,18 +59,33 @@ public class PokedexActivity extends AppCompatActivity {
 
     }
 
-    private void search(String searchedString){
-        Log.v("SC","Searched " + searchedString);
+    private void search(String searchedString) {
+        Log.v("SC", "Searched " + searchedString);
 
     }
 
+    static class ViewHolder extends RecyclerView.ViewHolder {
+        ImageView ivSprite;
+        TextView tvName;
+        TextView tvId;
+        MaterialCardView cvPokemon;
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+
+            cvPokemon = itemView.findViewById(R.id.cvPokemon);
+            ivSprite = itemView.findViewById(R.id.ivSprite);
+            tvName = itemView.findViewById(R.id.tvName);
+            tvId = itemView.findViewById(R.id.tvId);
+        }
+    }
 
     class Holder {
         final RecyclerView rvPokedex;
         final PokemonAdapter adapter;
         final SearchView svSearch;
 
-        public Holder(){
+        public Holder() {
             rvPokedex = findViewById(R.id.rvPokedex);
             rvPokedex.setLayoutManager(new LinearLayoutManager(PokedexActivity.this));
             adapter = new PokemonAdapter();
@@ -86,16 +99,16 @@ public class PokedexActivity extends AppCompatActivity {
         }
     }
 
-    class SearchViewListener implements SearchView.OnQueryTextListener{
+    class SearchViewListener implements SearchView.OnQueryTextListener {
 
         @Override
-        public boolean onQueryTextChange(String newText){
+        public boolean onQueryTextChange(String newText) {
             //DUMP
             return true;
         }
 
         @Override
-        public boolean onQueryTextSubmit(String query){
+        public boolean onQueryTextSubmit(String query) {
             search(query);
             hideKeyboard(PokedexActivity.this);
             return true;
@@ -113,15 +126,15 @@ public class PokedexActivity extends AppCompatActivity {
 
     }
 
-    class PokemonAdapter extends RecyclerView.Adapter<ViewHolder>{
+    class PokemonAdapter extends RecyclerView.Adapter<ViewHolder> {
         private List<Pokemon> pokemonList;
         private ImageManager imageManager = new ImageManager();
 
-        public PokemonAdapter(){
+        public PokemonAdapter() {
             this.pokemonList = new ArrayList<>();
         }
 
-        public void setPokemonList(List<Pokemon> pokemonList){
+        public void setPokemonList(List<Pokemon> pokemonList) {
             this.pokemonList = pokemonList;
             notifyDataSetChanged();
         }
@@ -152,22 +165,6 @@ public class PokedexActivity extends AppCompatActivity {
         @Override
         public int getItemCount() {
             return pokemonList.size();
-        }
-    }
-
-    static class ViewHolder extends RecyclerView.ViewHolder{
-        ImageView ivSprite;
-        TextView tvName;
-        TextView tvId;
-        MaterialCardView cvPokemon;
-
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-
-            cvPokemon = itemView.findViewById(R.id.cvPokemon);
-            ivSprite = itemView.findViewById(R.id.ivSprite);
-            tvName = itemView.findViewById(R.id.tvName);
-            tvId = itemView.findViewById(R.id.tvId);
         }
     }
 }

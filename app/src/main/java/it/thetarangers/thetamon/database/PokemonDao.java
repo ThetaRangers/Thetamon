@@ -22,12 +22,10 @@ public abstract class PokemonDao {
     @Query("SELECT DISTINCT * FROM Pokemon WHERE id = :pokemonId")
     public abstract Pokemon getPokemonFromId(int pokemonId);
 
-    //TODO ricerca da parte di nome
     @Query("SELECT * FROM Pokemon WHERE name LIKE :name")
     abstract List<Pokemon> getPokemonFromNameInterface(String name);
 
     public List<Pokemon> getPokemonsFromName(String name){
         return getPokemonFromNameInterface(name + "%");
     }
-
 }

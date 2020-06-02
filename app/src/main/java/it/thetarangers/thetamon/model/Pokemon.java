@@ -42,19 +42,19 @@ public class Pokemon {
         this.id = id;
     }
 
-    public void setIdFromUrl(){
+    public int setIdFromUrl(){
         String temp = this.url;
         temp = temp.substring("https://pokeapi.co/api/v2/pokemon/".length());
         temp = temp.substring(0, temp.length() - 1);
 
-        this.id = Integer.parseInt(temp);
+        return this.id = Integer.parseInt(temp);
     }
 
-    public void setType(PokemonType type){
-        if(this.type1 == null) {
-            this.type1 = type.name();
+    public void setType(String type, int slot){
+        if(slot == 1) {
+            this.type1 = type;
         } else {
-            this.type2 = type.name();
+            this.type2 = type;
         }
     }
 
