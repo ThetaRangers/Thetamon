@@ -9,7 +9,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Enumeration;
-import java.util.Objects;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -25,12 +24,10 @@ public class FileUnzipper {
                 File entryDestination = new File(outputDir, entry.getName());
 
                 if (entry.isDirectory()) {
-                    if (!entryDestination.mkdirs())
+                    if (!entryDestination.mkdir())
                         return false;
 
                 } else {
-                    if (!Objects.requireNonNull(entryDestination.getParentFile()).mkdirs())
-                        return false;
 
                     try (InputStream inputStream = zipFile.getInputStream(entry);
                          BufferedInputStream in = new BufferedInputStream(inputStream);
