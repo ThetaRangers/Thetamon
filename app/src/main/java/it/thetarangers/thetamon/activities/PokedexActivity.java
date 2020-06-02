@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -20,6 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,12 +82,20 @@ public class PokedexActivity extends AppCompatActivity {
         }
     }
 
-    class Holder {
+    class Holder implements View.OnClickListener {
         final RecyclerView rvPokedex;
         final PokemonAdapter adapter;
         final SearchView svSearch;
+        final FloatingActionButton fabSearch;
+        final ImageButton ibClose;
 
         public Holder() {
+            fabSearch = findViewById(R.id.fabSearch);
+            fabSearch.setOnClickListener(this);
+
+            ibClose = findViewById(R.id.ibClose);
+            ibClose.setOnClickListener(this);
+
             rvPokedex = findViewById(R.id.rvPokedex);
             rvPokedex.setLayoutManager(new LinearLayoutManager(PokedexActivity.this));
             adapter = new PokemonAdapter();
@@ -96,6 +106,15 @@ public class PokedexActivity extends AppCompatActivity {
             SearchViewListener svl = new SearchViewListener();
             svSearch.setOnQueryTextListener(svl);
 
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (v.getId() == R.id.fabSearch) {
+                fabSearch.setExpanded(true);
+            } else if(v.getId() == R.id.ibClose){
+                fabSearch.setExpanded(false);
+            }
         }
     }
 

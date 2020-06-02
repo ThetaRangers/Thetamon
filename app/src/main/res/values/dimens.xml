@@ -5,4 +5,5 @@
     <dimen name="corner_radius">10dp</dimen>
     <dimen name="card_padding_horizonal">16dp</dimen>
     <dimen name="card_padding_vertical">6dp</dimen>
+    <dimen name="floadint_padding">16dp</dimen>
 </resources>

@@ -5,4 +5,5 @@
     <color name="colorAccent">#03DAC5</color>
     <color name="colorTest1">#CCFFFFFF</color>
     <color name="colorTest2">#60FFFFFF</color>
+    <color name="filterColor">#345387</color>
 </resources>
