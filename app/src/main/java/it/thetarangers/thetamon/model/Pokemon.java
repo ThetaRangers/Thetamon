@@ -51,7 +51,11 @@ public class Pokemon {
     }
 
     public void setType(PokemonType type){
-        this.type1 = type.name();
+        if(this.type1 == null) {
+            this.type1 = type.name();
+        } else {
+            this.type2 = type.name();
+        }
     }
 
     public void setType(PokemonType type1, PokemonType type2){
