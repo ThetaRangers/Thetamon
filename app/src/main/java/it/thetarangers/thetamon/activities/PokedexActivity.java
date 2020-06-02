@@ -210,6 +210,7 @@ public class PokedexActivity extends AppCompatActivity {
                 else
                     bg2.setStroke(3, Color.DKGRAY);
                 holder.tvType2.setText(type2.toUpperCase());
+                holder.tvType2.setVisibility(View.VISIBLE);
             } else {
                 holder.tvType2.setVisibility(View.GONE);
             }
