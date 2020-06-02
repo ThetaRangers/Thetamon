@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="sprite_padding">8dp</dimen>
+    <dimen name="id_padding">2dp</dimen>
+    <dimen name="corner_radius">10dp</dimen>
+    <dimen name="card_padding_horizonal">16dp</dimen>
+    <dimen name="card_padding_vertical">6dp</dimen>
+</resources>
