@@ -34,7 +34,8 @@
             android:id="@+id/rvPokedex"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            tools:listitem="@layout/item_pokemon">
 
         </androidx.recyclerview.widget.RecyclerView>
 
@@ -58,7 +59,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
-            android:background="@color/colorFilter"
+            android:background="@color/colorAccent"
             android:visibility="invisible"
             app:layout_behavior="com.google.android.material.transformation.FabTransformationSheetBehavior">
 
@@ -70,6 +71,8 @@
                     android:id="@+id/ivClose"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/card_padding_vertical"
+                    android:layout_marginBottom="@dimen/card_padding_vertical"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:srcCompat="@drawable/close" />
@@ -80,7 +83,7 @@
                     android:layout_marginBottom="300dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" >
+                    app:layout_constraintStart_toStartOf="parent">
 
                 </SearchView>
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -92,7 +95,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_margin="@dimen/floating_button_margin"
+            android:backgroundTint="@color/colorAccent"
             android:clickable="true"
+            app:backgroundTint="@color/colorAccent"
+            app:borderWidth="0dp"
             app:srcCompat="@android:drawable/ic_menu_search" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

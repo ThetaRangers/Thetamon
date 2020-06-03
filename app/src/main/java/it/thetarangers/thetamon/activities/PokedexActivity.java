@@ -181,7 +181,7 @@ public class PokedexActivity extends AppCompatActivity {
             //TODO usare getter
             Pokemon pokemon = pokemonList.get(position);
             holder.cvPokemon.setCardBackgroundColor(Color.parseColor(pokemon.averageColor));
-            holder.tvId.setText(String.valueOf(pokemon.id));
+            holder.tvId.setText("#" + pokemon.id);
             holder.tvName.setText(capitalize(pokemon.name));
             holder.ivSprite.setImageBitmap(imageManager.loadFromDisk(
                     PokedexActivity.this.getFilesDir() + "/sprites_front", pokemon.id + ".png"));

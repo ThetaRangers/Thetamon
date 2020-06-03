@@ -14,6 +14,7 @@
         android:layout_marginEnd="@dimen/card_padding_horizontal"
         android:layout_marginBottom="@dimen/card_padding_vertical"
         app:cardCornerRadius="@dimen/corner_radius"
+        app:cardElevation="2dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -54,30 +55,30 @@
                 android:id="@+id/tvId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/id_padding"
-                android:layout_marginEnd="@dimen/id_padding"
                 android:background="@drawable/tv_background"
-                android:text="TextView"
-                android:textColor="@android:color/black"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tvName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/tv_background"
-                android:text="TextView"
+                android:text="#123"
                 android:textColor="@android:color/black"
                 app:layout_constraintBottom_toTopOf="@+id/tvType1"
                 app:layout_constraintStart_toStartOf="@+id/tvType1"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:id="@+id/tvName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/tv_padding"
+                android:background="@drawable/tv_background"
+                android:text="Pikachu"
+                android:textColor="@android:color/black"
+                app:layout_constraintBottom_toTopOf="@+id/tvType1"
+                app:layout_constraintStart_toEndOf="@+id/tvId"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
                 android:id="@+id/tvType1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/tv_type_padding"
+                android:layout_marginStart="@dimen/tv_padding"
                 android:background="@drawable/tv_type_background"
                 android:text="TextView"
                 android:textColor="@android:color/white"
@@ -90,7 +91,7 @@
                 android:id="@+id/tvType2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/tv_type_padding"
+                android:layout_marginStart="@dimen/tv_padding"
                 android:background="@drawable/tv_type_background"
                 android:text="TextView"
                 android:textColor="@android:color/white"
