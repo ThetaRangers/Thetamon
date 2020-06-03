@@ -92,14 +92,14 @@ public class PokedexActivity extends AppCompatActivity {
         final PokemonAdapter adapter;
         final SearchView svSearch;
         final FloatingActionButton fabSearch;
-        final ImageButton ibClose;
+        final ImageView ivClose;
 
         public Holder() {
             fabSearch = findViewById(R.id.fabSearch);
             fabSearch.setOnClickListener(this);
 
-            ibClose = findViewById(R.id.ibClose);
-            ibClose.setOnClickListener(this);
+            ivClose = findViewById(R.id.ivClose);
+            ivClose.setOnClickListener(this);
 
             rvPokedex = findViewById(R.id.rvPokedex);
             rvPokedex.setLayoutManager(new LinearLayoutManager(PokedexActivity.this));
@@ -117,7 +117,7 @@ public class PokedexActivity extends AppCompatActivity {
         public void onClick(View v) {
             if (v.getId() == R.id.fabSearch) {
                 fabSearch.setExpanded(true);
-            } else if (v.getId() == R.id.ibClose) {
+            } else if (v.getId() == R.id.ivClose) {
                 fabSearch.setExpanded(false);
             }
         }
