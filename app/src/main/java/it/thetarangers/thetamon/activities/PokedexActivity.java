@@ -5,14 +5,15 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.ImageButton;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,10 +23,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import it.thetarangers.thetamon.R;
 import it.thetarangers.thetamon.database.DaoThread;
@@ -66,6 +67,10 @@ public class PokedexActivity extends AppCompatActivity {
 
     }
 
+    public String capitalize(String in) { // TODO maybe put this somewhere else
+        return in.substring(0, 1).toUpperCase() + in.substring(1);
+    }
+
     static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView ivSprite;
         TextView tvName;
@@ -87,12 +92,13 @@ public class PokedexActivity extends AppCompatActivity {
         }
     }
 
-    class Holder implements View.OnClickListener {
+    class Holder implements View.OnClickListener, EditText.OnEditorActionListener {
         final RecyclerView rvPokedex;
         final PokemonAdapter adapter;
-        final SearchView svSearch;
         final FloatingActionButton fabSearch;
         final ImageView ivClose;
+        final TextInputLayout tilSearch;
+        final ImageView ivSearch;
 
         public Holder() {
             fabSearch = findViewById(R.id.fabSearch);
@@ -106,10 +112,11 @@ public class PokedexActivity extends AppCompatActivity {
             adapter = new PokemonAdapter();
             rvPokedex.setAdapter(adapter);
 
+            tilSearch = findViewById(R.id.tilSearch);
+            tilSearch.getEditText().setOnEditorActionListener(this);
 
-            svSearch = findViewById(R.id.svSearch);
-            SearchViewListener svl = new SearchViewListener();
-            svSearch.setOnQueryTextListener(svl);
+            ivSearch = findViewById(R.id.ivSearch);
+            ivSearch.setOnClickListener(this);
 
         }
 
@@ -119,36 +126,43 @@ public class PokedexActivity extends AppCompatActivity {
                 fabSearch.setExpanded(true);
             } else if (v.getId() == R.id.ivClose) {
                 fabSearch.setExpanded(false);
+            } else if (v.getId() == R.id.ivSearch) {
+                tilSearch.getEditText().onEditorAction(EditorInfo.IME_ACTION_DONE);
             }
-        }
-    }
-
-    class SearchViewListener implements SearchView.OnQueryTextListener {
-
-        @Override
-        public boolean onQueryTextChange(String newText) {
-            //DUMP
-            return true;
         }
 
         @Override
-        public boolean onQueryTextSubmit(String query) {
-            search(query);
-            hideKeyboard(PokedexActivity.this);
-            return true;
+        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+            search(tilSearch.getEditText().getText().toString());
+            fabSearch.setExpanded(false);
+            return false;
         }
 
-        public void hideKeyboard(AppCompatActivity activity) {
-            InputMethodManager imm = (InputMethodManager) activity
-                    .getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE);
-            View view = activity.getCurrentFocus();
-            if (view == null) {
-                view = new View(activity);
+        private void search(String query) {
+            Log.w("POKE", "Sto cercando questo " + query);
+
+            final DaoThread daoThread = new DaoThread();
+
+            update = new Runnable() {
+                @Override
+                public void run() {
+                    list = daoThread.getList();
+
+                    if(list.size() > 0) {
+                        holder.adapter.setPokemonList(list);
+                    } else {
+                        Toast.makeText(PokedexActivity.this, R.string.no_pokemon_found, Toast.LENGTH_SHORT).show();
+                    }
+                }
+            };
+
+            try {
+                daoThread.getPokemonFromId(PokedexActivity.this, handler, update, Integer.parseInt(query));
+            } catch (NumberFormatException e){
+                daoThread.getPokemonFromName(PokedexActivity.this, handler, update, query);
             }
-            Objects.requireNonNull(imm).hideSoftInputFromWindow(view.getWindowToken(), 0);
+
         }
-
-
     }
 
     class PokemonAdapter extends RecyclerView.Adapter<ViewHolder> {
@@ -220,9 +234,5 @@ public class PokedexActivity extends AppCompatActivity {
         public int getItemCount() {
             return pokemonList.size();
         }
-    }
-
-    public String capitalize(String in) { // TODO maybe put this somewhere else
-        return in.substring(0, 1).toUpperCase() + in.substring(1);
     }
 }

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Thetamon</string>
+    <string name="no_pokemon_found">No pokemon found</string>
+    <string name="pokemon_search_string">Insert Name or id</string>
 </resources>

@@ -70,4 +70,44 @@ public class DaoThread extends Thread {
         this.start();
     }
 
+    public void getPokemonFromName(final Context context, final Handler handler,
+                                   final Runnable update, final String query){
+        runnable = new Runnable() {
+            @Override
+            public void run() {
+                PokemonDb db = PokemonDb.getInstance(context);
+                PokemonDao dao = db.pokemonDao();
+
+                List<Pokemon> tempList = dao.getPokemonsFromName(query);
+                Log.w("POKE", "Listona: " + tempList.size());
+
+                list.addAll(tempList);
+
+                if (handler != null)
+                    handler.post(update);
+            }
+        };
+        this.start();
+    }
+
+    public void getPokemonFromId(final Context context, final Handler handler,
+                                 final Runnable update, final int id){
+        runnable = new Runnable() {
+            @Override
+            public void run() {
+                PokemonDb db = PokemonDb.getInstance(context);
+                PokemonDao dao = db.pokemonDao();
+
+                List<Pokemon> tempList = dao.getPokemonFromId(id);
+                Log.w("POKE", "Listona: " + tempList.size());
+
+                list.addAll(tempList);
+
+                if (handler != null)
+                    handler.post(update);
+            }
+        };
+        this.start();
+    }
+
 }
