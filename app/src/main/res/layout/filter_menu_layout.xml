@@ -34,6 +34,7 @@
         android:layout_marginTop="@dimen/tv_padding"
         android:layout_marginEnd="@dimen/tv_padding"
         android:hint="@string/pokemon_search_string"
+        app:endIconMode="clear_text"
         app:layout_constraintEnd_toStartOf="@+id/ivSearch"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
