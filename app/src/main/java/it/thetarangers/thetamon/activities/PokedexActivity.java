@@ -24,6 +24,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
+import com.qtalk.recyclerviewfastscroller.RecyclerViewFastScroller;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,11 +65,6 @@ public class PokedexActivity extends AppCompatActivity {
 
     }
 
-    private void search(String searchedString) {
-        Log.v("SC", "Searched " + searchedString);
-
-    }
-
     public String capitalize(String in) { // TODO maybe put this somewhere else
         return in.substring(0, 1).toUpperCase() + in.substring(1);
     }
@@ -99,6 +97,7 @@ public class PokedexActivity extends AppCompatActivity {
         final ImageView ivClose;
         final TextInputLayout tilSearch;
         final ImageView ivSearch;
+        final RecyclerViewFastScroller fastScroller;
 
         public Holder() {
             fabSearch = findViewById(R.id.fabSearch);
@@ -112,6 +111,9 @@ public class PokedexActivity extends AppCompatActivity {
             adapter = new PokemonAdapter();
             rvPokedex.setAdapter(adapter);
 
+            fastScroller = findViewById(R.id.fastScroller);
+            fastScroller.attachFastScrollerToRecyclerView(rvPokedex);
+
             tilSearch = findViewById(R.id.tilSearch);
             tilSearch.getEditText().setOnEditorActionListener(this);
 
@@ -123,9 +125,11 @@ public class PokedexActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             if (v.getId() == R.id.fabSearch) {
+                fastScroller.setVisibility(View.GONE);
                 fabSearch.setExpanded(true);
             } else if (v.getId() == R.id.ivClose) {
                 fabSearch.setExpanded(false);
+                fastScroller.setVisibility(View.VISIBLE);
             } else if (v.getId() == R.id.ivSearch) {
                 tilSearch.getEditText().onEditorAction(EditorInfo.IME_ACTION_DONE);
             }
@@ -135,6 +139,7 @@ public class PokedexActivity extends AppCompatActivity {
         public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
             search(tilSearch.getEditText().getText().toString());
             fabSearch.setExpanded(false);
+            fastScroller.setVisibility(View.VISIBLE);
             return false;
         }
 
@@ -165,7 +170,8 @@ public class PokedexActivity extends AppCompatActivity {
         }
     }
 
-    class PokemonAdapter extends RecyclerView.Adapter<ViewHolder> {
+    class PokemonAdapter extends RecyclerView.Adapter<ViewHolder>
+            implements RecyclerViewFastScroller.OnPopupTextUpdate {
         private List<Pokemon> pokemonList;
         private ImageManager imageManager = new ImageManager();
 
@@ -233,6 +239,12 @@ public class PokedexActivity extends AppCompatActivity {
         @Override
         public int getItemCount() {
             return pokemonList.size();
+        }
+
+        @NotNull
+        @Override
+        public CharSequence onChange(int i) {
+            return String.valueOf(pokemonList.get(i).id);
         }
     }
 }
