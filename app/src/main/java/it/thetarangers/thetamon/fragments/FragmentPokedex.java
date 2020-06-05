@@ -4,14 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -22,7 +14,14 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -38,22 +37,23 @@ import it.thetarangers.thetamon.R;
 import it.thetarangers.thetamon.database.DaoThread;
 import it.thetarangers.thetamon.model.Pokemon;
 import it.thetarangers.thetamon.utilities.ImageManager;
+import it.thetarangers.thetamon.viewmodel.PokemonListViewModel;
 
 public class FragmentPokedex extends Fragment {
 
-    private Context context;
-
+    PokemonListViewModel pokemonListViewModel;
     Handler handler;
-    Runnable update;
     Holder holder;
     List<Pokemon> list;
+    private Context context;
 
-    public FragmentPokedex(){
+    public FragmentPokedex() {
 
     }
 
-    public FragmentPokedex(Context context){
+    public FragmentPokedex(Context context) {
         this.context = context;
+
     }
 
     @Override
@@ -66,9 +66,13 @@ public class FragmentPokedex extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         handler = new Handler();
+        pokemonListViewModel = new ViewModelProvider(requireActivity()).get(PokemonListViewModel.class);
         holder = new Holder(view);
+        pokemonListViewModel.getPokemons().observe(getViewLifecycleOwner(), pokemons -> holder.adapter.setPokemonList(pokemons));
+        List<Pokemon> tmp = pokemonListViewModel.getPokemonList();
+        if (tmp == null)
+            search("");
     }
 
     public String capitalize(String in) { // TODO maybe put this somewhere else
@@ -78,24 +82,12 @@ public class FragmentPokedex extends Fragment {
     private void search(String query) {
         Log.w("POKE", "Sto cercando questo " + query);
 
-        final DaoThread daoThread = new DaoThread();
-
-        update = new Runnable() {
-            @Override
-            public void run() {
-                list = daoThread.getList();
-                if (list.size() > 0) {
-                    holder.adapter.setPokemonList(list);
-                } else {
-                    Toast.makeText(context, R.string.no_pokemon_found, Toast.LENGTH_SHORT).show();
-                }
-            }
-        };
+        DaoThread daoThread = new DaoThread(pokemonListViewModel);
 
         try {
-            daoThread.getPokemonFromId(context, handler, update, Integer.parseInt(query));
+            daoThread.getPokemonFromId(context, Integer.parseInt(query));
         } catch (NumberFormatException e) {
-            daoThread.getPokemonFromName(context, handler, update, query);
+            daoThread.getPokemonFromName(context, query);
         }
     }
 
@@ -130,7 +122,6 @@ public class FragmentPokedex extends Fragment {
             ivSearch = fp.findViewById(R.id.ivSearch);
             ivSearch.setOnClickListener(this);
 
-            search(""); //Search all the pokemons
         }
 
         @Override
@@ -149,6 +140,7 @@ public class FragmentPokedex extends Fragment {
         @Override
         public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
             search(tilSearch.getEditText().getText().toString());
+            Log.d("POKE", "Perché entro qua dentro porca miseria?");
             fabSearch.setExpanded(false);
             fastScroller.setVisibility(View.VISIBLE);
             return false;
@@ -177,7 +169,7 @@ public class FragmentPokedex extends Fragment {
 
         class PokemonAdapter extends RecyclerView.Adapter<ViewHolder>
                 implements RecyclerViewFastScroller.OnPopupTextUpdate {
-            private List<Pokemon> pokemonList;
+            public List<Pokemon> pokemonList;
             private ImageManager imageManager = new ImageManager();
 
             public PokemonAdapter() {

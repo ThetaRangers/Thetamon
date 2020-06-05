@@ -4,18 +4,21 @@ import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import it.thetarangers.thetamon.model.Pokemon;
+import it.thetarangers.thetamon.viewmodel.PokemonListViewModel;
 
 public class DaoThread extends Thread {
 
     private Runnable runnable;
-    private List<Pokemon> list;
+    private PokemonListViewModel pokemonListViewModel;
 
     public DaoThread() {
-        list = new ArrayList<>();
+    }
+
+    public DaoThread(PokemonListViewModel pokemonListViewModel) {
+        this.pokemonListViewModel = pokemonListViewModel;
     }
 
     @Override
@@ -23,89 +26,51 @@ public class DaoThread extends Thread {
         runnable.run();
     }
 
-    public List<Pokemon> getList() {
-        return list;
-    }
+    public void fill(final Context context, final List<Pokemon> pokemons,
+                     Handler handler, Runnable update) {
+        runnable = () -> {
+            PokemonDb db = PokemonDb.getInstance(context);
+            final PokemonDao dao = db.pokemonDao();
 
-    public void fill(final Context context, final List<Pokemon> pokemons, final Handler handler,
-                     final Runnable update) {
-        runnable = new Runnable() {
-            @Override
-            public void run() {
-                PokemonDb db = PokemonDb.getInstance(context);
-                final PokemonDao dao = db.pokemonDao();
-
-                dao.deleteAll();
-                for (int i = 0; i < pokemons.size(); i++) {
-                    dao.insertPokemon(pokemons.get(i));
-                }
-
-                Log.w("POKE", "Inserted " + dao.getPokemons().size() + " in the database");
-
-                if (handler != null)
-                    handler.post(update);
+            dao.deleteAll();
+            for (int i = 0; i < pokemons.size(); i++) {
+                dao.insertPokemon(pokemons.get(i));
             }
+
+            Log.w("POKE", "Inserted " + dao.getPokemons().size() + " in the database");
+
+            if (handler != null)
+                handler.post(update);
         };
         this.start();
     }
 
-    public void getPokemons(final Context context, final Handler handler,
-                                     final Runnable update) {
-        runnable = new Runnable() {
-            @Override
-            public void run() {
-                PokemonDb db = PokemonDb.getInstance(context);
-                PokemonDao dao = db.pokemonDao();
+    public void getPokemonFromName(final Context context, final String query) {
 
-                List<Pokemon> tempList = dao.getPokemons();
+        runnable = () -> {
+            PokemonDb db = PokemonDb.getInstance(context);
+            PokemonDao dao = db.pokemonDao();
 
-                list.addAll(tempList);
+            List<Pokemon> tempList = dao.getPokemonsFromName(query);
 
-                Log.w("POKE", list.size() + "");
-
-                if (handler != null)
-                    handler.post(update);
-            }
+            pokemonListViewModel.setPokemons(tempList);
         };
+
         this.start();
     }
 
-    public void getPokemonFromName(final Context context, final Handler handler,
-                                   final Runnable update, final String query){
-        runnable = new Runnable() {
-            @Override
-            public void run() {
-                PokemonDb db = PokemonDb.getInstance(context);
-                PokemonDao dao = db.pokemonDao();
+    public void getPokemonFromId(final Context context, final int id) {
 
-                List<Pokemon> tempList = dao.getPokemonsFromName(query);
+        runnable = () -> {
+            PokemonDb db = PokemonDb.getInstance(context);
+            PokemonDao dao = db.pokemonDao();
 
-                list.addAll(tempList);
+            List<Pokemon> tempList = dao.getPokemonFromId(id);
+            Log.w("POKE", "Listona: " + tempList.size());
 
-                if (handler != null)
-                    handler.post(update);
-            }
+            pokemonListViewModel.setPokemons(tempList);
         };
-        this.start();
-    }
 
-    public void getPokemonFromId(final Context context, final Handler handler,
-                                 final Runnable update, final int id){
-        runnable = new Runnable() {
-            @Override
-            public void run() {
-                PokemonDb db = PokemonDb.getInstance(context);
-                PokemonDao dao = db.pokemonDao();
-
-                List<Pokemon> tempList = dao.getPokemonFromId(id);
-                Log.w("POKE", "Listona: " + tempList.size());
-
-                list.addAll(tempList);
-
-                if (handler != null)
-                    handler.post(update);
-            }
-        };
         this.start();
     }
 
