@@ -45,7 +45,7 @@ public class PokedexActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pokedex);
 
-        fragmentPokedex = new FragmentPokedex();
+        fragmentPokedex = new FragmentPokedex(PokedexActivity.this);
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.flMain, fragmentPokedex)

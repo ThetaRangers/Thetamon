@@ -48,9 +48,12 @@ public class FragmentPokedex extends Fragment {
     Holder holder;
     List<Pokemon> list;
 
-
     public FragmentPokedex(){
 
+    }
+
+    public FragmentPokedex(Context context){
+        this.context = context;
     }
 
     @Override
@@ -64,6 +67,7 @@ public class FragmentPokedex extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        handler = new Handler();
         holder = new Holder(view);
     }
 
@@ -80,19 +84,18 @@ public class FragmentPokedex extends Fragment {
             @Override
             public void run() {
                 list = daoThread.getList();
-
                 if (list.size() > 0) {
                     holder.adapter.setPokemonList(list);
                 } else {
-                    Toast.makeText(getContext(), R.string.no_pokemon_found, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, R.string.no_pokemon_found, Toast.LENGTH_SHORT).show();
                 }
             }
         };
 
         try {
-            daoThread.getPokemonFromId(getContext(), handler, update, Integer.parseInt(query));
+            daoThread.getPokemonFromId(context, handler, update, Integer.parseInt(query));
         } catch (NumberFormatException e) {
-            daoThread.getPokemonFromName(getContext(), handler, update, query);
+            daoThread.getPokemonFromName(context, handler, update, query);
         }
     }
 
@@ -114,7 +117,7 @@ public class FragmentPokedex extends Fragment {
             ivClose.setOnClickListener(this);
 
             rvPokedex = fp.findViewById(R.id.rvPokedex);
-            rvPokedex.setLayoutManager(new LinearLayoutManager(getContext()));
+            rvPokedex.setLayoutManager(new LinearLayoutManager(context));
             adapter = new PokemonAdapter();
             rvPokedex.setAdapter(adapter);
 
@@ -128,7 +131,6 @@ public class FragmentPokedex extends Fragment {
             ivSearch.setOnClickListener(this);
 
             search(""); //Search all the pokemons
-            Log.d("POKE", "belughi ");
         }
 
         @Override
@@ -204,18 +206,19 @@ public class FragmentPokedex extends Fragment {
             public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
                 //TODO usare getter
                 Pokemon pokemon = pokemonList.get(position);
+
                 holder.cvPokemon.setCardBackgroundColor(Color.parseColor(pokemon.averageColor));
                 holder.tvId.setText("#" + pokemon.id);
                 holder.tvName.setText(capitalize(pokemon.name));
                 holder.ivSprite.setImageBitmap(imageManager.loadFromDisk(
-                        getContext().getFilesDir() + "/sprites_front", pokemon.id + ".png"));
+                        context.getFilesDir() + "/sprites_front", pokemon.id + ".png"));
 
                 String type1 = pokemon.type1;
                 type1 = capitalize(type1);
                 String color1 = "colorType" + type1;
-                int color1ID = getResources().getIdentifier(color1, "color", getContext().getPackageName());
+                int color1ID = getResources().getIdentifier(color1, "color", context.getPackageName());
                 GradientDrawable bg1 = (GradientDrawable) holder.tvType1.getBackground();
-                bg1.setColor(getContext().getColor(color1ID));
+                bg1.setColor(context.getColor(color1ID));
                 if (type1.equals("Dark"))
                     bg1.setStroke(3, Color.WHITE);
                 else
@@ -226,9 +229,9 @@ public class FragmentPokedex extends Fragment {
                 if (type2 != null) {
                     type2 = capitalize(type2);
                     String color2 = "colorType" + type2;
-                    int color2ID = getResources().getIdentifier(color2, "color", getContext().getPackageName());
+                    int color2ID = getResources().getIdentifier(color2, "color", context.getPackageName());
                     GradientDrawable bg2 = (GradientDrawable) holder.tvType2.getBackground();
-                    bg2.setColor(getContext().getColor(color2ID));
+                    bg2.setColor(context.getColor(color2ID));
                     if (type2.equals("Dark"))
                         bg2.setStroke(3, Color.WHITE);
                     else

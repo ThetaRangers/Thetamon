@@ -79,7 +79,6 @@ public class DaoThread extends Thread {
                 PokemonDao dao = db.pokemonDao();
 
                 List<Pokemon> tempList = dao.getPokemonsFromName(query);
-                Log.w("POKE", "Listona: " + tempList.size());
 
                 list.addAll(tempList);
 
