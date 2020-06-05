@@ -2,4 +2,7 @@
     <string name="app_name">Thetamon</string>
     <string name="no_pokemon_found">No pokemon found</string>
     <string name="pokemon_search_string">Insert Name or id</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
