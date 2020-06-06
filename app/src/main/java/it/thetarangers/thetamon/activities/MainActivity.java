@@ -49,18 +49,16 @@ public class MainActivity extends AppCompatActivity {
         }
 
         final Handler h = new Handler();
-        final Runnable update = new Runnable() {
-            @Override
-            public void run() {
-                ((TextView) findViewById(R.id.tv_hello)).setText("Unzip Completed");
-                findViewById(R.id.progressBar).setVisibility(View.GONE);
-                editor.putBoolean("FirstUse", false);
-                editor.apply();
+        final Runnable update = () -> {
+            //TODO replace with meaningfull text
+            ((TextView) findViewById(R.id.tv_hello)).setText("Unzip Completed");
+            findViewById(R.id.progressBar).setVisibility(View.GONE);
+            editor.putBoolean("FirstUse", false);
+            editor.apply();
 
-                Intent intent = new Intent(MainActivity.this, PokedexActivity.class);
-                startActivity(intent);
-                finish();
-            }
+            Intent intent = new Intent(MainActivity.this, PokedexActivity.class);
+            startActivity(intent);
+            finish();
         };
 
         final VolleyPokemon volley = new VolleyPokemon(MainActivity.this) {

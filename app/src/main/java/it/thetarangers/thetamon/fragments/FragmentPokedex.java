@@ -44,16 +44,11 @@ public class FragmentPokedex extends Fragment {
     PokemonListViewModel pokemonListViewModel;
     Handler handler;
     Holder holder;
-    List<Pokemon> list;
+
     private Context context;
-
-    public FragmentPokedex() {
-
-    }
 
     public FragmentPokedex(Context context) {
         this.context = context;
-
     }
 
     @Override
@@ -66,13 +61,17 @@ public class FragmentPokedex extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         handler = new Handler();
-        pokemonListViewModel = new ViewModelProvider(requireActivity()).get(PokemonListViewModel.class);
         holder = new Holder(view);
-        pokemonListViewModel.getPokemons().observe(getViewLifecycleOwner(), pokemons -> holder.adapter.setPokemonList(pokemons));
+
+        pokemonListViewModel = new ViewModelProvider(requireActivity()).get(PokemonListViewModel.class);
+        pokemonListViewModel.getPokemons().observe(getViewLifecycleOwner(),
+                pokemons -> holder.adapter.setPokemonList(pokemons));   //Observe the LiveData
+
         List<Pokemon> tmp = pokemonListViewModel.getPokemonList();
         if (tmp == null)
-            search("");
+            search(""); //Loads all pokemons
     }
 
     public String capitalize(String in) { // TODO maybe put this somewhere else
@@ -80,13 +79,13 @@ public class FragmentPokedex extends Fragment {
     }
 
     private void search(String query) {
-        Log.w("POKE", "Sto cercando questo " + query);
-
         DaoThread daoThread = new DaoThread(pokemonListViewModel);
 
         try {
+            //If the searched string is an int search by id
             daoThread.getPokemonFromId(context, Integer.parseInt(query));
         } catch (NumberFormatException e) {
+            //Otherwise search by name
             daoThread.getPokemonFromName(context, query);
         }
     }
@@ -111,6 +110,7 @@ public class FragmentPokedex extends Fragment {
             rvPokedex = fp.findViewById(R.id.rvPokedex);
             rvPokedex.setLayoutManager(new LinearLayoutManager(context));
             adapter = new PokemonAdapter();
+            adapter.setStateRestorationPolicy(RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY);
             rvPokedex.setAdapter(adapter);
 
             fastScroller = fp.findViewById(R.id.fastScroller);
@@ -121,7 +121,6 @@ public class FragmentPokedex extends Fragment {
 
             ivSearch = fp.findViewById(R.id.ivSearch);
             ivSearch.setOnClickListener(this);
-
         }
 
         @Override
