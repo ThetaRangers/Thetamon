@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -32,6 +31,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import it.thetarangers.thetamon.R;
 import it.thetarangers.thetamon.database.DaoThread;
@@ -41,9 +41,8 @@ import it.thetarangers.thetamon.viewmodel.PokemonListViewModel;
 
 public class FragmentPokedex extends Fragment {
 
-    PokemonListViewModel pokemonListViewModel;
-    Handler handler;
-    Holder holder;
+    private PokemonListViewModel pokemonListViewModel;
+    private Holder holder;
 
     private Context context;
 
@@ -62,7 +61,6 @@ public class FragmentPokedex extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        handler = new Handler();
         holder = new Holder(view);
 
         pokemonListViewModel = new ViewModelProvider(requireActivity()).get(PokemonListViewModel.class);
@@ -74,7 +72,7 @@ public class FragmentPokedex extends Fragment {
             search(""); //Loads all pokemons
     }
 
-    public String capitalize(String in) { // TODO maybe put this somewhere else
+    private String capitalize(String in) { // TODO maybe put this somewhere else
         return in.substring(0, 1).toUpperCase() + in.substring(1);
     }
 
@@ -99,7 +97,7 @@ public class FragmentPokedex extends Fragment {
         final ImageView ivSearch;
         final RecyclerViewFastScroller fastScroller;
 
-        public Holder(View fp) {
+        Holder(View fp) {
 
             fabSearch = fp.findViewById(R.id.fabSearch);
             fabSearch.setOnClickListener(this);
@@ -117,7 +115,7 @@ public class FragmentPokedex extends Fragment {
             fastScroller.attachFastScrollerToRecyclerView(rvPokedex);
 
             tilSearch = fp.findViewById(R.id.tilSearch);
-            tilSearch.getEditText().setOnEditorActionListener(this);
+            Objects.requireNonNull(tilSearch.getEditText()).setOnEditorActionListener(this);
 
             ivSearch = fp.findViewById(R.id.ivSearch);
             ivSearch.setOnClickListener(this);
@@ -132,14 +130,14 @@ public class FragmentPokedex extends Fragment {
                 fabSearch.setExpanded(false);
                 fastScroller.setVisibility(View.VISIBLE);
             } else if (v.getId() == R.id.ivSearch) {
-                tilSearch.getEditText().onEditorAction(EditorInfo.IME_ACTION_DONE);
+                Objects.requireNonNull(tilSearch.getEditText()).onEditorAction(EditorInfo.IME_ACTION_DONE);
             }
         }
 
         @Override
         public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-            search(tilSearch.getEditText().getText().toString());
-            Log.d("POKE", "Perché entro qua dentro porca miseria?");
+            search(Objects.requireNonNull(tilSearch.getEditText()).getText().toString());
+
             fabSearch.setExpanded(false);
             fastScroller.setVisibility(View.VISIBLE);
             return false;
