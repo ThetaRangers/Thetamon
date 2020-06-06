@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +30,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 import it.thetarangers.thetamon.R;
@@ -166,7 +166,7 @@ public class FragmentPokedex extends Fragment {
 
         class PokemonAdapter extends RecyclerView.Adapter<ViewHolder>
                 implements RecyclerViewFastScroller.OnPopupTextUpdate {
-            public List<Pokemon> pokemonList;
+            private List<Pokemon> pokemonList;
             private ImageManager imageManager = new ImageManager();
 
             public PokemonAdapter() {
@@ -174,7 +174,6 @@ public class FragmentPokedex extends Fragment {
             }
 
             public void setPokemonList(List<Pokemon> pokemonList) {
-                Log.d("POKE", "Grandezza lista: " + pokemonList.size());
                 this.pokemonList = pokemonList;
                 notifyDataSetChanged();
             }
@@ -197,34 +196,31 @@ public class FragmentPokedex extends Fragment {
                 Pokemon pokemon = pokemonList.get(position);
 
                 holder.cvPokemon.setCardBackgroundColor(Color.parseColor(pokemon.averageColor));
-                holder.tvId.setText("#" + pokemon.id);
+                holder.tvId.setText(String.format(Locale.getDefault(), "#%d", pokemon.id));
                 holder.tvName.setText(capitalize(pokemon.name));
                 holder.ivSprite.setImageBitmap(imageManager.loadFromDisk(
-                        context.getFilesDir() + "/sprites_front", pokemon.id + ".png"));
+                        context.getFilesDir() + getString(R.string.sprites_front),
+                        pokemon.id + getString(R.string.extension)));
 
+                //Initialize type1 TextView
                 String type1 = pokemon.type1;
                 type1 = capitalize(type1);
-                String color1 = "colorType" + type1;
+                String color1 = getString(R.string.color_type) + type1;
                 int color1ID = getResources().getIdentifier(color1, "color", context.getPackageName());
                 GradientDrawable bg1 = (GradientDrawable) holder.tvType1.getBackground();
                 bg1.setColor(context.getColor(color1ID));
-                if (type1.equals("Dark"))
-                    bg1.setStroke(3, Color.WHITE);
-                else
-                    bg1.setStroke(3, Color.DKGRAY);
+                bg1.setStroke((int) getResources().getDimension(R.dimen.stroke_tv_type), Color.WHITE);
                 holder.tvType1.setText(type1.toUpperCase());
 
                 String type2 = pokemon.type2;
+                //Initialize type2 TextView if exists
                 if (type2 != null) {
                     type2 = capitalize(type2);
-                    String color2 = "colorType" + type2;
+                    String color2 = getString(R.string.color_type) + type2;
                     int color2ID = getResources().getIdentifier(color2, "color", context.getPackageName());
                     GradientDrawable bg2 = (GradientDrawable) holder.tvType2.getBackground();
                     bg2.setColor(context.getColor(color2ID));
-                    if (type2.equals("Dark"))
-                        bg2.setStroke(3, Color.WHITE);
-                    else
-                        bg2.setStroke(3, Color.DKGRAY);
+                    bg2.setStroke((int) getResources().getDimension(R.dimen.stroke_tv_type), Color.WHITE);
                     holder.tvType2.setText(type2.toUpperCase());
                     holder.tvType2.setVisibility(View.VISIBLE);
                 } else {

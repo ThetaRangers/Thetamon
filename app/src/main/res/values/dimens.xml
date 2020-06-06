@@ -7,4 +7,5 @@
     <dimen name="card_padding_vertical">6dp</dimen>
     <dimen name="tv_padding">8dp</dimen>
     <dimen name="floating_button_margin">16dp</dimen>
+    <dimen name="stroke_tv_type">1dp</dimen>
 </resources>
