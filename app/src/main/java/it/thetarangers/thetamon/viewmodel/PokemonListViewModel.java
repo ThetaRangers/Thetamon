@@ -23,6 +23,10 @@ public class PokemonListViewModel extends ViewModel {
         this.pokemons.postValue(pokemons);
     }
 
+    public void setPokemonsSynchronous(List<Pokemon> pokemons) {
+        this.pokemons.setValue(pokemons);
+    }
+
     public List<Pokemon> getPokemonList() {
         return pokemons.getValue();
     }

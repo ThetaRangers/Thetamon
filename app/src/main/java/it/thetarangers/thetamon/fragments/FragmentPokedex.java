@@ -48,7 +48,6 @@ public class FragmentPokedex extends Fragment {
     private Context context;
 
     public FragmentPokedex(){
-
     }
 
     public FragmentPokedex(Context context) {
@@ -70,11 +69,11 @@ public class FragmentPokedex extends Fragment {
 
         pokemonListViewModel = new ViewModelProvider(requireActivity()).get(PokemonListViewModel.class);
         pokemonListViewModel.getPokemons().observe(getViewLifecycleOwner(),
-                pokemons -> holder.adapter.setPokemonList(pokemons));   //Observe the LiveData
+                pokemons -> holder.adapter.setPokemonList(pokemons));   // Observe the LiveData
 
         List<Pokemon> tmp = pokemonListViewModel.getPokemonList();
         if (tmp == null)
-            search(""); //Loads all pokemons
+            search(""); // Load all pokemons
     }
 
     private String capitalize(String in) { // TODO maybe put this somewhere else
@@ -85,12 +84,18 @@ public class FragmentPokedex extends Fragment {
         DaoThread daoThread = new DaoThread(pokemonListViewModel);
 
         try {
-            //If the searched string is an int search by id
+            // If the searched string is an int search by id
             daoThread.getPokemonFromId(context, Integer.parseInt(query));
         } catch (NumberFormatException e) {
-            //Otherwise search by name
+            // Otherwise search by name
             daoThread.getPokemonFromName(context, query);
         }
+    }
+
+    @Override
+    public void onStop() {
+        pokemonListViewModel.setPokemonsSynchronous(holder.adapter.pokemonList);
+        super.onStop();
     }
 
     class Holder implements View.OnClickListener, EditText.OnEditorActionListener {
@@ -191,7 +196,7 @@ public class FragmentPokedex extends Fragment {
             @Override
             public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
                 ConstraintLayout cl;
-                //Inflate row of RecyclerView
+                // Inflate row of RecyclerView
                 cl = (ConstraintLayout) LayoutInflater
                         .from(parent.getContext())
                         .inflate(R.layout.item_pokemon, parent, false);
@@ -201,7 +206,7 @@ public class FragmentPokedex extends Fragment {
 
             @Override
             public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-                //TODO usare getter
+                // TODO usare getter
                 Pokemon pokemon = pokemonList.get(position);
 
                 holder.cvPokemon.setCardBackgroundColor(Color.parseColor(pokemon.getAverageColor()));
@@ -211,7 +216,7 @@ public class FragmentPokedex extends Fragment {
                         context.getFilesDir() + getString(R.string.sprites_front),
                         pokemon.getId() + getString(R.string.extension)));
 
-                //Initialize type1 TextView
+                // Initialize type1 TextView
                 String type1 = pokemon.getType1();
                 type1 = capitalize(type1);
                 String color1 = getString(R.string.color_type) + type1;
@@ -222,7 +227,7 @@ public class FragmentPokedex extends Fragment {
                 holder.tvType1.setText(type1.toUpperCase());
 
                 String type2 = pokemon.getType2();
-                //Initialize type2 TextView if exists
+                // Initialize type2 TextView if exists
                 if (type2 != null) {
                     type2 = capitalize(type2);
                     String color2 = getString(R.string.color_type) + type2;
@@ -248,11 +253,5 @@ public class FragmentPokedex extends Fragment {
                 return String.valueOf(pokemonList.get(i).getId());
             }
         }
-    }
-
-    @Override
-    public void onStop() {
-        pokemonListViewModel.setPokemons(holder.adapter.pokemonList);
-        super.onStop();
     }
 }
