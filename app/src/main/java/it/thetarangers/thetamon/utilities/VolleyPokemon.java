@@ -84,8 +84,6 @@ public abstract class VolleyPokemon implements Response.ErrorListener, Response.
             pokemonList = gson.fromJson(result, listType);
             pokemonList = pokemonList.subList(0, POKEDEX_LENGHT);
 
-            Log.w("POKE", pokemonList.get(2).url);
-
             for (int i = 0; i < pokemonList.size(); i++) {
                 pokemonList.get(i).setIdFromUrl();
             }

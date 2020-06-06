@@ -195,15 +195,15 @@ public class FragmentPokedex extends Fragment {
                 //TODO usare getter
                 Pokemon pokemon = pokemonList.get(position);
 
-                holder.cvPokemon.setCardBackgroundColor(Color.parseColor(pokemon.averageColor));
-                holder.tvId.setText(String.format(Locale.getDefault(), "#%d", pokemon.id));
-                holder.tvName.setText(capitalize(pokemon.name));
+                holder.cvPokemon.setCardBackgroundColor(Color.parseColor(pokemon.getAverageColor()));
+                holder.tvId.setText(String.format(Locale.getDefault(), "#%d", pokemon.getId()));
+                holder.tvName.setText(capitalize(pokemon.getName()));
                 holder.ivSprite.setImageBitmap(imageManager.loadFromDisk(
                         context.getFilesDir() + getString(R.string.sprites_front),
-                        pokemon.id + getString(R.string.extension)));
+                        pokemon.getId() + getString(R.string.extension)));
 
                 //Initialize type1 TextView
-                String type1 = pokemon.type1;
+                String type1 = pokemon.getType1();
                 type1 = capitalize(type1);
                 String color1 = getString(R.string.color_type) + type1;
                 int color1ID = getResources().getIdentifier(color1, "color", context.getPackageName());
@@ -212,7 +212,7 @@ public class FragmentPokedex extends Fragment {
                 bg1.setStroke((int) getResources().getDimension(R.dimen.stroke_tv_type), Color.WHITE);
                 holder.tvType1.setText(type1.toUpperCase());
 
-                String type2 = pokemon.type2;
+                String type2 = pokemon.getType2();
                 //Initialize type2 TextView if exists
                 if (type2 != null) {
                     type2 = capitalize(type2);
@@ -236,7 +236,7 @@ public class FragmentPokedex extends Fragment {
             @NotNull
             @Override
             public CharSequence onChange(int i) {
-                return String.valueOf(pokemonList.get(i).id);
+                return String.valueOf(pokemonList.get(i).getId());
             }
         }
     }
