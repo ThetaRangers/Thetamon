@@ -25,9 +25,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
-import com.qtalk.recyclerviewfastscroller.RecyclerViewFastScroller;
-
-import org.jetbrains.annotations.NotNull;
+import com.simplecityapps.recyclerview_fastscroll.interfaces.OnFastScrollStateChangeListener;
+import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -98,14 +97,13 @@ public class FragmentPokedex extends Fragment {
         super.onStop();
     }
 
-    class Holder implements View.OnClickListener, EditText.OnEditorActionListener {
-        final RecyclerView rvPokedex;
+    class Holder implements View.OnClickListener, EditText.OnEditorActionListener, OnFastScrollStateChangeListener {
+        final FastScrollRecyclerView rvPokedex;
         final PokemonAdapter adapter;
         final FloatingActionButton fabSearch;
         final ImageView ivClose;
         final TextInputLayout tilSearch;
         final ImageView ivSearch;
-        final RecyclerViewFastScroller fastScroller;
 
         Holder(View fp) {
 
@@ -120,9 +118,7 @@ public class FragmentPokedex extends Fragment {
             adapter = new PokemonAdapter();
             adapter.setStateRestorationPolicy(RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY);
             rvPokedex.setAdapter(adapter);
-
-            fastScroller = fp.findViewById(R.id.fastScroller);
-            fastScroller.attachFastScrollerToRecyclerView(rvPokedex);
+            rvPokedex.setOnFastScrollStateChangeListener(this);
 
             tilSearch = fp.findViewById(R.id.tilSearch);
             Objects.requireNonNull(tilSearch.getEditText()).setOnEditorActionListener(this);
@@ -134,11 +130,9 @@ public class FragmentPokedex extends Fragment {
         @Override
         public void onClick(View v) {
             if (v.getId() == R.id.fabSearch) {
-                fastScroller.setVisibility(View.GONE);
                 fabSearch.setExpanded(true);
             } else if (v.getId() == R.id.ivClose) {
                 fabSearch.setExpanded(false);
-                fastScroller.setVisibility(View.VISIBLE);
             } else if (v.getId() == R.id.ivSearch) {
                 Objects.requireNonNull(tilSearch.getEditText()).onEditorAction(EditorInfo.IME_ACTION_DONE);
             }
@@ -149,8 +143,17 @@ public class FragmentPokedex extends Fragment {
             search(Objects.requireNonNull(tilSearch.getEditText()).getText().toString());
 
             fabSearch.setExpanded(false);
-            fastScroller.setVisibility(View.VISIBLE);
             return false;
+        }
+
+        @Override
+        public void onFastScrollStart() {
+            fabSearch.setVisibility(View.GONE);
+        }
+
+        @Override
+        public void onFastScrollStop() {
+            fabSearch.setVisibility(View.VISIBLE);
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
@@ -175,7 +178,7 @@ public class FragmentPokedex extends Fragment {
         }
 
         class PokemonAdapter extends RecyclerView.Adapter<ViewHolder>
-                implements RecyclerViewFastScroller.OnPopupTextUpdate {
+                implements FastScrollRecyclerView.SectionedAdapter {
             private List<Pokemon> pokemonList;
             private ImageManager imageManager = new ImageManager();
 
@@ -247,10 +250,10 @@ public class FragmentPokedex extends Fragment {
                 return pokemonList.size();
             }
 
-            @NotNull
+            @NonNull
             @Override
-            public CharSequence onChange(int i) {
-                return String.valueOf(pokemonList.get(i).getId());
+            public String getSectionName(int position) {
+                return String.valueOf(pokemonList.get(position).getId());
             }
         }
     }
