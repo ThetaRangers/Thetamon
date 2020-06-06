@@ -3,4 +3,6 @@
     <string name="sprites_front">/sprites_front</string>
     <string name="extension">.png</string>
     <string name="color_type">colorType</string>
+    <string name="url">https://pokeapi.co/api/v2/pokemon?limit=10000</string>
+    <string name="url_type">https://pokeapi.co/api/v2/type/%s</string>
 </resources>

@@ -1,7 +1,6 @@
 package it.thetarangers.thetamon.utilities;
 
 import android.content.Context;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -20,12 +19,11 @@ import org.json.JSONObject;
 import java.lang.reflect.Type;
 import java.util.List;
 
+import it.thetarangers.thetamon.R;
 import it.thetarangers.thetamon.model.Pokemon;
 import it.thetarangers.thetamon.model.PokemonType;
 
 public abstract class VolleyPokemon implements Response.ErrorListener, Response.Listener<String> {
-    private final String URL = "https://pokeapi.co/api/v2/pokemon?limit=10000";
-    private final String URL_TYPE = "https://pokeapi.co/api/v2/type/%s";
     private final int POKEDEX_LENGHT = 807;
     private final int TYPES_NUMBER = PokemonType.values().length;
     private final Context context;
@@ -45,7 +43,7 @@ public abstract class VolleyPokemon implements Response.ErrorListener, Response.
         requestQueue = Volley.newRequestQueue(context);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                URL,
+                context.getString(R.string.url),
                 this,
                 this);
         requestQueue.add(stringRequest);
@@ -57,7 +55,7 @@ public abstract class VolleyPokemon implements Response.ErrorListener, Response.
 
         for (PokemonType type : PokemonType.values()) {
             StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                    String.format(URL_TYPE, type.name()),
+                    String.format(context.getString(R.string.url_type), type.name()),
                     listener,
                     this);
             requestQueue.add(stringRequest);
@@ -67,7 +65,7 @@ public abstract class VolleyPokemon implements Response.ErrorListener, Response.
     @Override
     public void onErrorResponse(VolleyError error) {
         //TODO make error Response
-        Toast.makeText(context, "Error", Toast.LENGTH_LONG).show();
+        Toast.makeText(context, R.string.volley_error, Toast.LENGTH_LONG).show();
     }
 
     @Override

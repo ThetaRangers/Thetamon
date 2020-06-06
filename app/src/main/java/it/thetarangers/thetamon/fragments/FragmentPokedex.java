@@ -12,6 +12,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -45,6 +46,10 @@ public class FragmentPokedex extends Fragment {
     private Holder holder;
 
     private Context context;
+
+    public FragmentPokedex(){
+
+    }
 
     public FragmentPokedex(Context context) {
         this.context = context;
@@ -174,8 +179,12 @@ public class FragmentPokedex extends Fragment {
             }
 
             public void setPokemonList(List<Pokemon> pokemonList) {
-                this.pokemonList = pokemonList;
-                notifyDataSetChanged();
+                if(pokemonList.size() > 0) {
+                    this.pokemonList = pokemonList;
+                    notifyDataSetChanged();
+                } else {
+                    Toast.makeText(context, context.getString(R.string.no_pokemon_found), Toast.LENGTH_SHORT).show();
+                }
             }
 
             @NonNull
@@ -239,5 +248,11 @@ public class FragmentPokedex extends Fragment {
                 return String.valueOf(pokemonList.get(i).getId());
             }
         }
+    }
+
+    @Override
+    public void onStop() {
+        pokemonListViewModel.setPokemons(holder.adapter.pokemonList);
+        super.onStop();
     }
 }
