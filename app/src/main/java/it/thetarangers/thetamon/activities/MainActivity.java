@@ -19,6 +19,7 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 import it.thetarangers.thetamon.R;
@@ -40,10 +41,6 @@ public class MainActivity extends AppCompatActivity {
         final SharedPreferences.Editor editor = sharedPreferences.edit();
         boolean isFirstUse = sharedPreferences.getBoolean("FirstUse", true);
 
-        ImageView ivAnim = findViewById(R.id.ivAnim);
-        AnimationDrawable animation = (AnimationDrawable) ivAnim.getBackground();
-        animation.start();
-
         /*if (!isFirstUse) {
             Log.d("POKE", "Bypassed Download");
             Intent intent = new Intent(MainActivity.this, PokedexActivity.class);
@@ -52,10 +49,14 @@ public class MainActivity extends AppCompatActivity {
             return;
         }*/
 
+        ImageView ivAnim = findViewById(R.id.ivAnim);
+        AnimationDrawable animation = (AnimationDrawable) ivAnim.getBackground();
+        animation.start();
+
         final Handler h = new Handler();
         final Runnable update = () -> {
             //TODO replace with meaningfull text
-            ((TextView) findViewById(R.id.tv_hello)).setText("Unzip Completed");
+            ((TextView) findViewById(R.id.tv_loading)).setText("Unzip Completed");
             findViewById(R.id.progressBar).setVisibility(View.GONE);
             editor.putBoolean("FirstUse", false);
             editor.apply();
@@ -71,8 +72,15 @@ public class MainActivity extends AppCompatActivity {
                 Log.w("POKE", pokemonList.size() + "");
 
                 final DaoThread daoThread = new DaoThread();
-                avgColor(pokemonList);
-                daoThread.fill(MainActivity.this, pokemonList, h, update);
+                Thread t = new Thread() {
+                    @Override
+                    public void run() {
+                        avgColor(pokemonList);
+                        daoThread.fill(MainActivity.this, pokemonList, h, update);
+                    }
+                };
+
+                t.start();
 
             }
         };
@@ -82,9 +90,9 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 FileDownloader fd = new FileDownloader(MainActivity.this);
 
-                fd.downloadFile(// TODO static strings
-                        "https://github.com/ThetaRangers/Thetamon/blob/master/sprites.zip?raw=true",
-                        "Sprites", "sprites.zip");
+                fd.downloadFile(getString(R.string.url_sprites),
+                        getString(R.string.sprites_temp_path),
+                        getString(R.string.sprites_archive));
                 unpack();
 
                 volley.getPokemonList();
@@ -97,7 +105,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void unpack() {
         File file = new File(getApplicationContext().getExternalFilesDir(null),
-                "Sprites/sprites.zip");
+                String.format(Locale.getDefault(), "%s/%s",
+                        getString(R.string.sprites_temp_path),
+                        getString(R.string.sprites_archive)));
         FileUnzipper fu = new FileUnzipper();
 
         if (!fu.unzip(file, getApplicationContext().getFilesDir().getAbsolutePath())) {
@@ -118,7 +128,8 @@ public class MainActivity extends AppCompatActivity {
 
         for (int i = 0; i < pokemons.size(); i++) {
             Bitmap bitmap = imageManager.loadFromDisk(MainActivity.this.getFilesDir() +
-                    "/sprites_front", pokemons.get(i).getId() + ".png");
+                    getString(R.string.sprites_front), pokemons.get(i).getId() +
+                    getString(R.string.extension));
 
             pokemons.get(i).setAverageColor(imageManager.getDesaturatedColor(bitmap, -1));
         }
