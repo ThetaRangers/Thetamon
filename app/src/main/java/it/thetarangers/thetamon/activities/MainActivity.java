@@ -4,10 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -38,13 +40,17 @@ public class MainActivity extends AppCompatActivity {
         final SharedPreferences.Editor editor = sharedPreferences.edit();
         boolean isFirstUse = sharedPreferences.getBoolean("FirstUse", true);
 
-        if (!isFirstUse) {
+        ImageView ivAnim = findViewById(R.id.ivAnim);
+        AnimationDrawable animation = (AnimationDrawable) ivAnim.getBackground();
+        animation.start();
+
+        /*if (!isFirstUse) {
             Log.d("POKE", "Bypassed Download");
             Intent intent = new Intent(MainActivity.this, PokedexActivity.class);
             startActivity(intent);
             finish();
             return;
-        }
+        }*/
 
         final Handler h = new Handler();
         final Runnable update = () -> {
