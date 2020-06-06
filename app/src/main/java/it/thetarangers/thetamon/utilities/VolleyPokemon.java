@@ -18,7 +18,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
-import java.util.HashMap;
 import java.util.List;
 
 import it.thetarangers.thetamon.model.Pokemon;
@@ -114,8 +113,6 @@ public abstract class VolleyPokemon implements Response.ErrorListener, Response.
 
                 JSONObject jsonObject = new JSONObject(response);
                 String name = jsonObject.getString("name");
-
-                HashMap<Integer, Pokemon> pokemonHashMap = new HashMap<>();
 
                 JSONArray pokemons = jsonObject.getJSONArray("pokemon");
 

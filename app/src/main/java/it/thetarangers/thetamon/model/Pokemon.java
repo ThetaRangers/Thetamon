@@ -1,16 +1,12 @@
 package it.thetarangers.thetamon.model;
 
-import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-import java.util.List;
-
 @Entity(tableName = "Pokemon")
 public class Pokemon {
-    @NonNull
     @PrimaryKey
     public int id;
 
@@ -43,10 +39,12 @@ public class Pokemon {
     }
 
     public int setIdFromUrl(){
+        //Parse URL to get id
         String temp = this.url;
         temp = temp.substring("https://pokeapi.co/api/v2/pokemon/".length());
         temp = temp.substring(0, temp.length() - 1);
 
+        //Set id from parsed string
         return this.id = Integer.parseInt(temp);
     }
 
@@ -56,11 +54,6 @@ public class Pokemon {
         } else {
             this.type2 = type;
         }
-    }
-
-    public void setType(PokemonType type1, PokemonType type2){
-        this.type1 = type1.name();
-        this.type2 = type2.name();
     }
 
     public void setAverageColor(String averageColor){

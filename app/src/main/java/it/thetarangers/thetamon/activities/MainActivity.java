@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -30,7 +29,6 @@ import it.thetarangers.thetamon.utilities.VolleyPokemon;
 
 public class MainActivity extends AppCompatActivity {
 
-    private List<Pokemon> pokemonListOna;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = getPreferences(Context.MODE_PRIVATE);
         final SharedPreferences.Editor editor = sharedPreferences.edit();
-        Boolean isFirstUse = sharedPreferences.getBoolean("FirstUse", true);
+        boolean isFirstUse = sharedPreferences.getBoolean("FirstUse", true);
 
         if (!isFirstUse) {
             Log.d("POKE", "Bypassed Download");
@@ -67,7 +65,6 @@ public class MainActivity extends AppCompatActivity {
                 Log.w("POKE", pokemonList.size() + "");
 
                 final DaoThread daoThread = new DaoThread();
-                pokemonListOna = pokemonList;
                 avgColor(pokemonList);
                 daoThread.fill(MainActivity.this, pokemonList, h, update);
 

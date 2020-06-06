@@ -37,8 +37,6 @@ public class DaoThread extends Thread {
                 dao.insertPokemon(pokemons.get(i));
             }
 
-            Log.w("POKE", "Inserted " + dao.getPokemons().size() + " in the database");
-
             if (handler != null)
                 handler.post(update);
         };
@@ -66,7 +64,6 @@ public class DaoThread extends Thread {
             PokemonDao dao = db.pokemonDao();
 
             List<Pokemon> tempList = dao.getPokemonFromId(id);
-            Log.w("POKE", "Listona: " + tempList.size());
 
             pokemonListViewModel.setPokemons(tempList);
         };

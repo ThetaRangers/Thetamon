@@ -1,6 +1,5 @@
 package it.thetarangers.thetamon.utilities;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -9,8 +8,6 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-
-import it.thetarangers.thetamon.model.Pokemon;
 
 public class ImageManager {
 
@@ -55,11 +52,10 @@ public class ImageManager {
         int blue = (blueColors/pixelCount);
 
         if (desaturation != -1) {
-            float f = desaturation; // desaturate by 20%
             float L = (float) (0.3 * red + 0.6 * green + 0.1 * blue);
-            float new_r = red + f * (L - red);
-            float new_g = green + f * (L - green);
-            float new_b = blue + f * (L - blue);
+            float new_r = red + desaturation * (L - red);
+            float new_g = green + desaturation * (L - green);
+            float new_b = blue + desaturation * (L - blue);
 
             int color = Color.rgb(new_r, new_g, new_b);
             return "#" + Integer.toHexString(color).substring(2);
