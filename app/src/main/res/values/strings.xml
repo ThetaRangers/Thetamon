@@ -5,6 +5,9 @@
     <string name="volley_error">Error in reaching PokeApi</string>
     <string name="not_found">No Pokemons found</string>
     <string name="downloading">Downloading resources…</string>
+    <string name="error_unzip">Error unzipping file</string>
+    <string name="extracting">Extracting resources…</string>
+    <string name="updating_db">Updating database…</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

@@ -27,16 +27,14 @@ public class ImageManager {
         return null;
     }
 
-    public String getDesaturatedColor(Bitmap bitmap, float desaturation){
+    public String getAverageColor(Bitmap bitmap, int rate) {
         int redColors = 0;
         int greenColors = 0;
         int blueColors = 0;
         int pixelCount = 0;
 
-        for (int y = 0; y < bitmap.getHeight(); y++)
-        {
-            for (int x = 0; x < bitmap.getWidth(); x++)
-            {
+        for (int y = 0; y < bitmap.getHeight(); y += rate) {
+            for (int x = 0; x < bitmap.getWidth(); x += rate) {
                 int c = bitmap.getPixel(x, y);
                 if (c != Color.TRANSPARENT) {
                     pixelCount++;
@@ -47,20 +45,11 @@ public class ImageManager {
             }
         }
 
-        int red = (redColors/pixelCount);
-        int green = (greenColors/pixelCount);
-        int blue = (blueColors/pixelCount);
+        int red = (redColors / pixelCount);
+        int green = (greenColors / pixelCount);
+        int blue = (blueColors / pixelCount);
 
-        if (desaturation != -1) {
-            float L = (float) (0.3 * red + 0.6 * green + 0.1 * blue);
-            float new_r = red + desaturation * (L - red);
-            float new_g = green + desaturation * (L - green);
-            float new_b = blue + desaturation * (L - blue);
+        return "#" + Integer.toHexString(Color.rgb(red, green, blue)).substring(2);
 
-            int color = Color.rgb(new_r, new_g, new_b);
-            return "#" + Integer.toHexString(color).substring(2);
-        } else {
-            return "#" + Integer.toHexString(Color.rgb(red, green, blue)).substring(2);
-        }
     }
 }

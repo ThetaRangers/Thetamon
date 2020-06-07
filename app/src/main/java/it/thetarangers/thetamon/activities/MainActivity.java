@@ -8,9 +8,9 @@ import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -32,6 +32,9 @@ import it.thetarangers.thetamon.utilities.VolleyPokemon;
 
 public class MainActivity extends AppCompatActivity {
 
+    Holder holder;
+    Handler handler;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,15 +52,10 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        ImageView ivAnim = findViewById(R.id.ivAnim);
-        AnimationDrawable animation = (AnimationDrawable) ivAnim.getBackground();
-        animation.start();
+        holder = new Holder();
 
-        final Handler h = new Handler();
+        handler = new Handler();
         final Runnable update = () -> {
-            //TODO replace with meaningful text
-            ((TextView) findViewById(R.id.tv_loading)).setText("Unzip Completed");
-            findViewById(R.id.progressBar).setVisibility(View.GONE);
             editor.putBoolean("FirstUse", false);
             editor.apply();
 
@@ -69,14 +67,13 @@ public class MainActivity extends AppCompatActivity {
         final VolleyPokemon volley = new VolleyPokemon(MainActivity.this) {
             @Override
             public void fill(List<Pokemon> pokemonList) {
-                Log.w("POKE", pokemonList.size() + "");
 
-                final DaoThread daoThread = new DaoThread();
                 Thread t = new Thread() {
                     @Override
                     public void run() {
                         avgColor(pokemonList);
-                        daoThread.fill(MainActivity.this, pokemonList, h, update);
+                        DaoThread daoThread = new DaoThread();
+                        daoThread.fill(MainActivity.this, pokemonList, handler, update);
                     }
                 };
 
@@ -90,10 +87,19 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 FileDownloader fd = new FileDownloader(MainActivity.this);
 
+                // Blocking operation
                 fd.downloadFile(getString(R.string.url_sprites),
                         getString(R.string.sprites_temp_path),
                         getString(R.string.sprites_archive));
-                unpack();
+
+                handler.post(() -> holder.setTvLoading(R.string.extracting));
+
+                if (!unpack()) {
+                    handler.post(() -> finishAndRemoveTask());
+                    return;
+                }
+
+                handler.post(() -> holder.setTvLoading(R.string.updating_db));
 
                 volley.getPokemonList();
             }
@@ -103,23 +109,45 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void unpack() {
+    private Boolean unpack() {
         File file = new File(getApplicationContext().getExternalFilesDir(null),
                 String.format(Locale.getDefault(), "%s/%s",
                         getString(R.string.sprites_temp_path),
                         getString(R.string.sprites_archive)));
         FileUnzipper fu = new FileUnzipper();
 
+        // Remove resources already in internal memory
+        cleanUpInternal();
+
         if (!fu.unzip(file, getApplicationContext().getFilesDir().getAbsolutePath())) {
-            // TODO
+            handler.post(() -> Toast.makeText(this, getString(R.string.error_unzip),
+                    Toast.LENGTH_LONG).show());
+            cleanUpExternal();
+            return false;
         }
 
+        cleanUpExternal();
+        return true;
+    }
+
+    private void cleanUpExternal() {
         try {
-            Log.d("POKE", "Cleaning up");
             FileUtils.forceDelete(Objects.requireNonNull(getApplicationContext()
                     .getExternalFilesDir(null)));
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void cleanUpInternal() {
+        File file = new File(getApplicationContext()
+                .getFilesDir(), getString(R.string.sprites_front));
+        if (file.exists()) {
+            try {
+                FileUtils.forceDelete(file);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -131,7 +159,25 @@ public class MainActivity extends AppCompatActivity {
                     getString(R.string.sprites_front), pokemons.get(i).getId() +
                     getString(R.string.extension));
 
-            pokemons.get(i).setAverageColor(imageManager.getDesaturatedColor(bitmap, -1));
+            pokemons.get(i).setAverageColor(imageManager.getAverageColor(bitmap, 5));
+        }
+    }
+
+    class Holder {
+
+        ImageView ivAnim;
+        TextView tvLoading;
+
+        Holder() {
+            ivAnim = findViewById(R.id.ivAnim);
+            AnimationDrawable animation = (AnimationDrawable) ivAnim.getBackground();
+            animation.start();
+
+            tvLoading = findViewById(R.id.tvLoading);
+        }
+
+        public void setTvLoading(int resId) {
+            tvLoading.setText(resId);
         }
     }
 
