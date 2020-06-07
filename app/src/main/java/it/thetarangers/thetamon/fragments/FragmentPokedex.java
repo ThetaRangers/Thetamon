@@ -35,6 +35,7 @@ import java.util.Objects;
 
 import it.thetarangers.thetamon.R;
 import it.thetarangers.thetamon.adapter.FilterAdapter;
+import it.thetarangers.thetamon.adapter.PokedexAdapter;
 import it.thetarangers.thetamon.database.DaoThread;
 import it.thetarangers.thetamon.model.Pokemon;
 import it.thetarangers.thetamon.utilities.ImageManager;
@@ -70,7 +71,7 @@ public class FragmentPokedex extends Fragment {
 
     @Override
     public void onStop() {
-        pokemonListViewModel.setPokemonsSynchronous(holder.adapter.pokemonList);
+        pokemonListViewModel.setPokemonsSynchronous(holder.adapter.getUnfilteredPokemonList());
         super.onStop();
     }
 
@@ -88,7 +89,7 @@ public class FragmentPokedex extends Fragment {
 
     class Holder implements View.OnClickListener, EditText.OnEditorActionListener, OnFastScrollStateChangeListener {
         final FastScrollRecyclerView rvPokedex;
-        final PokemonAdapter adapter;
+        final PokedexAdapter adapter;
         final FilterAdapter typeAdapter;
         final FloatingActionButton fabSearch;
         final ImageView ivClose;
@@ -106,8 +107,9 @@ public class FragmentPokedex extends Fragment {
 
             rvPokedex = fp.findViewById(R.id.rvPokedex);
             rvPokedex.setLayoutManager(new LinearLayoutManager(getContext()));
-            adapter = new PokemonAdapter();
+            adapter = new PokedexAdapter(getContext());
             adapter.setStateRestorationPolicy(RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY);
+
             rvPokedex.setAdapter(adapter);
             rvPokedex.setOnFastScrollStateChangeListener(this);
 
@@ -152,113 +154,7 @@ public class FragmentPokedex extends Fragment {
             fabSearch.setVisibility(View.VISIBLE);
         }
 
-        class ViewHolder extends RecyclerView.ViewHolder {
-            ImageView ivSprite;
-            TextView tvName;
-            TextView tvId;
-            TextView tvType1;
-            TextView tvType2;
-            MaterialCardView cvPokemon;
 
-            public ViewHolder(@NonNull View itemView) {
-                super(itemView);
 
-                cvPokemon = itemView.findViewById(R.id.cvPokemon);
-                ivSprite = itemView.findViewById(R.id.ivSprite);
-                tvName = itemView.findViewById(R.id.tvName);
-                tvId = itemView.findViewById(R.id.tvId);
-                tvType1 = itemView.findViewById(R.id.tvType1);
-                tvType2 = itemView.findViewById(R.id.tvType2);
-
-            }
-        }
-
-        class PokemonAdapter extends RecyclerView.Adapter<ViewHolder>
-                implements FastScrollRecyclerView.SectionedAdapter {
-            private List<Pokemon> pokemonList;
-            private ImageManager imageManager = new ImageManager();
-
-            public PokemonAdapter() {
-                this.pokemonList = new ArrayList<>();
-            }
-
-            public void setPokemonList(List<Pokemon> pokemonList) {
-                if(pokemonList.size() > 0) {
-                    this.pokemonList = pokemonList;
-                    notifyDataSetChanged();
-                } else {
-                    if (getContext() != null) {
-                        Toast t = Toast.makeText(getContext(),
-                                getContext().getString(R.string.no_pokemon_found),
-                                Toast.LENGTH_SHORT);
-                        t.show();
-                    }
-                }
-            }
-
-            @NonNull
-            @Override
-            public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                ConstraintLayout cl;
-                // Inflate row of RecyclerView
-                cl = (ConstraintLayout) LayoutInflater
-                        .from(parent.getContext())
-                        .inflate(R.layout.item_pokemon, parent, false);
-
-                return new ViewHolder(cl);
-            }
-
-            @Override
-            public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-                Pokemon pokemon = pokemonList.get(position);
-
-                holder.cvPokemon.setCardBackgroundColor(Color.parseColor(pokemon.getAverageColor()));
-                holder.tvId.setText(String.format(Locale.getDefault(), "#%d", pokemon.getId()));
-                holder.tvName.setText(StringManager.capitalize(pokemon.getName()));
-
-                if (getContext() == null)
-                    return;
-
-                holder.ivSprite.setImageBitmap(imageManager.loadFromDisk(
-                        getContext().getFilesDir() + getString(R.string.sprites_front),
-                        pokemon.getId() + getString(R.string.extension)));
-
-                // Initialize type1 TextView
-                String type1 = pokemon.getType1();
-                type1 = StringManager.capitalize(type1);
-                String color1 = getString(R.string.color_type) + type1;
-                int color1ID = getResources().getIdentifier(color1, "color", getContext().getPackageName());
-                GradientDrawable bg1 = (GradientDrawable) holder.tvType1.getBackground();
-                bg1.setColor(getContext().getColor(color1ID));
-                bg1.setStroke((int) getResources().getDimension(R.dimen.stroke_tv_type), Color.WHITE);
-                holder.tvType1.setText(type1.toUpperCase());
-
-                String type2 = pokemon.getType2();
-                // Initialize type2 TextView if exists
-                if (type2 != null) {
-                    type2 = StringManager.capitalize(type2);
-                    String color2 = getString(R.string.color_type) + type2;
-                    int color2ID = getResources().getIdentifier(color2, "color", getContext().getPackageName());
-                    GradientDrawable bg2 = (GradientDrawable) holder.tvType2.getBackground();
-                    bg2.setColor(getContext().getColor(color2ID));
-                    bg2.setStroke((int) getResources().getDimension(R.dimen.stroke_tv_type), Color.WHITE);
-                    holder.tvType2.setText(type2.toUpperCase());
-                    holder.tvType2.setVisibility(View.VISIBLE);
-                } else {
-                    holder.tvType2.setVisibility(View.GONE);
-                }
-            }
-
-            @Override
-            public int getItemCount() {
-                return pokemonList.size();
-            }
-
-            @NonNull
-            @Override
-            public String getSectionName(int position) {
-                return String.valueOf(pokemonList.get(position).getId());
-            }
-        }
     }
 }
