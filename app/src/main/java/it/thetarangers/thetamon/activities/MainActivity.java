@@ -41,13 +41,13 @@ public class MainActivity extends AppCompatActivity {
         final SharedPreferences.Editor editor = sharedPreferences.edit();
         boolean isFirstUse = sharedPreferences.getBoolean("FirstUse", true);
 
-        /*if (!isFirstUse) {
+        if (!isFirstUse) {
             Log.d("POKE", "Bypassed Download");
             Intent intent = new Intent(MainActivity.this, PokedexActivity.class);
             startActivity(intent);
             finish();
             return;
-        }*/
+        }
 
         ImageView ivAnim = findViewById(R.id.ivAnim);
         AnimationDrawable animation = (AnimationDrawable) ivAnim.getBackground();
@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
         final Handler h = new Handler();
         final Runnable update = () -> {
-            //TODO replace with meaningfull text
+            //TODO replace with meaningful text
             ((TextView) findViewById(R.id.tv_loading)).setText("Unzip Completed");
             findViewById(R.id.progressBar).setVisibility(View.GONE);
             editor.putBoolean("FirstUse", false);

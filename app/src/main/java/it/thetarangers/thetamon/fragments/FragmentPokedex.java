@@ -1,6 +1,5 @@
 package it.thetarangers.thetamon.fragments;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
@@ -44,15 +43,6 @@ public class FragmentPokedex extends Fragment {
     private PokemonListViewModel pokemonListViewModel;
     private Holder holder;
 
-    private Context context;
-
-    public FragmentPokedex(){
-    }
-
-    public FragmentPokedex(Context context) {
-        this.context = context;
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -75,6 +65,12 @@ public class FragmentPokedex extends Fragment {
             search(""); // Load all pokemons
     }
 
+    @Override
+    public void onStop() {
+        pokemonListViewModel.setPokemonsSynchronous(holder.adapter.pokemonList);
+        super.onStop();
+    }
+
     private String capitalize(String in) { // TODO maybe put this somewhere else
         return in.substring(0, 1).toUpperCase() + in.substring(1);
     }
@@ -84,17 +80,11 @@ public class FragmentPokedex extends Fragment {
 
         try {
             // If the searched string is an int search by id
-            daoThread.getPokemonFromId(context, Integer.parseInt(query));
+            daoThread.getPokemonFromId(getContext(), Integer.parseInt(query));
         } catch (NumberFormatException e) {
             // Otherwise search by name
-            daoThread.getPokemonFromName(context, query);
+            daoThread.getPokemonFromName(getContext(), query);
         }
-    }
-
-    @Override
-    public void onStop() {
-        pokemonListViewModel.setPokemonsSynchronous(holder.adapter.pokemonList);
-        super.onStop();
     }
 
     class Holder implements View.OnClickListener, EditText.OnEditorActionListener, OnFastScrollStateChangeListener {
@@ -114,7 +104,7 @@ public class FragmentPokedex extends Fragment {
             ivClose.setOnClickListener(this);
 
             rvPokedex = fp.findViewById(R.id.rvPokedex);
-            rvPokedex.setLayoutManager(new LinearLayoutManager(context));
+            rvPokedex.setLayoutManager(new LinearLayoutManager(getContext()));
             adapter = new PokemonAdapter();
             adapter.setStateRestorationPolicy(RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY);
             rvPokedex.setAdapter(adapter);
@@ -191,7 +181,12 @@ public class FragmentPokedex extends Fragment {
                     this.pokemonList = pokemonList;
                     notifyDataSetChanged();
                 } else {
-                    Toast.makeText(context, context.getString(R.string.no_pokemon_found), Toast.LENGTH_SHORT).show();
+                    if (getContext() != null) {
+                        Toast t = Toast.makeText(getContext(),
+                                getContext().getString(R.string.no_pokemon_found),
+                                Toast.LENGTH_SHORT);
+                        t.show();
+                    }
                 }
             }
 
@@ -209,23 +204,26 @@ public class FragmentPokedex extends Fragment {
 
             @Override
             public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-                // TODO usare getter
                 Pokemon pokemon = pokemonList.get(position);
 
                 holder.cvPokemon.setCardBackgroundColor(Color.parseColor(pokemon.getAverageColor()));
                 holder.tvId.setText(String.format(Locale.getDefault(), "#%d", pokemon.getId()));
                 holder.tvName.setText(capitalize(pokemon.getName()));
+
+                if (getContext() == null)
+                    return;
+
                 holder.ivSprite.setImageBitmap(imageManager.loadFromDisk(
-                        context.getFilesDir() + getString(R.string.sprites_front),
+                        getContext().getFilesDir() + getString(R.string.sprites_front),
                         pokemon.getId() + getString(R.string.extension)));
 
                 // Initialize type1 TextView
                 String type1 = pokemon.getType1();
                 type1 = capitalize(type1);
                 String color1 = getString(R.string.color_type) + type1;
-                int color1ID = getResources().getIdentifier(color1, "color", context.getPackageName());
+                int color1ID = getResources().getIdentifier(color1, "color", getContext().getPackageName());
                 GradientDrawable bg1 = (GradientDrawable) holder.tvType1.getBackground();
-                bg1.setColor(context.getColor(color1ID));
+                bg1.setColor(getContext().getColor(color1ID));
                 bg1.setStroke((int) getResources().getDimension(R.dimen.stroke_tv_type), Color.WHITE);
                 holder.tvType1.setText(type1.toUpperCase());
 
@@ -234,9 +232,9 @@ public class FragmentPokedex extends Fragment {
                 if (type2 != null) {
                     type2 = capitalize(type2);
                     String color2 = getString(R.string.color_type) + type2;
-                    int color2ID = getResources().getIdentifier(color2, "color", context.getPackageName());
+                    int color2ID = getResources().getIdentifier(color2, "color", getContext().getPackageName());
                     GradientDrawable bg2 = (GradientDrawable) holder.tvType2.getBackground();
-                    bg2.setColor(context.getColor(color2ID));
+                    bg2.setColor(getContext().getColor(color2ID));
                     bg2.setStroke((int) getResources().getDimension(R.dimen.stroke_tv_type), Color.WHITE);
                     holder.tvType2.setText(type2.toUpperCase());
                     holder.tvType2.setVisibility(View.VISIBLE);
