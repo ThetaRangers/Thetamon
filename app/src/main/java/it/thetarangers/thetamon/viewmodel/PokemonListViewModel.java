@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import it.thetarangers.thetamon.model.Pokemon;
@@ -11,6 +12,7 @@ import it.thetarangers.thetamon.model.Pokemon;
 public class PokemonListViewModel extends ViewModel {
 
     private MutableLiveData<List<Pokemon>> pokemons;
+    private MutableLiveData<List<Pokemon>> filteredPokemonList;
 
     public LiveData<List<Pokemon>> getPokemons() {
         if (pokemons == null) {
@@ -31,4 +33,14 @@ public class PokemonListViewModel extends ViewModel {
         return pokemons.getValue();
     }
 
+    public LiveData<List<Pokemon>> getFilteredPokemons(){
+        if (filteredPokemonList == null) {
+            filteredPokemonList = new MutableLiveData<>();
+        }
+        return filteredPokemonList;
+    }
+
+    public void setFilterList(List<Pokemon> pokemons){
+        this.filteredPokemonList.setValue(pokemons);
+    }
 }

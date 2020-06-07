@@ -1,8 +1,8 @@
 package it.thetarangers.thetamon.fragments;
 
-import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,26 +11,21 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 import com.simplecityapps.recyclerview_fastscroll.interfaces.OnFastScrollStateChangeListener;
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 
 import it.thetarangers.thetamon.R;
@@ -38,8 +33,6 @@ import it.thetarangers.thetamon.adapter.FilterAdapter;
 import it.thetarangers.thetamon.adapter.PokedexAdapter;
 import it.thetarangers.thetamon.database.DaoThread;
 import it.thetarangers.thetamon.model.Pokemon;
-import it.thetarangers.thetamon.utilities.ImageManager;
-import it.thetarangers.thetamon.utilities.StringManager;
 import it.thetarangers.thetamon.viewmodel.PokemonListViewModel;
 
 public class FragmentPokedex extends Fragment {
@@ -58,11 +51,26 @@ public class FragmentPokedex extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        holder = new Holder(view);
-
         pokemonListViewModel = new ViewModelProvider(requireActivity()).get(PokemonListViewModel.class);
         pokemonListViewModel.getPokemons().observe(getViewLifecycleOwner(),
+                pokemons -> holder.typeAdapter.setPokemonList(pokemons));   // Observe the LiveData
+
+        pokemonListViewModel.getFilteredPokemons().observe(getViewLifecycleOwner(),
                 pokemons -> holder.adapter.setPokemonList(pokemons));   // Observe the LiveData
+
+        holder = new Holder(view);
+        if(savedInstanceState != null) {
+            String type1 = savedInstanceState.getString("type1");
+            String type2 = savedInstanceState.getString("type2");
+
+            if(type1 != null){
+                holder.typeAdapter.setFilter(type1);
+            }
+
+            if(type2 != null){
+                holder.typeAdapter.setFilter(type2);
+            }
+        }
 
         List<Pokemon> tmp = pokemonListViewModel.getPokemonList();
         if (tmp == null)
@@ -71,8 +79,28 @@ public class FragmentPokedex extends Fragment {
 
     @Override
     public void onStop() {
-        pokemonListViewModel.setPokemonsSynchronous(holder.adapter.getUnfilteredPokemonList());
+        pokemonListViewModel.setPokemonsSynchronous(holder.typeAdapter.getPokemonList());
+        pokemonListViewModel.setFilterList(holder.adapter.getPokemonList());
+
         super.onStop();
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        List<String> tmp = holder.typeAdapter.getCheckedTypes();
+
+        switch (tmp.size()) {
+            case 1:
+                outState.putString("type1", tmp.get(0));
+                break;
+            case 2:
+                outState.putString("type2", tmp.get(1));
+                break;
+            default:
+                break;
+        }
+
+        super.onSaveInstanceState(outState);
     }
 
     private void search(String query) {
@@ -89,13 +117,13 @@ public class FragmentPokedex extends Fragment {
 
     class Holder implements View.OnClickListener, EditText.OnEditorActionListener, OnFastScrollStateChangeListener {
         final FastScrollRecyclerView rvPokedex;
-        final PokedexAdapter adapter;
-        final FilterAdapter typeAdapter;
         final FloatingActionButton fabSearch;
         final ImageView ivClose;
         final TextInputLayout tilSearch;
         final ImageView ivSearch;
         final RecyclerView rvType;
+        final PokedexAdapter adapter;
+        final FilterAdapter typeAdapter;
 
         Holder(View fp) {
 
@@ -120,7 +148,7 @@ public class FragmentPokedex extends Fragment {
             ivSearch.setOnClickListener(this);
 
             rvType = fp.findViewById(R.id.rvType);
-            typeAdapter = new FilterAdapter(getContext());
+            typeAdapter = new FilterAdapter(getContext(), pokemonListViewModel);
             rvType.setLayoutManager(new GridLayoutManager(getContext(), 4));
             rvType.setAdapter(typeAdapter);
         }
@@ -153,8 +181,5 @@ public class FragmentPokedex extends Fragment {
         public void onFastScrollStop() {
             fabSearch.setVisibility(View.VISIBLE);
         }
-
-
-
     }
 }

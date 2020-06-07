@@ -17,16 +17,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 import it.thetarangers.thetamon.R;
+import it.thetarangers.thetamon.model.Pokemon;
 import it.thetarangers.thetamon.model.PokemonType;
 import it.thetarangers.thetamon.utilities.StringManager;
+import it.thetarangers.thetamon.viewmodel.PokemonListViewModel;
 
 public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.ViewHolder> {
+    private final PokemonListViewModel viewModel;
     private List<String> types;
     private List<String> checkedTypes;
+    private List<Pokemon> pokemonList;
+    private List<View> cards = new ArrayList<>();
+
     private Context context;
 
-    public FilterAdapter(Context context) {
+    public FilterAdapter(Context context, PokemonListViewModel viewModel) {
         this.context = context;
+        this.viewModel = viewModel;
 
         types = new ArrayList<>();
         checkedTypes = new ArrayList<>();
@@ -34,6 +41,22 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.ViewHolder
         for (PokemonType type : PokemonType.values()) {
             types.add(type.name());
         }
+    }
+
+    public List<Pokemon> getPokemonList() {
+        return this.pokemonList;
+    }
+
+    public void setPokemonList(List<Pokemon> pokemons) {
+        if (pokemons != null) {
+            this.pokemonList = pokemons;
+
+            viewModel.setFilterList(this.pokemonList);
+        }
+    }
+
+    public void setFilteredList(List<Pokemon> pokemons) {
+
     }
 
     @NonNull
@@ -45,7 +68,8 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.ViewHolder
                 .from(parent.getContext())
                 .inflate(R.layout.item_type, parent, false);
 
-        return new ViewHolder(cl);
+        ViewHolder holder = new ViewHolder(cl);
+        return holder;
     }
 
     @Override
@@ -67,6 +91,35 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.ViewHolder
         return types.size();
     }
 
+    public List<String> getCheckedTypes() {
+        return this.checkedTypes;
+    }
+
+    public void setFilter(String filter) {
+        for (int i = 0; i < types.size(); i++) {
+            if (types.get(i).equals(filter)) {
+                cards.get(i).callOnClick();
+                return;
+            }
+        }
+    }
+
+    private void filter(String type) {
+        List<Pokemon> tmp;
+/*
+        for (int i = 0; i < filteredList.size(); i++) {
+
+            if (filteredList.get(i).getType1().equals(type)) {
+                filteredList.remove(i);
+            }
+
+        }
+
+        setFilteredList(filteredList);
+
+ */
+    }
+
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView tvType;
         MaterialCardView mcvType;
@@ -79,24 +132,30 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.ViewHolder
 
             tvType = itemView.findViewById(R.id.tvType);
             mcvType.setOnClickListener(this);
+            cards.add(mcvType);
         }
 
         @Override
         public void onClick(View v) {
-            if(mcvType.isChecked()){
+            if (mcvType.isChecked()) {
                 mcvType.setChecked(false);
 
-                if(checkedTypes.get(0).equals(type)){
+                if (checkedTypes.get(0).equals(type)) {
                     checkedTypes.remove(0);
-                } else if (checkedTypes.get(1).equals(type)){
+                } else if (checkedTypes.get(1).equals(type)) {
                     checkedTypes.remove(1);
                 }
             } else {
-                if(checkedTypes.size() < 2) {
+                if (checkedTypes.size() < 2) {
                     mcvType.setChecked(true);
                     checkedTypes.add(type);
+                    filter(type);
                 }
             }
+        }
+
+        public String getType() {
+            return this.type;
         }
 
         public void setType(String type) {
