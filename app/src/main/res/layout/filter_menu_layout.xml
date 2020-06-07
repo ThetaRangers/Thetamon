@@ -9,9 +9,11 @@
         android:id="@+id/ivClose"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:clickable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/close" />
+        app:srcCompat="@drawable/close"
+        android:background="?android:attr/selectableItemBackground"/>
 
     <ImageView
         android:id="@+id/ivSearch"
@@ -46,4 +48,14 @@
             android:singleLine="true" />
 
     </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvType"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/ivClose"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivSearch"
+        tools:listitem="@layout/item_type" />
 </androidx.constraintlayout.widget.ConstraintLayout>
