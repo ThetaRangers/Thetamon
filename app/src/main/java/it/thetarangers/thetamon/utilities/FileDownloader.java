@@ -7,13 +7,14 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
 import android.net.Uri;
+
 import java.util.Objects;
 
 /*
  * A class used to download files exploiting Android DownloadManager.
  * The method downloadFile is blocking, thus not intended to be called from the UI thread.
  */
-public class FileDownloader extends BroadcastReceiver {
+public abstract class FileDownloader extends BroadcastReceiver {
 
     Context context;
     Thread t;
@@ -24,21 +25,24 @@ public class FileDownloader extends BroadcastReceiver {
     public FileDownloader(Context context) {
         this.context = context;
         t = Thread.currentThread();
-        check = true;
+        setCheck(true);
         manager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
         context.registerReceiver(this,
                 new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
     }
 
+    protected abstract void handleError();
+
+    public void setCheck(Boolean val) {
+        check = val;
+    }
+
     public synchronized void downloadFile(String URL,
-                             String path, String name) {
+                                          String path, String name) {
 
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(URL));
         request.setDescription("ThetaMon");
         request.setTitle(name);
-        request.setVisibleInDownloadsUi(false);
-
-        request.allowScanningByMediaScanner();
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE);
         request.setDestinationInExternalFilesDir(context, path, name);
 
@@ -52,7 +56,8 @@ public class FileDownloader extends BroadcastReceiver {
         while (check) {
             try {
                 Thread.sleep(Long.MAX_VALUE);
-            } catch (InterruptedException ignored) { }
+            } catch (InterruptedException ignored) {
+            }
         }
     }
 
@@ -66,11 +71,12 @@ public class FileDownloader extends BroadcastReceiver {
             if (c.moveToFirst()) {
                 int columnIndex = c.getColumnIndex(DownloadManager.COLUMN_STATUS);
                 if (DownloadManager.STATUS_SUCCESSFUL == c.getInt(columnIndex)) {
-                    check = false;
+                    setCheck(false);
                     t.interrupt();
                     context.unregisterReceiver(this);
                 } else {
-                    // TODO
+                    context.unregisterReceiver(this);
+                    this.handleError();
                 }
             }
             c.close();

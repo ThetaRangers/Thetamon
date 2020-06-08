@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
     Holder holder;
     Handler handler;
+    FileDownloader fd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,8 +86,7 @@ public class MainActivity extends AppCompatActivity {
         final Thread t = new Thread() {
             @Override
             public void run() {
-                FileDownloader fd = new FileDownloader(MainActivity.this);
-
+                cleanUpExternal();
                 // Blocking operation
                 fd.downloadFile(getString(R.string.url_sprites),
                         getString(R.string.sprites_temp_path),
@@ -102,6 +102,17 @@ public class MainActivity extends AppCompatActivity {
                 handler.post(() -> holder.setTvLoading(R.string.updating_db));
 
                 volley.getPokemonList();
+            }
+        };
+
+        fd = new FileDownloader(MainActivity.this) {
+            @Override
+            protected void handleError() {
+                Toast.makeText(MainActivity.this,
+                        R.string.error_download, Toast.LENGTH_LONG).show();
+                this.setCheck(false);
+                t.interrupt();
+                MainActivity.this.finish();
             }
         };
 

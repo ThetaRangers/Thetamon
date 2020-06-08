@@ -6,6 +6,7 @@
     <string name="not_found">No Pokemons found</string>
     <string name="downloading">Downloading resources…</string>
     <string name="error_unzip">Error unzipping file</string>
+    <string name="error_download">Error downloading resources</string>
     <string name="extracting">Extracting resources…</string>
     <string name="updating_db">Updating database…</string>
 
