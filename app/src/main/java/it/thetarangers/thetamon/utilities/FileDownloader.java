@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.net.Uri;
 
 import java.util.Objects;
+import java.util.concurrent.locks.ReentrantLock;
 
 /*
  * A class used to download files exploiting Android DownloadManager.
@@ -18,24 +19,20 @@ public abstract class FileDownloader extends BroadcastReceiver {
 
     Context context;
     Thread t;
-    Boolean check;
+    ReentrantLock lock;
     DownloadManager manager;
     long id;
 
-    public FileDownloader(Context context) {
+    public FileDownloader(Context context, ReentrantLock lock) {
         this.context = context;
         t = Thread.currentThread();
-        setCheck(true);
+        this.lock = lock;
         manager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
         context.registerReceiver(this,
                 new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
     }
 
     protected abstract void handleError();
-
-    public void setCheck(Boolean val) {
-        check = val;
-    }
 
     public synchronized void downloadFile(String URL,
                                           String path, String name) {
@@ -53,12 +50,7 @@ public abstract class FileDownloader extends BroadcastReceiver {
          * Sleeping until download completes.
          * While loop ensures that the interrupt is caused by onReceive.
          */
-        while (check) {
-            try {
-                Thread.sleep(Long.MAX_VALUE);
-            } catch (InterruptedException ignored) {
-            }
-        }
+        lock.lock();
     }
 
     @Override
@@ -71,11 +63,11 @@ public abstract class FileDownloader extends BroadcastReceiver {
             if (c.moveToFirst()) {
                 int columnIndex = c.getColumnIndex(DownloadManager.COLUMN_STATUS);
                 if (DownloadManager.STATUS_SUCCESSFUL == c.getInt(columnIndex)) {
-                    setCheck(false);
-                    t.interrupt();
+                    lock.unlock();
                     context.unregisterReceiver(this);
                 } else {
                     context.unregisterReceiver(this);
+                    lock.unlock();
                     this.handleError();
                 }
             }

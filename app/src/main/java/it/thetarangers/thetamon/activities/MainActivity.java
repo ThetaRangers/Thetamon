@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.concurrent.locks.ReentrantLock;
 
 import it.thetarangers.thetamon.R;
 import it.thetarangers.thetamon.database.DaoThread;
@@ -83,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        final Thread t = new Thread() {
+        final Thread thread = new Thread() {
             @Override
             public void run() {
                 cleanUpExternal();
@@ -105,18 +106,20 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        fd = new FileDownloader(MainActivity.this) {
+
+        ReentrantLock lock = new ReentrantLock();
+        lock.lock();
+
+        fd = new FileDownloader(MainActivity.this, lock) {
             @Override
             protected void handleError() {
                 Toast.makeText(MainActivity.this,
                         R.string.error_download, Toast.LENGTH_LONG).show();
-                this.setCheck(false);
-                t.interrupt();
                 MainActivity.this.finish();
             }
         };
 
-        t.start();
+        thread.start();
 
     }
 
