@@ -304,11 +304,15 @@ public class FragmentPokedex extends Fragment {
         @Override
         public void onFastScrollStart() {
             fabAdd.setVisibility(View.GONE);
+            fabFilter.setVisibility(View.GONE);
+            fabSearch.setVisibility(View.GONE);
         }
 
         @Override
         public void onFastScrollStop() {
             fabAdd.setVisibility(View.VISIBLE);
+            fabFilter.setVisibility(View.VISIBLE);
+            fabSearch.setVisibility(View.VISIBLE);
         }
 
         List<MaterialCardView> generateCards() {
