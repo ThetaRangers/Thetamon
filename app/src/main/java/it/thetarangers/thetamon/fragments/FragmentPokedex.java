@@ -9,12 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -116,21 +114,22 @@ public class FragmentPokedex extends Fragment {
         final FloatingActionButton fabAdd;
         final FloatingActionButton fabSearch;
         final FloatingActionButton fabFilter;
-        final ImageView ivClose;
         final TextInputLayout tilSearch;
         final ImageView ivSearch;
 
         final ConstraintLayout clShadow;
-        final LinearLayout contentLayout;
-        final Button buttonTest; // Dummy
+        final LinearLayout filterSheet;
         final LinearLayout llType1;
         final LinearLayout llType2;
         final LinearLayout llType3;
         // Not needed for now
         final List<MaterialCardView> cardsType;
-        final BottomSheetBehavior<LinearLayout> bottomSheetBehavior;
+        final BottomSheetBehavior<LinearLayout> bottomSheetBehaviorFilter;
 
-        boolean isRotate = false;
+        final LinearLayout searchSheet;
+        final BottomSheetBehavior<LinearLayout> bottomSheetBehaviorSearch;
+
+        boolean isOpen = false;
 
         Holder(View fp) {
 
@@ -144,9 +143,6 @@ public class FragmentPokedex extends Fragment {
             fabSearch = fp.findViewById(R.id.fabSearch);
             fabSearch.setOnClickListener(this);
             init(fabSearch);
-
-            ivClose = fp.findViewById(R.id.ivClose);
-            ivClose.setOnClickListener(this);
 
             rvPokedex = fp.findViewById(R.id.rvPokedex);
             rvPokedex.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -164,14 +160,16 @@ public class FragmentPokedex extends Fragment {
 
             clShadow = fp.findViewById(R.id.clShadow);
             clShadow.setOnClickListener(this);
-            contentLayout = fp.findViewById(R.id.contentLayout);
-            bottomSheetBehavior = BottomSheetBehavior.from(contentLayout);
-            bottomSheetBehavior.addBottomSheetCallback(this);
+            filterSheet = fp.findViewById(R.id.filterSheet);
+            bottomSheetBehaviorFilter = BottomSheetBehavior.from(filterSheet);
+            bottomSheetBehaviorFilter.addBottomSheetCallback(this);
 
-            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+            searchSheet = fp.findViewById(R.id.searchSheet);
+            bottomSheetBehaviorSearch = BottomSheetBehavior.from(searchSheet);
+            bottomSheetBehaviorSearch.addBottomSheetCallback(this);
 
-            buttonTest = fp.findViewById(R.id.buttonTest);
-            buttonTest.setOnClickListener((View) -> bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED));
+            bottomSheetBehaviorFilter.setState(BottomSheetBehavior.STATE_HIDDEN);
+            bottomSheetBehaviorSearch.setState(BottomSheetBehavior.STATE_HIDDEN);
 
             llType1 = fp.findViewById(R.id.llType1);
             llType2 = fp.findViewById(R.id.llType2);
@@ -182,25 +180,25 @@ public class FragmentPokedex extends Fragment {
         }
 
         //TODO change position
-        public boolean rotateFab(final View v, boolean rotate){
+        public boolean rotateFab(final View v, boolean rotate) {
             v.animate().setDuration(200).setListener(new AnimatorListenerAdapter() {
                 @Override
-                public void onAnimationEnd(Animator animation){
+                public void onAnimationEnd(Animator animation) {
                     super.onAnimationEnd(animation);
                 }
-            }).rotation(rotate ? 135f :0f);
+            }).rotation(rotate ? 135f : 0f);
             return rotate;
         }
 
 
-        public void showIn(final View v){
+        public void showIn(final View v) {
             v.setVisibility(View.VISIBLE);
             v.setAlpha(0f);
             v.setTranslationY(v.getHeight());
             v.animate().setDuration(200).translationY(0)
-                    .setListener(new AnimatorListenerAdapter(){
+                    .setListener(new AnimatorListenerAdapter() {
                         @Override
-                        public void onAnimationEnd(Animator animation){
+                        public void onAnimationEnd(Animator animation) {
                             super.onAnimationEnd(animation);
                         }
                     })
@@ -208,45 +206,49 @@ public class FragmentPokedex extends Fragment {
         }
 
 
-        public void showOut(final View v){
+        public void showOut(final View v) {
             v.setVisibility(View.VISIBLE);
             v.setAlpha(1f);
             v.setTranslationY(0);
             v.animate().setDuration(200).translationY(v.getHeight())
-                    .setListener(new AnimatorListenerAdapter(){
-                       @Override
-                       public void onAnimationEnd(Animator animation) {
-                           v.setVisibility(View.GONE);
-                           super.onAnimationEnd(animation);
-                       }
+                    .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            v.setVisibility(View.GONE);
+                            super.onAnimationEnd(animation);
+                        }
                     }).alpha(0f).start();
         }
 
 
         //TODO init in xml
-        public void init (final View v){
+        public void init(final View v) {
             v.setVisibility(View.GONE);
             v.setTranslationY(v.getHeight());
             v.setAlpha(0f);
         }
 
+        public void collapseFab() {
+            showOut(fabFilter);
+            showOut(fabSearch);
+            isOpen = rotateFab(fabAdd, !isOpen);
+        }
 
+        public void openFab() {
+            showIn(fabFilter);
+            showIn(fabSearch);
+            isOpen = rotateFab(fabAdd, !isOpen);
+        }
 
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.fabAdd:
-                    isRotate = rotateFab(fabAdd, !isRotate);
-                    if(isRotate){
-                        showIn(fabFilter);
-                        showIn(fabSearch);
-                    }else{
-                        showOut(fabFilter);
-                        showOut(fabSearch);
+                    if (isOpen) {
+                        collapseFab();
+                    } else {
+                        openFab();
                     }
-                    break;
-                case R.id.ivClose:
-                    fabAdd.setExpanded(false);
                     break;
                 case R.id.ivSearch:
                     Objects.requireNonNull(tilSearch.getEditText())
@@ -274,13 +276,18 @@ public class FragmentPokedex extends Fragment {
                     }
                     break;
                 case R.id.clShadow:
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                    bottomSheetBehaviorFilter.setState(BottomSheetBehavior.STATE_HIDDEN);
+                    bottomSheetBehaviorSearch.setState(BottomSheetBehavior.STATE_HIDDEN);
+                    Objects.requireNonNull(tilSearch.getEditText())
+                            .onEditorAction(EditorInfo.IME_ACTION_DONE);
                     break;
                 case R.id.fabFilter:
-                    Log.v("POKE","open filter sheet");
+                    bottomSheetBehaviorFilter.setState(BottomSheetBehavior.STATE_EXPANDED);
+                    collapseFab();
                     break;
                 case R.id.fabSearch:
-                    Log.v("POKE","open search sheet");
+                    bottomSheetBehaviorSearch.setState(BottomSheetBehavior.STATE_EXPANDED);
+                    collapseFab();
                     break;
                 default:
                     break;
@@ -290,8 +297,7 @@ public class FragmentPokedex extends Fragment {
         @Override
         public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
             search(Objects.requireNonNull(tilSearch.getEditText()).getText().toString());
-
-            fabAdd.setExpanded(false);
+            bottomSheetBehaviorSearch.setState(BottomSheetBehavior.STATE_HIDDEN);
             return false;
         }
 

@@ -38,89 +38,46 @@
                 tools:listitem="@layout/item_pokemon" />
 
             <androidx.coordinatorlayout.widget.CoordinatorLayout
-                android:id="@+id/coordinatorLayout"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/guideline">
+                android:layout_height="match_parent">
 
-                <com.google.android.material.circularreveal.CircularRevealFrameLayout
-                    android:id="@+id/sheet"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="bottom|center_horizontal"
-                    android:background="@color/colorFilter"
-                    android:visibility="invisible"
-                    app:layout_behavior="com.google.android.material.transformation.FabTransformationSheetBehavior">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|end"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/fabSearch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:foreground="@drawable/fab_search_foreground"
+                        app:fabSize="mini" />
 
-                        <include
-                            layout="@layout/search_menu_layout"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-                </com.google.android.material.circularreveal.CircularRevealFrameLayout>
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/fabFilter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:foreground="@drawable/fab_filter_foreground"
+                        app:fabSize="mini" />
 
-                <androidx.coordinatorlayout.widget.CoordinatorLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/fabAdd"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|end"
+                        android:layout_margin="@dimen/floating_button_margin"
+                        android:clickable="true"
+                        app:backgroundTint="@color/colorPrimary"
+                        app:srcCompat="@drawable/ic_pokeball"
+                        app:tint="@android:color/white" />
 
-                    <LinearLayout
-                        android:gravity = "center_horizontal"
-                        android:layout_gravity = "bottom|end|right"
-                        android:orientation = "vertical"
-                        android:layout_width = "wrap_content"
-                        android:layout_height = "wrap_content">
-
-                        <com.google.android.material.floatingactionbutton.FloatingActionButton
-                            android:id="@+id/fabSearch"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            android:layout_margin="10dp"
-                            android:src="@android:drawable/ic_menu_search"
-                            app:backgroundTint="@color/colorAccent"
-                            app:fabSize="mini" />
-
-                        <com.google.android.material.floatingactionbutton.FloatingActionButton
-                            android:id="@+id/fabFilter"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            android:layout_margin="10dp"
-                            android:src="@android:drawable/alert_light_frame"
-                            app:backgroundTint="@color/colorAccent"
-                            app:fabSize="mini" />
-
-                        <com.google.android.material.floatingactionbutton.FloatingActionButton
-                            android:id="@+id/fabAdd"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="bottom|end"
-                            android:layout_margin="@dimen/floating_button_margin"
-                            android:backgroundTint="@color/colorAccent"
-                            android:clickable="true"
-                            app:backgroundTint="@color/colorAccent"
-                            app:borderWidth="0dp"
-                            app:srcCompat="@android:drawable/ic_input_add" />
+                </LinearLayout>
 
 
-
-
-                    </LinearLayout>
-
-
-
-                </androidx.coordinatorlayout.widget.CoordinatorLayout>
             </androidx.coordinatorlayout.widget.CoordinatorLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -132,7 +89,23 @@
             android:visibility="gone" />
 
         <LinearLayout
-            android:id="@+id/contentLayout"
+            android:id="@+id/searchSheet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="4dp"
+            android:orientation="vertical"
+            app:behavior_hideable="true"
+            app:behavior_skipCollapsed="true"
+            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+            <include
+                layout="@layout/search_menu_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/filterSheet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:elevation="4dp"
