@@ -89,9 +89,13 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 cleanUpExternal();
                 // Blocking operation
-                fd.downloadFile(getString(R.string.url_sprites),
-                        getString(R.string.sprites_temp_path),
-                        getString(R.string.sprites_archive));
+                try {
+                    fd.downloadFile(getString(R.string.url_sprites),
+                            getString(R.string.sprites_temp_path),
+                            getString(R.string.sprites_archive));
+                } catch (InterruptedException e) {
+                    return;
+                }
 
                 handler.post(() -> holder.setTvLoading(R.string.extracting));
 

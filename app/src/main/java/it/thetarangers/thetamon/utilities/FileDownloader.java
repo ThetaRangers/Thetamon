@@ -34,8 +34,7 @@ public abstract class FileDownloader extends BroadcastReceiver {
 
     protected abstract void handleError();
 
-    public synchronized void downloadFile(String URL,
-                                          String path, String name) {
+    public synchronized void downloadFile(String URL, String path, String name) throws InterruptedException {
 
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(URL));
         request.setDescription("ThetaMon");
@@ -48,9 +47,11 @@ public abstract class FileDownloader extends BroadcastReceiver {
 
         /*
          * Sleeping until download completes.
-         * While loop ensures that the interrupt is caused by onReceive.
          */
         lock.lock();
+        if (t.isInterrupted()) {
+            throw new InterruptedException();
+        }
     }
 
     @Override
@@ -63,10 +64,11 @@ public abstract class FileDownloader extends BroadcastReceiver {
             if (c.moveToFirst()) {
                 int columnIndex = c.getColumnIndex(DownloadManager.COLUMN_STATUS);
                 if (DownloadManager.STATUS_SUCCESSFUL == c.getInt(columnIndex)) {
-                    lock.unlock();
                     context.unregisterReceiver(this);
+                    lock.unlock();
                 } else {
                     context.unregisterReceiver(this);
+                    t.interrupt();
                     lock.unlock();
                     this.handleError();
                 }
