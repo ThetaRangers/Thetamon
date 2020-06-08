@@ -70,17 +70,57 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </com.google.android.material.circularreveal.CircularRevealFrameLayout>
 
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/fabSearch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|end"
-                    android:layout_margin="@dimen/floating_button_margin"
-                    android:backgroundTint="@color/colorAccent"
-                    android:clickable="true"
-                    app:backgroundTint="@color/colorAccent"
-                    app:borderWidth="0dp"
-                    app:srcCompat="@android:drawable/ic_menu_search" />
+                <androidx.coordinatorlayout.widget.CoordinatorLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:gravity = "center_horizontal"
+                        android:layout_gravity = "bottom|end|right"
+                        android:orientation = "vertical"
+                        android:layout_width = "wrap_content"
+                        android:layout_height = "wrap_content">
+
+                        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                            android:id="@+id/fabSearch"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:layout_margin="10dp"
+                            android:src="@android:drawable/ic_menu_search"
+                            app:backgroundTint="@color/colorAccent"
+                            app:fabSize="mini" />
+
+                        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                            android:id="@+id/fabFilter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:layout_margin="10dp"
+                            android:src="@android:drawable/alert_light_frame"
+                            app:backgroundTint="@color/colorAccent"
+                            app:fabSize="mini" />
+
+                        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                            android:id="@+id/fabAdd"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom|end"
+                            android:layout_margin="@dimen/floating_button_margin"
+                            android:backgroundTint="@color/colorAccent"
+                            android:clickable="true"
+                            app:backgroundTint="@color/colorAccent"
+                            app:borderWidth="0dp"
+                            app:srcCompat="@android:drawable/ic_input_add" />
+
+
+
+
+                    </LinearLayout>
+
+
+
+                </androidx.coordinatorlayout.widget.CoordinatorLayout>
             </androidx.coordinatorlayout.widget.CoordinatorLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -1,5 +1,7 @@
 package it.thetarangers.thetamon.fragments;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -12,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -110,7 +113,9 @@ public class FragmentPokedex extends Fragment {
     class Holder extends BottomSheetBehavior.BottomSheetCallback implements View.OnClickListener, EditText.OnEditorActionListener, OnFastScrollStateChangeListener {
         final FastScrollRecyclerView rvPokedex;
         final PokedexAdapter adapter;
+        final FloatingActionButton fabAdd;
         final FloatingActionButton fabSearch;
+        final FloatingActionButton fabFilter;
         final ImageView ivClose;
         final TextInputLayout tilSearch;
         final ImageView ivSearch;
@@ -125,10 +130,20 @@ public class FragmentPokedex extends Fragment {
         final List<MaterialCardView> cardsType;
         final BottomSheetBehavior<LinearLayout> bottomSheetBehavior;
 
+        boolean isRotate = false;
+
         Holder(View fp) {
+
+            fabAdd = fp.findViewById(R.id.fabAdd);
+            fabAdd.setOnClickListener(this);
+
+            fabFilter = fp.findViewById(R.id.fabFilter);
+            fabFilter.setOnClickListener(this);
+            init(fabFilter);
 
             fabSearch = fp.findViewById(R.id.fabSearch);
             fabSearch.setOnClickListener(this);
+            init(fabSearch);
 
             ivClose = fp.findViewById(R.id.ivClose);
             ivClose.setOnClickListener(this);
@@ -166,14 +181,72 @@ public class FragmentPokedex extends Fragment {
             cardsType = generateCards();
         }
 
+        //TODO change position
+        public boolean rotateFab(final View v, boolean rotate){
+            v.animate().setDuration(200).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation){
+                    super.onAnimationEnd(animation);
+                }
+            }).rotation(rotate ? 135f :0f);
+            return rotate;
+        }
+
+
+        public void showIn(final View v){
+            v.setVisibility(View.VISIBLE);
+            v.setAlpha(0f);
+            v.setTranslationY(v.getHeight());
+            v.animate().setDuration(200).translationY(0)
+                    .setListener(new AnimatorListenerAdapter(){
+                        @Override
+                        public void onAnimationEnd(Animator animation){
+                            super.onAnimationEnd(animation);
+                        }
+                    })
+                    .alpha(1f).start();
+        }
+
+
+        public void showOut(final View v){
+            v.setVisibility(View.VISIBLE);
+            v.setAlpha(1f);
+            v.setTranslationY(0);
+            v.animate().setDuration(200).translationY(v.getHeight())
+                    .setListener(new AnimatorListenerAdapter(){
+                       @Override
+                       public void onAnimationEnd(Animator animation) {
+                           v.setVisibility(View.GONE);
+                           super.onAnimationEnd(animation);
+                       }
+                    }).alpha(0f).start();
+        }
+
+
+        //TODO init in xml
+        public void init (final View v){
+            v.setVisibility(View.GONE);
+            v.setTranslationY(v.getHeight());
+            v.setAlpha(0f);
+        }
+
+
+
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
-                case R.id.fabSearch:
-                    fabSearch.setExpanded(true);
+                case R.id.fabAdd:
+                    isRotate = rotateFab(fabAdd, !isRotate);
+                    if(isRotate){
+                        showIn(fabFilter);
+                        showIn(fabSearch);
+                    }else{
+                        showOut(fabFilter);
+                        showOut(fabSearch);
+                    }
                     break;
                 case R.id.ivClose:
-                    fabSearch.setExpanded(false);
+                    fabAdd.setExpanded(false);
                     break;
                 case R.id.ivSearch:
                     Objects.requireNonNull(tilSearch.getEditText())
@@ -203,6 +276,12 @@ public class FragmentPokedex extends Fragment {
                 case R.id.clShadow:
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
                     break;
+                case R.id.fabFilter:
+                    Log.v("POKE","open filter sheet");
+                    break;
+                case R.id.fabSearch:
+                    Log.v("POKE","open search sheet");
+                    break;
                 default:
                     break;
             }
@@ -212,18 +291,18 @@ public class FragmentPokedex extends Fragment {
         public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
             search(Objects.requireNonNull(tilSearch.getEditText()).getText().toString());
 
-            fabSearch.setExpanded(false);
+            fabAdd.setExpanded(false);
             return false;
         }
 
         @Override
         public void onFastScrollStart() {
-            fabSearch.setVisibility(View.GONE);
+            fabAdd.setVisibility(View.GONE);
         }
 
         @Override
         public void onFastScrollStop() {
-            fabSearch.setVisibility(View.VISIBLE);
+            fabAdd.setVisibility(View.VISIBLE);
         }
 
         List<MaterialCardView> generateCards() {
