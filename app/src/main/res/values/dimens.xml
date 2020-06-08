@@ -10,4 +10,8 @@
     <dimen name="stroke_tv_type">1dp</dimen>
     <dimen name="type_card_padding">8dp</dimen>
     <dimen name="type_card_vertical_padding">4dp</dimen>
+    <!-- Generic dimen names for 4dp 8dp 16dp -->
+    <dimen name="margin_small">4dp</dimen>
+    <dimen name="margin_medium">8dp</dimen>
+    <dimen name="margin_large">16dp</dimen>
 </resources>

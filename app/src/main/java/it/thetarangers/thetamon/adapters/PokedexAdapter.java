@@ -1,4 +1,4 @@
-package it.thetarangers.thetamon.adapter;
+package it.thetarangers.thetamon.adapters;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -57,7 +57,7 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHold
         }
     }
 
-    public List<Pokemon> getUnfilteredPokemonList(){
+    public List<Pokemon> getUnfilteredPokemonList() {
         return this.unfilteredPokemonList;
     }
 
