@@ -8,7 +8,7 @@ import it.thetarangers.thetamon.R;
 public class PreferencesHandler {
 
     private static Boolean isFirstUse;
-    private static Boolean isNightMode;
+    private static String isNightMode;
 
     private PreferencesHandler() {
     }
@@ -33,17 +33,17 @@ public class PreferencesHandler {
         isFirstUse = value;
     }
 
-    public static synchronized Boolean isNightMode(Context context) {
+    public static synchronized String isNightMode(Context context) {
         if (isNightMode == null) {
             SharedPreferences sharedPreferences = getSharedPreferences(context);
-            isNightMode = sharedPreferences.getBoolean(context.getString(R.string.night_mode), false);
+            isNightMode = sharedPreferences.getString(context.getString(R.string.night_mode), context.getString(R.string.system_enum));
         }
         return isNightMode;
     }
 
-    public static synchronized void setIsNightMode(Context context, Boolean value) {
+    public static synchronized void setIsNightMode(Context context, String value) {
         SharedPreferences.Editor editor = getSharedPreferences(context).edit();
-        editor.putBoolean(context.getString(R.string.night_mode), value);
+        editor.putString(context.getString(R.string.night_mode), value);
         editor.apply();
         isNightMode = value;
     }

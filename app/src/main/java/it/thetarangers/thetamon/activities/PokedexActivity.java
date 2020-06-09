@@ -34,10 +34,13 @@ public class PokedexActivity extends AppCompatActivity {
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentSettings = new FragmentSettings();
-        if (savedInstanceState == null)
+        if (savedInstanceState == null) {
             fragmentPokedex = new FragmentPokedex();
-        else
+        } else {
             fragmentPokedex = (FragmentPokedex) fragmentManager.getFragment(savedInstanceState, "FragmentPokedex");
+            if (fragmentPokedex == null)
+                fragmentPokedex = new FragmentPokedex();
+        }
         fragmentManager.beginTransaction()
                 .replace(R.id.flMain, fragmentPokedex)
                 .commit();
@@ -45,7 +48,8 @@ public class PokedexActivity extends AppCompatActivity {
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle out) {
-        getSupportFragmentManager().putFragment(out, "FragmentPokedex", fragmentPokedex);
+        if (fragmentPokedex.isAdded())
+            getSupportFragmentManager().putFragment(out, "FragmentPokedex", fragmentPokedex);
         super.onSaveInstanceState(out);
     }
 
