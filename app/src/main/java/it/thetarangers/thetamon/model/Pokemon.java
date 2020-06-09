@@ -1,12 +1,15 @@
 package it.thetarangers.thetamon.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "Pokemon")
-public class Pokemon {
+public class Pokemon implements Parcelable {
     @PrimaryKey
     private int id;
 
@@ -30,9 +33,31 @@ public class Pokemon {
     }
 
     @Ignore
+    protected Pokemon(Parcel in) {
+        id = in.readInt();
+        name = in.readString();
+        type1 = in.readString();
+        type2 = in.readString();
+        averageColor = in.readString();
+        url = in.readString();
+    }
+
+    @Ignore
     public Pokemon(String name){
         this.name = name;
     }
+
+    public static final Creator<Pokemon> CREATOR = new Creator<Pokemon>() {
+        @Override
+        public Pokemon createFromParcel(Parcel in) {
+            return new Pokemon(in);
+        }
+
+        @Override
+        public Pokemon[] newArray(int size) {
+            return new Pokemon[size];
+        }
+    };
 
     public void setId(int id){
         this.id = id;
@@ -98,5 +123,20 @@ public class Pokemon {
 
     public void setType2(String type2) {
         this.type2 = type2;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(name);
+        dest.writeString(type1);
+        dest.writeString(type2);
+        dest.writeString(averageColor);
+        dest.writeString(url);
     }
 }

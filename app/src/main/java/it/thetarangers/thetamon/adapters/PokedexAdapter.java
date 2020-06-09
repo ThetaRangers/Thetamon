@@ -1,8 +1,10 @@
 package it.thetarangers.thetamon.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +24,7 @@ import java.util.List;
 import java.util.Locale;
 
 import it.thetarangers.thetamon.R;
+import it.thetarangers.thetamon.activities.PokemonDetail;
 import it.thetarangers.thetamon.model.Pokemon;
 import it.thetarangers.thetamon.utilities.ImageManager;
 import it.thetarangers.thetamon.utilities.StringManager;
@@ -53,6 +56,10 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHold
                 t.show();
             }
         }
+    }
+
+    public List<Pokemon> getPokemonList(){
+        return this.pokemonList;
     }
 
     @NonNull
@@ -120,7 +127,7 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHold
         return String.valueOf(pokemonList.get(position).getId());
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         ImageView ivSprite;
         TextView tvName;
         TextView tvId;
@@ -132,11 +139,27 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHold
             super(itemView);
 
             cvPokemon = itemView.findViewById(R.id.cvPokemon);
+            cvPokemon.setOnClickListener(this);
+
             ivSprite = itemView.findViewById(R.id.ivSprite);
             tvName = itemView.findViewById(R.id.tvName);
             tvId = itemView.findViewById(R.id.tvId);
             tvType1 = itemView.findViewById(R.id.tvType1);
             tvType2 = itemView.findViewById(R.id.tvType2);
+        }
+
+        @Override
+        public void onClick(View v) {
+            String id = tvId.getText().toString().substring(1);
+
+            for(int i = 0; i < pokemonList.size(); i++){
+                if(id.equals((i + 1) + "")){
+                    Intent data = new Intent(context, PokemonDetail.class);
+
+                    data.putExtra("pokemon", pokemonList.get(i));
+                    context.startActivity(data);
+                }
+            }
         }
     }
 }
