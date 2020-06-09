@@ -62,7 +62,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
-                        android:foreground="@drawable/fab_filter_foreground"
+                        android:foreground="@drawable/fab_reset_foreground"
                         app:fabSize="mini" />
 
                     <com.google.android.material.floatingactionbutton.FloatingActionButton
