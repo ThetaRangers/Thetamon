@@ -3,6 +3,7 @@ package it.thetarangers.thetamon.adapters;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +30,6 @@ import it.thetarangers.thetamon.utilities.StringManager;
 public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHolder>
         implements FastScrollRecyclerView.SectionedAdapter {
     private List<Pokemon> pokemonList;
-    private List<Pokemon> unfilteredPokemonList;
     private Context context;
 
     private ImageManager imageManager = new ImageManager();
@@ -42,7 +42,6 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHold
     public void setPokemonList(List<Pokemon> pokemonList) {
         if (pokemonList.size() > 0) {
             this.pokemonList = pokemonList;
-            this.unfilteredPokemonList = pokemonList;
             notifyDataSetChanged();
         } else {
             if (context
@@ -57,13 +56,8 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHold
         }
     }
 
-    public List<Pokemon> getUnfilteredPokemonList() {
-        return this.unfilteredPokemonList;
-    }
-
-    public void filterList(List<Pokemon> filteredList) {
-        this.pokemonList = filteredList;
-        notifyDataSetChanged();
+    public List<Pokemon> getPokemonList(){
+        return this.pokemonList;
     }
 
     @NonNull

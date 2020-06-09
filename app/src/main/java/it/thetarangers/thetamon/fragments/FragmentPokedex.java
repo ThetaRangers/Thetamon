@@ -2,6 +2,7 @@ package it.thetarangers.thetamon.fragments;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -9,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -71,14 +73,10 @@ public class FragmentPokedex extends Fragment {
                 pokemons -> holder.adapter.setPokemonList(pokemons));   // Observe the LiveData
 
         List<Pokemon> tmp = pokemonListViewModel.getPokemonList();
-        if (tmp == null)
+        if (tmp == null) {
             search(""); // Load all pokemons
-    }
-
-    @Override
-    public void onStop() {
-        pokemonListViewModel.setPokemonsSynchronous(holder.adapter.getUnfilteredPokemonList());
-        super.onStop();
+        } else
+            filter();
     }
 
     @Override
@@ -96,6 +94,11 @@ public class FragmentPokedex extends Fragment {
 
     private void search(String query) {
         DaoThread daoThread = new DaoThread(pokemonListViewModel);
+        for(MaterialCardView card : holder.cardsType){
+            card.setChecked(false);
+        }
+
+        checkedTypes.clear();
 
         try {
             // If the searched string is an int search by id
@@ -106,9 +109,41 @@ public class FragmentPokedex extends Fragment {
         }
     }
 
-    private void filter(String type) {
-        // TODO
-        Log.d("POKE", "Filter: " + type);
+    private void filter() {
+        //TODO refactor please i'm dirty
+        List<Pokemon> tmp = new ArrayList<>();
+        List<Pokemon> pokemonList = pokemonListViewModel.getPokemonList();;
+        String type1;
+        String type2 = null;
+
+        switch (checkedTypes.size()){
+            case 2:
+                type2 = checkedTypes.get(1).toLowerCase();
+            case 1:
+                type1 = checkedTypes.get(0).toLowerCase();
+                break;
+            default:
+                holder.adapter.setPokemonList(pokemonList);
+                return;
+        }
+
+
+        for (int i = 0; i < pokemonList.size(); i++) {
+            Pokemon pokemon = pokemonList.get(i);
+
+            if (type2 != null) {
+                if ((type1.equals(pokemon.getType1()) && type2.equals(pokemon.getType2())) ||
+                        (type2.equals(pokemon.getType1()) && type1.equals(pokemon.getType2()))) {
+                    tmp.add(pokemon);
+                }
+            } else {
+                if (type1.equals(pokemon.getType1()) || type1.equals(pokemon.getType2())) {
+                    tmp.add(pokemon);
+                }
+            }
+        }
+
+        holder.adapter.setPokemonList(tmp);
     }
 
     class Holder extends BottomSheetBehavior.BottomSheetCallback implements View.OnClickListener, EditText.OnEditorActionListener, OnFastScrollStateChangeListener {
@@ -243,6 +278,15 @@ public class FragmentPokedex extends Fragment {
             isOpen = rotateFab(fabAdd, !isOpen);
         }
 
+        public void hideKeyboardFrom(View view) {
+            Context context = getContext();
+            if (context != null) {
+                InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                assert imm != null;
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            }
+        }
+
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
@@ -274,15 +318,14 @@ public class FragmentPokedex extends Fragment {
                         if (checkedTypes.size() < 2) {
                             mcvType.setChecked(true);
                             checkedTypes.add(type);
-                            filter(type);
                         }
                     }
+                    filter();
                     break;
                 case R.id.clShadow:
                     bottomSheetBehaviorFilter.setState(BottomSheetBehavior.STATE_HIDDEN);
                     bottomSheetBehaviorSearch.setState(BottomSheetBehavior.STATE_HIDDEN);
-                    Objects.requireNonNull(tilSearch.getEditText())
-                            .onEditorAction(EditorInfo.IME_ACTION_DONE);
+                    hideKeyboardFrom(tilSearch);
                     break;
                 case R.id.fabFilter:
                     bottomSheetBehaviorFilter.setState(BottomSheetBehavior.STATE_EXPANDED);
@@ -299,7 +342,9 @@ public class FragmentPokedex extends Fragment {
 
         @Override
         public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-            search(Objects.requireNonNull(tilSearch.getEditText()).getText().toString());
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                search(Objects.requireNonNull(tilSearch.getEditText()).getText().toString());
+            }
             bottomSheetBehaviorSearch.setState(BottomSheetBehavior.STATE_HIDDEN);
             return false;
         }
@@ -321,6 +366,12 @@ public class FragmentPokedex extends Fragment {
         List<MaterialCardView> generateCards() {
             // Init variables
             List<MaterialCardView> retList = new ArrayList<>();
+            String type1 = null;
+            String type2 = null;
+            if (savedInstanceState != null) {
+                type1 = savedInstanceState.getString("TYPE1");
+                type2 = savedInstanceState.getString("TYPE2");
+            }
 
             int i = 0;
 
@@ -342,8 +393,6 @@ public class FragmentPokedex extends Fragment {
 
                 materialCardView.setOnClickListener(this);
                 if (savedInstanceState != null) {
-                    String type1 = savedInstanceState.getString("TYPE1");
-                    String type2 = savedInstanceState.getString("TYPE2");
                     if (tvText.equals(type1) | tvText.equals(type2)) {
                         materialCardView.setChecked(true);
                         checkedTypes.add(tvText);
