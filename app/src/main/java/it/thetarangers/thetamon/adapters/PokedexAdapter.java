@@ -3,7 +3,6 @@ package it.thetarangers.thetamon.adapters;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,10 +53,6 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHold
                 t.show();
             }
         }
-    }
-
-    public List<Pokemon> getPokemonList(){
-        return this.pokemonList;
     }
 
     @NonNull
@@ -125,7 +120,7 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHold
         return String.valueOf(pokemonList.get(position).getId());
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView ivSprite;
         TextView tvName;
         TextView tvId;

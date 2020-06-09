@@ -70,13 +70,11 @@ public class FragmentPokedex extends Fragment {
 
         pokemonListViewModel = new ViewModelProvider(requireActivity()).get(PokemonListViewModel.class);
         pokemonListViewModel.getPokemons().observe(getViewLifecycleOwner(),
-                pokemons -> holder.adapter.setPokemonList(pokemons));   // Observe the LiveData
+                (pokemons) -> filter());   // Observe the LiveData
 
         List<Pokemon> tmp = pokemonListViewModel.getPokemonList();
-        if (tmp == null) {
+        if (tmp == null)
             search(""); // Load all pokemons
-        } else
-            filter();
     }
 
     @Override
@@ -94,7 +92,7 @@ public class FragmentPokedex extends Fragment {
 
     private void search(String query) {
         DaoThread daoThread = new DaoThread(pokemonListViewModel);
-        for(MaterialCardView card : holder.cardsType){
+        for (MaterialCardView card : holder.cardsType) {
             card.setChecked(false);
         }
 
@@ -112,11 +110,11 @@ public class FragmentPokedex extends Fragment {
     private void filter() {
         //TODO refactor please i'm dirty
         List<Pokemon> tmp = new ArrayList<>();
-        List<Pokemon> pokemonList = pokemonListViewModel.getPokemonList();;
+        List<Pokemon> pokemonList = pokemonListViewModel.getPokemonList();
         String type1;
         String type2 = null;
 
-        switch (checkedTypes.size()){
+        switch (checkedTypes.size()) {
             case 2:
                 type2 = checkedTypes.get(1).toLowerCase();
             case 1:
@@ -215,6 +213,64 @@ public class FragmentPokedex extends Fragment {
 
             checkedTypes = new ArrayList<>();
             cardsType = generateCards();
+        }
+
+        List<MaterialCardView> generateCards() {
+            // Init variables
+            List<MaterialCardView> retList = new ArrayList<>();
+            String type1 = null;
+            String type2 = null;
+            if (savedInstanceState != null) {
+                type1 = savedInstanceState.getString("TYPE1");
+                type2 = savedInstanceState.getString("TYPE2");
+            }
+
+            int i = 0;
+
+            for (PokemonType type : PokemonType.values()) {
+                String typeName = type.name();
+                String tvText = typeName.toUpperCase();
+
+                // Init color
+                String color = Objects.requireNonNull(getContext()).getString(R.string.color_type) +
+                        StringManager.capitalize(typeName);
+                int colorID = getContext().getResources().getIdentifier(color, "color",
+                        getContext().getPackageName());
+
+                // Init card
+                MaterialCardView materialCardView = (MaterialCardView) View.inflate(getContext(), R.layout.card_type, null);
+                materialCardView.setCardBackgroundColor(getContext().getColor(colorID));
+                TextView textView = materialCardView.findViewById(R.id.tvType);
+                textView.setText(tvText);
+
+                materialCardView.setOnClickListener(this);
+                if (savedInstanceState != null) {
+                    if (tvText.equals(type1) | tvText.equals(type2)) {
+                        materialCardView.setChecked(true);
+                        checkedTypes.add(tvText);
+                        Log.d("POKE", tvText);
+                    }
+                }
+
+                // Add button to correspondent LinearLayout
+                switch (i) {
+                    case 0:
+                        llType1.addView(materialCardView);
+                        break;
+                    case 1:
+                        llType2.addView(materialCardView);
+                        break;
+                    case 2:
+                        llType3.addView(materialCardView);
+                        break;
+                    default:
+                        break;
+                }
+                retList.add(materialCardView);
+
+                i = (i + 1) % 3;
+            }
+            return retList;
         }
 
         //TODO change position
@@ -361,64 +417,6 @@ public class FragmentPokedex extends Fragment {
             fabAdd.setVisibility(View.VISIBLE);
             fabFilter.setVisibility(View.VISIBLE);
             fabSearch.setVisibility(View.VISIBLE);
-        }
-
-        List<MaterialCardView> generateCards() {
-            // Init variables
-            List<MaterialCardView> retList = new ArrayList<>();
-            String type1 = null;
-            String type2 = null;
-            if (savedInstanceState != null) {
-                type1 = savedInstanceState.getString("TYPE1");
-                type2 = savedInstanceState.getString("TYPE2");
-            }
-
-            int i = 0;
-
-            for (PokemonType type : PokemonType.values()) {
-                String typeName = type.name();
-                String tvText = typeName.toUpperCase();
-
-                // Init color
-                String color = Objects.requireNonNull(getContext()).getString(R.string.color_type) +
-                        StringManager.capitalize(typeName);
-                int colorID = getContext().getResources().getIdentifier(color, "color",
-                        getContext().getPackageName());
-
-                // Init card
-                MaterialCardView materialCardView = (MaterialCardView) View.inflate(getContext(), R.layout.card_type, null);
-                materialCardView.setCardBackgroundColor(getContext().getColor(colorID));
-                TextView textView = materialCardView.findViewById(R.id.tvType);
-                textView.setText(tvText);
-
-                materialCardView.setOnClickListener(this);
-                if (savedInstanceState != null) {
-                    if (tvText.equals(type1) | tvText.equals(type2)) {
-                        materialCardView.setChecked(true);
-                        checkedTypes.add(tvText);
-                        Log.d("POKE", tvText);
-                    }
-                }
-
-                // Add button to correspondent LinearLayout
-                switch (i) {
-                    case 0:
-                        llType1.addView(materialCardView);
-                        break;
-                    case 1:
-                        llType2.addView(materialCardView);
-                        break;
-                    case 2:
-                        llType3.addView(materialCardView);
-                        break;
-                    default:
-                        break;
-                }
-                retList.add(materialCardView);
-
-                i = (i + 1) % 3;
-            }
-            return retList;
         }
 
         @Override
