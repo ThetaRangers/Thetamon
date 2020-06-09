@@ -1,19 +1,18 @@
 package it.thetarangers.thetamon.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.ImageView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import it.thetarangers.thetamon.R;
 import it.thetarangers.thetamon.model.Pokemon;
 import it.thetarangers.thetamon.utilities.ImageManager;
 
-public class PokemonDetail extends AppCompatActivity {
+public class PokemonDetailActivity extends AppCompatActivity {
     Pokemon pokemon;
 
     @Override
@@ -23,7 +22,7 @@ public class PokemonDetail extends AppCompatActivity {
 
         pokemon = getIntent().getParcelableExtra("pokemon");
 
-        new Holder(PokemonDetail.this);
+        new Holder(PokemonDetailActivity.this);
     }
 
     class Holder {

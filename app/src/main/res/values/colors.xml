@@ -6,6 +6,7 @@
     <color name="colorTest1">#CCFFFFFF</color>
     <color name="colorOverlayCard">#40FFFFFF</color>
     <color name="colorOverlaySprite">#80FFFFFF</color>
+    <color name="colorOverlaySum">#C0FFFFFF</color>
     <color name="colorShadow">#40000000</color>
     <color name="colorFilter">#F0F0F0F0</color>
 

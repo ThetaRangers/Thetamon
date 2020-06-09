@@ -2,11 +2,9 @@ package it.thetarangers.thetamon.adapters;
 
 import android.app.Activity;
 import android.app.ActivityOptions;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
-import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,8 +25,7 @@ import java.util.List;
 import java.util.Locale;
 
 import it.thetarangers.thetamon.R;
-import it.thetarangers.thetamon.activities.PokedexActivity;
-import it.thetarangers.thetamon.activities.PokemonDetail;
+import it.thetarangers.thetamon.activities.PokemonDetailActivity;
 import it.thetarangers.thetamon.model.Pokemon;
 import it.thetarangers.thetamon.utilities.ImageManager;
 import it.thetarangers.thetamon.utilities.StringManager;
@@ -161,7 +158,7 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHold
 
             for(int i = 0; i < pokemonList.size(); i++){
                 if(id.equals((i + 1) + "")){
-                    Intent data = new Intent(context, PokemonDetail.class);
+                    Intent data = new Intent(context, PokemonDetailActivity.class);
                     data.putExtra("pokemon", pokemonList.get(i));
 
                     ActivityOptions options = ActivityOptions
