@@ -150,6 +150,7 @@ public class FragmentPokedex extends Fragment {
         final FloatingActionButton fabAdd;
         final FloatingActionButton fabSearch;
         final FloatingActionButton fabFilter;
+        final FloatingActionButton fabReset;
         final TextInputLayout tilSearch;
         final ImageView ivSearch;
 
@@ -172,6 +173,8 @@ public class FragmentPokedex extends Fragment {
             fabAdd = fp.findViewById(R.id.fabAdd);
             fabAdd.setOnClickListener(this);
 
+
+
             fabFilter = fp.findViewById(R.id.fabFilter);
             fabFilter.setOnClickListener(this);
             init(fabFilter);
@@ -179,6 +182,10 @@ public class FragmentPokedex extends Fragment {
             fabSearch = fp.findViewById(R.id.fabSearch);
             fabSearch.setOnClickListener(this);
             init(fabSearch);
+
+            fabReset = fp.findViewById(R.id.fabReset);
+            fabReset.setOnClickListener(this);
+            init(fabReset);
 
             rvPokedex = fp.findViewById(R.id.rvPokedex);
             rvPokedex.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -325,12 +332,14 @@ public class FragmentPokedex extends Fragment {
         public void collapseFab() {
             showOut(fabFilter);
             showOut(fabSearch);
+            showOut(fabReset);
             isOpen = rotateFab(fabAdd, !isOpen);
         }
 
         public void openFab() {
             showIn(fabFilter);
             showIn(fabSearch);
+            showIn(fabReset);
             isOpen = rotateFab(fabAdd, !isOpen);
         }
 
@@ -389,6 +398,10 @@ public class FragmentPokedex extends Fragment {
                     break;
                 case R.id.fabSearch:
                     bottomSheetBehaviorSearch.setState(BottomSheetBehavior.STATE_EXPANDED);
+                    collapseFab();
+                    break;
+                case R.id.fabReset:
+                    search("");
                     collapseFab();
                     break;
                 default:
