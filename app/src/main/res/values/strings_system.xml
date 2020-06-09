@@ -8,4 +8,10 @@
     <string name="url_sprites">https://github.com/ThetaRangers/Thetamon/blob/master/sprites.zip?raw=true</string>
     <string name="sprites_temp_path">Sprites</string>
     <string name="sprites_archive">sprites.zip</string>
+    <string name="preferences_name">it.thetarangers.thetamon</string>
+    <string name="first_use">first_use</string>
+    <string name="night_mode">night_mode</string>
+    <string name="system_enum">0</string>
+    <string name="light_enum">1</string>
+    <string name="dark_enum">2</string>
 </resources>

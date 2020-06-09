@@ -100,7 +100,7 @@
             app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
             <include
-                layout="@layout/search_menu_layout"
+                layout="@layout/search_sheet_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </LinearLayout>
@@ -116,7 +116,7 @@
             app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
             <include
-                layout="@layout/filter_menu_layout"
+                layout="@layout/filter_sheet_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </LinearLayout>

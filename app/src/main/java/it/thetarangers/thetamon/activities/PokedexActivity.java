@@ -2,35 +2,38 @@ package it.thetarangers.thetamon.activities;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.navigation.NavigationView;
 
 import it.thetarangers.thetamon.R;
 import it.thetarangers.thetamon.fragments.FragmentPokedex;
+import it.thetarangers.thetamon.fragments.FragmentSettings;
 
 public class PokedexActivity extends AppCompatActivity {
+
     private FragmentPokedex fragmentPokedex;
+    private FragmentSettings fragmentSettings;
+    private Holder holder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pokedex);
 
-        new Holder();
+        holder = new Holder();
 
         FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentSettings = new FragmentSettings();
         if (savedInstanceState == null)
             fragmentPokedex = new FragmentPokedex();
         else
@@ -46,6 +49,21 @@ public class PokedexActivity extends AppCompatActivity {
         super.onSaveInstanceState(out);
     }
 
+    @Override
+    public void onBackPressed() {
+        if (holder.lastItem.getItemId() != R.id.item_pokedex)
+            holder.onNavigationItemSelected(holder.nav_view.getMenu().getItem(0)); // TODO save in holder
+        else
+            super.onBackPressed();
+    }
+
+    void switchFragment(Fragment fragment) {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.flMain,
+                        fragment)
+                .commit();
+    }
 
     class Holder implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
 
@@ -85,7 +103,7 @@ public class PokedexActivity extends AppCompatActivity {
             drawerLayout.closeDrawer(GravityCompat.START);
             switch (item.getItemId()) {
                 case R.id.item_pokedex:
-                    Log.d("POKE", "open Pokedex");
+                    switchFragment(fragmentPokedex);
                     break;
                 case R.id.item_wtp:
                     Log.d("POKE", "It's a Pikachu");
@@ -94,7 +112,7 @@ public class PokedexActivity extends AppCompatActivity {
                     Log.d("POKE", "go to fav");
                     break;
                 case R.id.item_settings:
-                    Log.d("POKE", "go to settings");
+                    switchFragment(fragmentSettings);
                     break;
                 case R.id.item_about:
                     Log.d("POKE", "go to about");
@@ -110,10 +128,9 @@ public class PokedexActivity extends AppCompatActivity {
         @Override
         public void onClick(View view) {
             if (view.getId() == R.id.btn_open) {
-                drawerLayout.openDrawer(GravityCompat.START | Gravity.LEFT);
+                drawerLayout.openDrawer(GravityCompat.START);
             }
         }
-
 
     }
 
