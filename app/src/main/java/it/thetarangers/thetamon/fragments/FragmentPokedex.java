@@ -21,6 +21,9 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.transition.Fade;
+import androidx.transition.Transition;
+import androidx.transition.TransitionManager;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.card.MaterialCardView;
@@ -371,6 +374,10 @@ public class FragmentPokedex extends Fragment {
 
         @Override
         public void onStateChanged(@NonNull View bottomSheet, int newState) {
+            Transition transition = new Fade();
+            transition.setDuration(300);
+            transition.addTarget(clShadow);
+            TransitionManager.beginDelayedTransition((ViewGroup) clShadow.getParent(), transition);
             if (newState == BottomSheetBehavior.STATE_EXPANDED) {
                 clShadow.setVisibility(View.VISIBLE);
             } else if (newState == BottomSheetBehavior.STATE_HIDDEN) {
