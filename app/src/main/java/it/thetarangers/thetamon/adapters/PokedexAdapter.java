@@ -157,7 +157,7 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHold
             String id = tvId.getText().toString().substring(1);
 
             for(int i = 0; i < pokemonList.size(); i++){
-                if(id.equals((i + 1) + "")){
+                if(id.equals(pokemonList.get(i).getId() + "")){
                     Intent data = new Intent(context, PokemonDetailActivity.class);
                     data.putExtra("pokemon", pokemonList.get(i));
 
