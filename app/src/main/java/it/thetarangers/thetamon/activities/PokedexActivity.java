@@ -8,6 +8,7 @@ import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -67,6 +68,15 @@ public class PokedexActivity extends AppCompatActivity {
                 .replace(R.id.flMain,
                         fragment)
                 .commit();
+    }
+
+    public void switchTheme(String val) {
+        if (val.equals(getString(R.string.light_enum)))
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        else if (val.equals(getString(R.string.dark_enum)))
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        else
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
     }
 
     class Holder implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {

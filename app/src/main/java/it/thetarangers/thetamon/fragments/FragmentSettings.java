@@ -6,6 +6,7 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
 import it.thetarangers.thetamon.R;
+import it.thetarangers.thetamon.activities.PokedexActivity;
 
 public class FragmentSettings extends PreferenceFragmentCompat implements Preference.OnPreferenceChangeListener {
 
@@ -21,7 +22,7 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Prefer
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
         if (preference.getKey().equals(getString(R.string.night_mode)))
-            requireActivity().recreate();
+            ((PokedexActivity) requireActivity()).switchTheme((String) newValue);
         return true;
     }
 }
