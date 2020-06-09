@@ -189,7 +189,7 @@ public class FragmentPokedex extends Fragment {
 
             rvPokedex = fp.findViewById(R.id.rvPokedex);
             rvPokedex.setLayoutManager(new LinearLayoutManager(getContext()));
-            adapter = new PokedexAdapter(getContext());
+            adapter = new PokedexAdapter(getActivity());
             adapter.setStateRestorationPolicy(RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY);
 
             rvPokedex.setAdapter(adapter);

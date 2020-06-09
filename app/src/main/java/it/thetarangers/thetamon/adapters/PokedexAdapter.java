@@ -1,10 +1,13 @@
 package it.thetarangers.thetamon.adapters;
 
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +27,7 @@ import java.util.List;
 import java.util.Locale;
 
 import it.thetarangers.thetamon.R;
+import it.thetarangers.thetamon.activities.PokedexActivity;
 import it.thetarangers.thetamon.activities.PokemonDetail;
 import it.thetarangers.thetamon.model.Pokemon;
 import it.thetarangers.thetamon.utilities.ImageManager;
@@ -32,11 +36,11 @@ import it.thetarangers.thetamon.utilities.StringManager;
 public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHolder>
         implements FastScrollRecyclerView.SectionedAdapter {
     private List<Pokemon> pokemonList;
-    private Context context;
+    private Activity context;
 
     private ImageManager imageManager = new ImageManager();
 
-    public PokedexAdapter(Context context) {
+    public PokedexAdapter(Activity context) {
         this.pokemonList = new ArrayList<>();
         this.context = context;
     }
@@ -129,6 +133,7 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHold
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         ImageView ivSprite;
+        ImageView imageView;
         TextView tvName;
         TextView tvId;
         TextView tvType1;
@@ -142,6 +147,8 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHold
             cvPokemon.setOnClickListener(this);
 
             ivSprite = itemView.findViewById(R.id.ivSprite);
+            imageView = itemView.findViewById(R.id.imageView);
+
             tvName = itemView.findViewById(R.id.tvName);
             tvId = itemView.findViewById(R.id.tvId);
             tvType1 = itemView.findViewById(R.id.tvType1);
@@ -155,9 +162,13 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHold
             for(int i = 0; i < pokemonList.size(); i++){
                 if(id.equals((i + 1) + "")){
                     Intent data = new Intent(context, PokemonDetail.class);
-
                     data.putExtra("pokemon", pokemonList.get(i));
-                    context.startActivity(data);
+
+                    ActivityOptions options = ActivityOptions
+                            .makeSceneTransitionAnimation(context, Pair.create(imageView, "cardExpansion"),
+                                    Pair.create(ivSprite, "imageExpansion"));
+
+                    context.startActivity(data, options.toBundle());
                 }
             }
         }
