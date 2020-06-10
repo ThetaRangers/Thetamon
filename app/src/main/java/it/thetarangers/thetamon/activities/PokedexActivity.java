@@ -3,12 +3,12 @@ package it.thetarangers.thetamon.activities;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -57,16 +57,21 @@ public class PokedexActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if (holder.lastItem.getItemId() != R.id.item_pokedex)
-            holder.onNavigationItemSelected(holder.nav_view.getMenu().getItem(0)); // TODO save in holder
+            holder.onNavigationItemSelected(holder.navView.getMenu().getItem(0)); // TODO save in holder
         else
             super.onBackPressed();
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        holder.actionBarDrawerToggle.syncState();
+        super.onPostCreate(savedInstanceState);
     }
 
     void switchFragment(Fragment fragment) {
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.flMain,
-                        fragment)
+                .replace(R.id.flMain, fragment)
                 .commit();
     }
 
@@ -79,30 +84,35 @@ public class PokedexActivity extends AppCompatActivity {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
     }
 
-    class Holder implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
+    class Holder implements NavigationView.OnNavigationItemSelectedListener {
 
-        final private Button btn_open;
         final private DrawerLayout drawerLayout;
-        final private NavigationView nav_view;
+        final private NavigationView navView;
+        final private ActionBarDrawerToggle actionBarDrawerToggle;
 
         //TODO può essere fatto molto meglio
         private MenuItem lastItem;
 
         public Holder() {
-            btn_open = findViewById(R.id.btn_open);
-            btn_open.setOnClickListener(this);
 
             drawerLayout = findViewById(R.id.drawer_layout);
+            Toolbar toolbar = findViewById(R.id.toolbar);
 
-            nav_view = findViewById(R.id.nav_view);
+            actionBarDrawerToggle = new ActionBarDrawerToggle(PokedexActivity.this,
+                    drawerLayout,
+                    toolbar,
+                    R.string.app_name, // TODO properly set content description
+                    R.string.app_name);
+
+            navView = findViewById(R.id.navView);
             //TODO manually check the first menu item
             //TODO menu is selected in activity_pokedex.xml
-            lastItem = nav_view.getMenu().getItem(0);
+            lastItem = navView.getMenu().getItem(0);
             lastItem.setChecked(true);
             lastItem.setEnabled(false);
 
             //TODO add a header layout for navigation view
-            nav_view.setNavigationItemSelectedListener(this);
+            navView.setNavigationItemSelectedListener(this);
 
 
         }
@@ -136,14 +146,6 @@ public class PokedexActivity extends AppCompatActivity {
 
             }
             return false;
-        }
-
-
-        @Override
-        public void onClick(View view) {
-            if (view.getId() == R.id.btn_open) {
-                drawerLayout.openDrawer(GravityCompat.START);
-            }
         }
 
     }

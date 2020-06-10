@@ -9,6 +9,8 @@
     <string name="error_download">Error downloading resources</string>
     <string name="extracting">Extracting resources…</string>
     <string name="updating_db">Updating database…</string>
+    <string name="night_mode">Night Mode</string>
+    <string name="night_mode_summary">Night Mode displays dark surfaces across the majority of the UI</string>
     <string name="system">System default</string>
     <string name="light">Light theme</string>
     <string name="dark">Dark theme</string>

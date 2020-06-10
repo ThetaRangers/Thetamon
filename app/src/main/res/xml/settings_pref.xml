@@ -5,6 +5,7 @@
         app:entries="@array/night_mode_prefs"
         app:entryValues="@array/night_mode_prefs_enum"
         app:icon="@drawable/ic_night_mode"
-        app:key="@string/night_mode"
-        app:title="Night Mode" />
+        app:key="@string/night_mode_pref"
+        app:summary="@string/night_mode_summary"
+        app:title="@string/night_mode" />
 </PreferenceScreen>
