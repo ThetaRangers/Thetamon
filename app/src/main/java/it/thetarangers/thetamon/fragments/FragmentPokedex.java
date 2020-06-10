@@ -69,6 +69,7 @@ public class FragmentPokedex extends Fragment implements SelectorCallback {
 
             @Override
             public void onDestroyActionMode(android.view.ActionMode mode) {
+                holder.adapter.deselectAll();
                 actionMode = null;
             }
         });
@@ -222,6 +223,7 @@ public class FragmentPokedex extends Fragment implements SelectorCallback {
 
         @Override
         public void onClick(View v) {
+            actionMode.finish();
             switch (v.getId()) {
                 case R.id.fabAdd:
                     if (isOpen) {
