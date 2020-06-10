@@ -21,14 +21,14 @@ public class PreferencesHandler {
     public static synchronized Boolean isFirstUse(Context context) {
         if (isFirstUse == null) {
             SharedPreferences sharedPreferences = getSharedPreferences(context);
-            isFirstUse = sharedPreferences.getBoolean(context.getString(R.string.first_use), true);
+            isFirstUse = sharedPreferences.getBoolean(context.getString(R.string.first_use_pref), true);
         }
         return isFirstUse;
     }
 
     public static synchronized void setIsFirstUse(Context context, Boolean value) {
         SharedPreferences.Editor editor = getSharedPreferences(context).edit();
-        editor.putBoolean(context.getString(R.string.first_use), value);
+        editor.putBoolean(context.getString(R.string.first_use_pref), value);
         editor.apply();
         isFirstUse = value;
     }
@@ -36,14 +36,14 @@ public class PreferencesHandler {
     public static synchronized String isNightMode(Context context) {
         if (isNightMode == null) {
             SharedPreferences sharedPreferences = getSharedPreferences(context);
-            isNightMode = sharedPreferences.getString(context.getString(R.string.night_mode), context.getString(R.string.system_enum));
+            isNightMode = sharedPreferences.getString(context.getString(R.string.night_mode_pref), context.getString(R.string.system_enum));
         }
         return isNightMode;
     }
 
     public static synchronized void setIsNightMode(Context context, String value) {
         SharedPreferences.Editor editor = getSharedPreferences(context).edit();
-        editor.putString(context.getString(R.string.night_mode), value);
+        editor.putString(context.getString(R.string.night_mode_pref), value);
         editor.apply();
         isNightMode = value;
     }

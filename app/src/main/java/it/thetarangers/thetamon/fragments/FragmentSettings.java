@@ -14,14 +14,14 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Prefer
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         getPreferenceManager().setSharedPreferencesName(requireContext().getString(R.string.preferences_name));
         setPreferencesFromResource(R.xml.settings_pref, rootKey);
-        Preference nightMode = findPreference(getString(R.string.night_mode));
+        Preference nightMode = findPreference(getString(R.string.night_mode_pref));
         assert nightMode != null;
         nightMode.setOnPreferenceChangeListener(this);
     }
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
-        if (preference.getKey().equals(getString(R.string.night_mode)))
+        if (preference.getKey().equals(getString(R.string.night_mode_pref)))
             ((PokedexActivity) requireActivity()).switchTheme((String) newValue);
         return true;
     }
