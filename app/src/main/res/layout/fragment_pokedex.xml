@@ -6,121 +6,76 @@
     android:layout_height="match_parent"
     tools:context=".fragments.FragmentPokedex">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
+            android:id="@+id/rvPokedex"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:fastScrollPopupBackgroundSize="40dp"
+            app:fastScrollPopupBgColor="@color/colorPrimary"
+            app:fastScrollPopupPosition="adjacent"
+            app:fastScrollPopupTextColor="@android:color/white"
+            app:fastScrollPopupTextSize="26sp"
+            app:fastScrollThumbColor="@color/colorPrimary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:listitem="@layout/item_pokemon" />
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
-                android:id="@+id/rvPokedex"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:fastScrollPopupBackgroundSize="40dp"
-                app:fastScrollPopupBgColor="@color/colorPrimary"
-                app:fastScrollPopupPosition="adjacent"
-                app:fastScrollPopupTextColor="@android:color/white"
-                app:fastScrollPopupTextSize="26sp"
-                app:fastScrollThumbColor="@color/colorPrimary"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:listitem="@layout/item_pokemon" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
 
-            <androidx.coordinatorlayout.widget.CoordinatorLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fabSearch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:foreground="@drawable/fab_search_foreground"
+                    app:fabSize="mini" />
 
-                <LinearLayout
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fabFilter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:foreground="@drawable/fab_filter_foreground"
+                    app:fabSize="mini" />
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fabReset"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:foreground="@drawable/fab_reset_foreground"
+                    app:fabSize="mini" />
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fabAdd"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|end"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical">
+                    android:layout_margin="@dimen/floating_button_margin"
+                    android:clickable="true"
+                    app:backgroundTint="@color/colorPrimary"
+                    app:srcCompat="@drawable/ic_pokeball"
+                    app:tint="@android:color/white" />
 
-                    <com.google.android.material.floatingactionbutton.FloatingActionButton
-                        android:id="@+id/fabSearch"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
-                        android:foreground="@drawable/fab_search_foreground"
-                        app:fabSize="mini" />
+            </LinearLayout>
 
-                    <com.google.android.material.floatingactionbutton.FloatingActionButton
-                        android:id="@+id/fabFilter"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
-                        android:foreground="@drawable/fab_filter_foreground"
-                        app:fabSize="mini" />
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-                    <com.google.android.material.floatingactionbutton.FloatingActionButton
-                        android:id="@+id/fabReset"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
-                        android:foreground="@drawable/fab_reset_foreground"
-                        app:fabSize="mini" />
-
-                    <com.google.android.material.floatingactionbutton.FloatingActionButton
-                        android:id="@+id/fabAdd"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom|end"
-                        android:layout_margin="@dimen/floating_button_margin"
-                        android:clickable="true"
-                        app:backgroundTint="@color/colorPrimary"
-                        app:srcCompat="@drawable/ic_pokeball"
-                        app:tint="@android:color/white" />
-
-                </LinearLayout>
-
-
-            </androidx.coordinatorlayout.widget.CoordinatorLayout>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/clShadow"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/colorShadow"
-            android:visibility="gone" />
-
-        <LinearLayout
-            android:id="@+id/searchSheet"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:elevation="4dp"
-            android:orientation="vertical"
-            app:behavior_hideable="true"
-            app:behavior_skipCollapsed="true"
-            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
-
-            <include
-                layout="@layout/search_sheet_layout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/filterSheet"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:elevation="4dp"
-            android:orientation="vertical"
-            app:behavior_hideable="true"
-            app:behavior_skipCollapsed="true"
-            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
-
-            <include
-                layout="@layout/filter_sheet_layout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </LinearLayout>
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

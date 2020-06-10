@@ -2,7 +2,6 @@ package it.thetarangers.thetamon.database;
 
 import android.content.Context;
 import android.os.Handler;
-import android.util.Log;
 
 import java.util.List;
 
@@ -51,7 +50,7 @@ public class DaoThread extends Thread {
 
             List<Pokemon> tempList = dao.getPokemonsFromName(query);
 
-            pokemonListViewModel.setPokemons(tempList);
+            pokemonListViewModel.setPokemonsAsynchronous(tempList);
         };
 
         this.start();
@@ -65,7 +64,7 @@ public class DaoThread extends Thread {
 
             List<Pokemon> tempList = dao.getPokemonFromId(id);
 
-            pokemonListViewModel.setPokemons(tempList);
+            pokemonListViewModel.setPokemonsAsynchronous(tempList);
         };
 
         this.start();
