@@ -27,6 +27,18 @@ public class Pokemon implements Parcelable {
 
     private String url;
 
+    @ColumnInfo(name = "flavorText")
+    private String flavorText;
+
+    @ColumnInfo(name = "genderRate")
+    private int genderRate;
+
+    @ColumnInfo(name = "captureRate")
+    private int capture_rate;
+
+    @ColumnInfo(name = "growthRate")
+    private String growth_rate;
+
     public Pokemon(int id, String name){
         this.id = id;
         this.name = name;
@@ -123,6 +135,38 @@ public class Pokemon implements Parcelable {
 
     public void setType2(String type2) {
         this.type2 = type2;
+    }
+
+    public String getFlavorText() {
+        return flavorText;
+    }
+
+    public void setFlavorText(String flavorText) {
+        this.flavorText = flavorText;
+    }
+
+    public int getGenderRate() {
+        return genderRate;
+    }
+
+    public void setGenderRate(int genderRate) {
+        this.genderRate = genderRate;
+    }
+
+    public int getCapture_rate() {
+        return capture_rate;
+    }
+
+    public void setCapture_rate(int capture_rate) {
+        this.capture_rate = capture_rate;
+    }
+
+    public String getGrowth_rate() {
+        return growth_rate;
+    }
+
+    public void setGrowth_rate(String growth_rate) {
+        this.growth_rate = growth_rate;
     }
 
     @Override
