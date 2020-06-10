@@ -28,6 +28,7 @@ import java.util.Locale;
 
 import it.thetarangers.thetamon.R;
 import it.thetarangers.thetamon.activities.PokemonDetailActivity;
+import it.thetarangers.thetamon.listener.SelectorCallback;
 import it.thetarangers.thetamon.listener.SelectorListener;
 import it.thetarangers.thetamon.model.Pokemon;
 import it.thetarangers.thetamon.utilities.ImageManager;
@@ -39,13 +40,23 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHold
     private Activity context;
 
     private ImageManager imageManager = new ImageManager();
-    private SelectorListener selectList = new SelectorListener();
+    private SelectorListener selectList ;
+    private SelectorCallback call;
 
-
-    public PokedexAdapter(Activity context) {
+    //aggiustare chi crea l adapter
+    public PokedexAdapter(Activity context, SelectorCallback call) {
         this.pokemonList = new ArrayList<>();
         this.context = context;
+        this.call = call;
+        this.selectList = new SelectorListener(call);
+
     }
+
+    public void deselectAll(){
+        selectList.clearList();
+        notifyDataSetChanged();
+    }
+
 
     public void setPokemonList(List<Pokemon> pokemonList) {
         if (pokemonList.size() > 0) {

@@ -10,11 +10,13 @@ public class SelectorListener implements View.OnLongClickListener {
     final private int MAX_COUNT = 10;
     private SparseBooleanArray selectedList;
     private int count;
+    private SelectorCallback call;
 
 
-    public SelectorListener(){
+    public SelectorListener(SelectorCallback call){
         this.selectedList = new SparseBooleanArray();
         this.count = 0;
+        this.call = call;
     }
 
 
@@ -36,10 +38,14 @@ public class SelectorListener implements View.OnLongClickListener {
                 count++;
             }
         }
-        //TODO add callback to activity
+        //callback to activity
+        if(call !=null) {
+            call.onSelect(selectedList.size());
+        }
 
-        ((RecyclerView)v.getParent()).getAdapter().notifyDataSetChanged();
+        ((RecyclerView) v.getParent()).getAdapter().notifyDataSetChanged();
         return true;
+
     }
 
 
