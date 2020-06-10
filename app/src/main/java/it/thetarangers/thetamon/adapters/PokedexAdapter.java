@@ -5,7 +5,9 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.util.Log;
 import android.util.Pair;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +28,7 @@ import java.util.Locale;
 
 import it.thetarangers.thetamon.R;
 import it.thetarangers.thetamon.activities.PokemonDetailActivity;
+import it.thetarangers.thetamon.listener.SelectorListener;
 import it.thetarangers.thetamon.model.Pokemon;
 import it.thetarangers.thetamon.utilities.ImageManager;
 import it.thetarangers.thetamon.utilities.StringManager;
@@ -36,6 +39,8 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHold
     private Activity context;
 
     private ImageManager imageManager = new ImageManager();
+    private SelectorListener selectList = new SelectorListener();
+
 
     public PokedexAdapter(Activity context) {
         this.pokemonList = new ArrayList<>();
@@ -45,6 +50,7 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHold
     public void setPokemonList(List<Pokemon> pokemonList) {
         if (pokemonList.size() > 0) {
             this.pokemonList = pokemonList;
+            selectList.clearList();
             notifyDataSetChanged();
         } else {
             if (context
@@ -66,13 +72,13 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHold
     @NonNull
     @Override
     public PokedexAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        ConstraintLayout cl;
+        MaterialCardView cardView;
         // Inflate row of RecyclerView
-        cl = (ConstraintLayout) LayoutInflater
+        cardView = (MaterialCardView) LayoutInflater
                 .from(parent.getContext())
                 .inflate(R.layout.item_pokemon, parent, false);
 
-        return new PokedexAdapter.ViewHolder(cl);
+        return new PokedexAdapter.ViewHolder(cardView);
     }
 
     @Override
@@ -115,6 +121,13 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHold
         } else {
             holder.tvType2.setVisibility(View.GONE);
         }
+
+        boolean isSelected = selectList.isSelected(position);
+        if(isSelected)
+                holder.cvPokemon.setSelected(true);
+        else holder.cvPokemon.setSelected(false);
+
+
     }
 
     @Override
@@ -142,6 +155,7 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHold
 
             cvPokemon = itemView.findViewById(R.id.cvPokemon);
             cvPokemon.setOnClickListener(this);
+            cvPokemon.setOnLongClickListener(selectList);
 
             ivSprite = itemView.findViewById(R.id.ivSprite);
             imageView = itemView.findViewById(R.id.imageView);
@@ -154,20 +168,28 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHold
 
         @Override
         public void onClick(View v) {
-            String id = tvId.getText().toString().substring(1);
 
-            for(int i = 0; i < pokemonList.size(); i++){
-                if(id.equals(pokemonList.get(i).getId() + "")){
-                    Intent data = new Intent(context, PokemonDetailActivity.class);
-                    data.putExtra("pokemon", pokemonList.get(i));
+            if(selectList.selectedSize()>0)
+                selectList.onLongClick(v);
+            else{
+                String id = tvId.getText().toString().substring(1);
 
-                    ActivityOptions options = ActivityOptions
-                            .makeSceneTransitionAnimation(context, Pair.create(imageView, "cardExpansion"),
-                                    Pair.create(ivSprite, "imageExpansion"));
+                for (int i = 0; i < pokemonList.size(); i++) {
+                    if (id.equals(pokemonList.get(i).getId() + "")) {
+                        Intent data = new Intent(context, PokemonDetailActivity.class);
+                        data.putExtra("pokemon", pokemonList.get(i));
 
-                    context.startActivity(data, options.toBundle());
+                        ActivityOptions options = ActivityOptions
+                                .makeSceneTransitionAnimation(context, Pair.create(imageView, "cardExpansion"),
+                                        Pair.create(ivSprite, "imageExpansion"));
+
+                        context.startActivity(data, options.toBundle());
+                    }
                 }
             }
         }
+
+
+
     }
 }
