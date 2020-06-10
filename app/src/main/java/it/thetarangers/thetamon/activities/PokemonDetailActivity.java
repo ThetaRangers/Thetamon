@@ -41,8 +41,8 @@ public class PokemonDetailActivity extends AppCompatActivity {
 
         VolleyPokemonDetail volley = new VolleyPokemonDetail(PokemonDetailActivity.this) {
             @Override
-            public Pokemon fill(Pokemon pokemon) {
-                return null;
+            public void fill(Pokemon pokemon) {
+
             }
         };
 

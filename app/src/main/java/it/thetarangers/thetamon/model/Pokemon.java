@@ -8,6 +8,9 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import java.util.HashMap;
+import java.util.List;
+
 @Entity(tableName = "Pokemon")
 public class Pokemon implements Parcelable {
     @PrimaryKey
@@ -38,6 +41,10 @@ public class Pokemon implements Parcelable {
 
     @ColumnInfo(name = "growthRate")
     private String growth_rate;
+
+    //TODO foreign key
+    @Ignore
+    public List<Move> movesList;
 
     public Pokemon(int id, String name){
         this.id = id;
