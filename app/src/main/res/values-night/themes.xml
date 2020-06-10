@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!--Top level DayNight theme to be used in AndroidManifest.xml-->
+    <style name="Theme.MyApp" parent="Base.Theme.MyApp">
+        <!--Material color attributes (dark theme) -->
+        <item name="colorPrimary">@color/red_600</item>
+        <item name="android:colorBackground">@color/black_900</item>
+        <item name="colorSurface">@color/black_800</item>
+        <item name="colorError">@color/yellow_200</item>
+        <item name="colorOnBackground">@color/white_50</item>
+        <item name="colorOnSurface">@color/white_50</item>
+        <item name="android:statusBarColor" tools:ignore="NewApi">@color/black_700</item>
+        <item name="colorSheet">@color/black_700</item>
+    </style>
+</resources>

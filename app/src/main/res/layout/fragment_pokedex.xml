@@ -16,11 +16,11 @@
             android:layout_height="0dp"
             app:fastScrollEnableThumbInactiveColor="false"
             app:fastScrollPopupBackgroundSize="40dp"
-            app:fastScrollPopupBgColor="@color/colorPrimary"
+            app:fastScrollPopupBgColor="?android:colorPrimary"
             app:fastScrollPopupPosition="adjacent"
             app:fastScrollPopupTextColor="@android:color/white"
             app:fastScrollPopupTextSize="26sp"
-            app:fastScrollThumbColor="@color/colorPrimary"
+            app:fastScrollThumbColor="?android:colorPrimary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -69,7 +69,7 @@
                     android:layout_gravity="bottom|end"
                     android:layout_margin="@dimen/floating_button_margin"
                     android:clickable="true"
-                    app:backgroundTint="@color/colorPrimary"
+                    app:backgroundTint="?android:colorPrimary"
                     app:srcCompat="@drawable/ic_pokeball"
                     app:tint="@android:color/white" />
 

@@ -104,12 +104,11 @@ public class FragmentPokedex extends Fragment {
 
         final FastScrollRecyclerView rvPokedex;
         final PokedexAdapter adapter;
-
-        boolean isOpen;
         final FloatingActionButton fabAdd;
         final FloatingActionButton fabSearch;
         final FloatingActionButton fabFilter;
         final FloatingActionButton fabReset;
+        boolean isOpen;
 
         Holder(View fp) {
 
@@ -208,6 +207,7 @@ public class FragmentPokedex extends Fragment {
             fabAdd.setVisibility(View.GONE);
             fabFilter.setVisibility(View.GONE);
             fabSearch.setVisibility(View.GONE);
+            fabReset.setVisibility(View.GONE);
         }
 
         @Override
@@ -215,6 +215,7 @@ public class FragmentPokedex extends Fragment {
             fabAdd.setVisibility(View.VISIBLE);
             fabFilter.setVisibility(View.VISIBLE);
             fabSearch.setVisibility(View.VISIBLE);
+            fabReset.setVisibility(View.VISIBLE);
         }
 
     }
