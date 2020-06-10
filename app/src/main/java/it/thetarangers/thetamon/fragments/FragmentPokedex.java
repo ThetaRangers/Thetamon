@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import it.thetarangers.thetamon.R;
+import it.thetarangers.thetamon.activities.PokedexActivity;
 import it.thetarangers.thetamon.adapters.PokedexAdapter;
 import it.thetarangers.thetamon.database.DaoThread;
 import it.thetarangers.thetamon.listener.SelectorCallback;
@@ -53,6 +54,7 @@ public class FragmentPokedex extends Fragment implements SelectorCallback {
             @Override
             public boolean onCreateActionMode(android.view.ActionMode mode, Menu menu) {
                 mode.getMenuInflater().inflate(R.menu.menu_navigation_view, menu);
+                ((PokedexActivity)getActivity()).lockDrawer();
                 Log.d("POKE","inflated");
                 return true;
             }
@@ -70,6 +72,7 @@ public class FragmentPokedex extends Fragment implements SelectorCallback {
             @Override
             public void onDestroyActionMode(android.view.ActionMode mode) {
                 holder.adapter.deselectAll();
+                ((PokedexActivity)getActivity()).unlockDrawer();
                 actionMode = null;
             }
         });
@@ -223,7 +226,7 @@ public class FragmentPokedex extends Fragment implements SelectorCallback {
 
         @Override
         public void onClick(View v) {
-            actionMode.finish();
+            if(actionMode!= null) actionMode.finish();
             switch (v.getId()) {
                 case R.id.fabAdd:
                     if (isOpen) {

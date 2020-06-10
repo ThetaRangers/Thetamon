@@ -1,5 +1,6 @@
 package it.thetarangers.thetamon.listener;
 
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.View;
 
@@ -36,6 +37,7 @@ public class SelectorListener implements View.OnLongClickListener {
                 v.setSelected(true);
                 selectedList.put(position, true);
                 count++;
+                Log.d("POKE","selected "+selectedList.size());
             }
         }
         //callback to activity
@@ -60,6 +62,7 @@ public class SelectorListener implements View.OnLongClickListener {
     public void clearList(){
         selectedList.clear();
         count = 0;
+        Log.d("POKE","selected "+selectedList.size());
     }
 
 
