@@ -18,6 +18,9 @@ import java.util.HashMap;
 import java.util.Objects;
 
 import it.thetarangers.thetamon.R;
+import it.thetarangers.thetamon.fragments.FragmentAbout;
+import it.thetarangers.thetamon.fragments.FragmentFavorites;
+import it.thetarangers.thetamon.fragments.FragmentGame;
 import it.thetarangers.thetamon.fragments.FragmentPokedex;
 import it.thetarangers.thetamon.fragments.FragmentSettings;
 import it.thetarangers.thetamon.utilities.FragmentStateHelper;
@@ -38,6 +41,11 @@ public class PokedexActivity extends AppCompatActivity {
         setContentView(R.layout.activity_pokedex);
 
         fragments = new HashMap<>();
+        fragments.put(R.id.item_pokedex, new FragmentPokedex());
+        fragments.put(R.id.item_favorites, new FragmentFavorites());
+        fragments.put(R.id.item_game, new FragmentGame());
+        fragments.put(R.id.item_settings, new FragmentSettings());
+        fragments.put(R.id.item_about, new FragmentAbout());
 
         fragmentStateHelper = new FragmentStateHelper(getSupportFragmentManager());
 
@@ -46,8 +54,6 @@ public class PokedexActivity extends AppCompatActivity {
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
-        fragments.put(R.id.item_pokedex, new FragmentPokedex());
-        fragments.put(R.id.item_settings, new FragmentSettings());
         if (savedInstanceState == null) {
             switchFragment(fragments.get(R.id.item_pokedex));
             checkedItemId = R.id.item_pokedex;
@@ -131,12 +137,11 @@ public class PokedexActivity extends AppCompatActivity {
             drawerLayout = findViewById(R.id.drawer_layout);
             Toolbar toolbar = findViewById(R.id.toolbar);
 
-            // TODO properly set content description
             actionBarDrawerToggle = new ActionBarDrawerToggle(PokedexActivity.this,
                     drawerLayout,
                     toolbar,
-                    R.string.app_name,
-                    R.string.app_name);
+                    R.string.open_drawer_toggle,
+                    R.string.close_drawer_toggle);
 
             navView = findViewById(R.id.navView);
 
@@ -146,9 +151,6 @@ public class PokedexActivity extends AppCompatActivity {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            // ONLY FOR NOW
-            if (item.getItemId() != R.id.item_pokedex && item.getItemId() != R.id.item_settings)
-                return true;
             // Enable previous MenuItem
             Objects.requireNonNull(navView.getCheckedItem()).setEnabled(true);
 

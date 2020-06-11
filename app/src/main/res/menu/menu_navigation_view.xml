@@ -4,19 +4,19 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/item_pokedex"
-            android:title="Pokedex" />
+            android:title="@string/pokedex" />
         <item
-            android:id="@+id/item_wtp"
-            android:title="Who's that pokemon" />
+            android:id="@+id/item_favorites"
+            android:title="@string/favorites" />
         <item
-            android:id="@+id/item_fav"
-            android:title="Favourites" />
+            android:id="@+id/item_game"
+            android:title="@string/game" />
         <item
             android:id="@+id/item_settings"
-            android:title="Settings" />
+            android:title="@string/settings" />
         <item
             android:id="@+id/item_about"
-            android:title="About" />
+            android:title="@string/about" />
     </group>
 
 </menu>

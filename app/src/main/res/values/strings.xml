@@ -14,4 +14,11 @@
     <string name="system">System default</string>
     <string name="light">Light theme</string>
     <string name="dark">Dark theme</string>
+    <string name="pokedex">Pokédex</string>
+    <string name="favorites">Favorites</string>
+    <string name="game">Who\'s That Pokémon?</string>
+    <string name="settings">Settings</string>
+    <string name="about">About</string>
+    <string name="open_drawer_toggle">Open Navigation Drawer</string>
+    <string name="close_drawer_toggle">Close Navigation Drawer</string>
 </resources>
