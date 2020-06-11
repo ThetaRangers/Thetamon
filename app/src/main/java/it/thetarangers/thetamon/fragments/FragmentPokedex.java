@@ -46,6 +46,7 @@ public class FragmentPokedex extends Fragment implements SelectorCallback {
             if (size == 0) {
                 actionMode.finish();
             }
+            actionMode.setTitle("Selected "+size+"/10 pokemons");
             return;
 
         }
@@ -55,6 +56,7 @@ public class FragmentPokedex extends Fragment implements SelectorCallback {
             public boolean onCreateActionMode(android.view.ActionMode mode, Menu menu) {
                 mode.getMenuInflater().inflate(R.menu.menu_navigation_view, menu);
                 ((PokedexActivity)getActivity()).lockDrawer();
+                mode.setTitle("Selected "+size+ " pokemons");
                 Log.d("POKE","inflated");
                 return true;
             }
