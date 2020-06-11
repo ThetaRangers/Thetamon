@@ -1,7 +1,6 @@
 package it.thetarangers.thetamon.activities;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
@@ -12,18 +11,25 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.navigation.NavigationView;
+
+import java.util.HashMap;
+import java.util.Objects;
 
 import it.thetarangers.thetamon.R;
 import it.thetarangers.thetamon.fragments.FragmentPokedex;
 import it.thetarangers.thetamon.fragments.FragmentSettings;
+import it.thetarangers.thetamon.utilities.FragmentStateHelper;
 
 public class PokedexActivity extends AppCompatActivity {
 
-    private FragmentPokedex fragmentPokedex;
-    private FragmentSettings fragmentSettings;
+    private static final String HELPER = "helper";
+    private static final String CHECKED_ITEM = "checked_item";
+
+    private HashMap<Integer, Fragment> fragments;
+    private FragmentStateHelper fragmentStateHelper;
+    private Integer checkedItemId;
     private Holder holder;
 
     @Override
@@ -31,48 +37,69 @@ public class PokedexActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pokedex);
 
+        fragments = new HashMap<>();
+
+        fragmentStateHelper = new FragmentStateHelper(getSupportFragmentManager());
+
         holder = new Holder();
-
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentSettings = new FragmentSettings();
-        if (savedInstanceState == null) {
-            fragmentPokedex = new FragmentPokedex();
-        } else {
-            fragmentPokedex = (FragmentPokedex) fragmentManager.getFragment(savedInstanceState, "FragmentPokedex");
-            if (fragmentPokedex == null)
-                fragmentPokedex = new FragmentPokedex();
-        }
-        fragmentManager.beginTransaction()
-                .replace(R.id.flMain, fragmentPokedex)
-                .commit();
-    }
-
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle out) {
-        if (fragmentPokedex.isAdded())
-            getSupportFragmentManager().putFragment(out, "FragmentPokedex", fragmentPokedex);
-        super.onSaveInstanceState(out);
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (holder.lastItem.getItemId() != R.id.item_pokedex)
-            holder.onNavigationItemSelected(holder.navView.getMenu().getItem(0)); // TODO save in holder
-        else
-            super.onBackPressed();
     }
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
+        fragments.put(R.id.item_pokedex, new FragmentPokedex());
+        fragments.put(R.id.item_settings, new FragmentSettings());
+        if (savedInstanceState == null) {
+            switchFragment(fragments.get(R.id.item_pokedex));
+            checkedItemId = R.id.item_pokedex;
+        } else {
+            Bundle helperState = savedInstanceState.getBundle(HELPER);
+            assert helperState != null;
+            fragmentStateHelper.restoreHelperState(helperState);
+
+            checkedItemId = savedInstanceState.getInt(CHECKED_ITEM);
+        }
+        holder.navView.setCheckedItem(checkedItemId);
+        Objects.requireNonNull(holder.navView.getCheckedItem()).setEnabled(false);
+
         holder.actionBarDrawerToggle.syncState();
         super.onPostCreate(savedInstanceState);
     }
 
-    void switchFragment(Fragment fragment) {
-        getSupportFragmentManager()
-                .beginTransaction()
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        // Save current Fragment's state
+        saveCurrentState();
+        // Save the state all Fragments
+        outState.putBundle(HELPER, fragmentStateHelper.saveHelperState());
+        // Save the state of NavigationDrawer
+        outState.putInt(CHECKED_ITEM, checkedItemId);
+
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (holder.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            holder.drawerLayout.closeDrawer(GravityCompat.START);
+        } else if (checkedItemId != R.id.item_pokedex) {
+            // Easier than handling BackStack
+            holder.onNavigationItemSelected(holder.navView.getMenu().findItem(R.id.item_pokedex));
+            holder.navView.setCheckedItem(R.id.item_pokedex);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    private void saveCurrentState() {
+        Fragment current = fragments.get(checkedItemId);
+        if (current != null)
+            fragmentStateHelper.saveState(current, checkedItemId);
+    }
+
+    private void switchFragment(Fragment fragment) {
+        getSupportFragmentManager().beginTransaction()
                 .replace(R.id.flMain, fragment)
-                .commit();
+                .commitNowAllowingStateLoss();
     }
 
     public void switchTheme(String val) {
@@ -86,68 +113,57 @@ public class PokedexActivity extends AppCompatActivity {
 
     class Holder implements NavigationView.OnNavigationItemSelectedListener {
 
-        final private DrawerLayout drawerLayout;
-        final private NavigationView navView;
-        final private ActionBarDrawerToggle actionBarDrawerToggle;
-
-        //TODO può essere fatto molto meglio
-        private MenuItem lastItem;
+        private final NavigationView navView;
+        private final DrawerLayout drawerLayout;
+        private final ActionBarDrawerToggle actionBarDrawerToggle;
 
         public Holder() {
 
             drawerLayout = findViewById(R.id.drawer_layout);
             Toolbar toolbar = findViewById(R.id.toolbar);
 
+            // TODO properly set content description
             actionBarDrawerToggle = new ActionBarDrawerToggle(PokedexActivity.this,
                     drawerLayout,
                     toolbar,
-                    R.string.app_name, // TODO properly set content description
+                    R.string.app_name,
                     R.string.app_name);
 
             navView = findViewById(R.id.navView);
-            //TODO manually check the first menu item
-            //TODO menu is selected in activity_pokedex.xml
-            lastItem = navView.getMenu().getItem(0);
-            lastItem.setChecked(true);
-            lastItem.setEnabled(false);
 
-            //TODO add a header layout for navigation view
             navView.setNavigationItemSelectedListener(this);
-
 
         }
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            lastItem.setChecked(false);
-            lastItem.setEnabled(true);
-            item.setChecked(true);
+            // ONLY FOR NOW
+            if (item.getItemId() != R.id.item_pokedex && item.getItemId() != R.id.item_settings)
+                return true;
+            // Enable previous MenuItem
+            Objects.requireNonNull(navView.getCheckedItem()).setEnabled(true);
+
+            // Disable current MenuItem
             item.setEnabled(false);
-            lastItem = item;
+
+            // Save current Fragment's state
+            saveCurrentState();
+
+            // Prepare Fragment and restore its state
+            Fragment newFragment = fragments.get(item.getItemId());
+            assert newFragment != null;
+            fragmentStateHelper.restoreState(newFragment, item.getItemId());
+
+            // Commit Transaction
+            switchFragment(newFragment);
+
+            // Close drawer
             drawerLayout.closeDrawer(GravityCompat.START);
-            switch (item.getItemId()) {
-                case R.id.item_pokedex:
-                    switchFragment(fragmentPokedex);
-                    break;
-                case R.id.item_wtp:
-                    Log.d("POKE", "It's a Pikachu");
-                    break;
-                case R.id.item_fav:
-                    Log.d("POKE", "go to fav");
-                    break;
-                case R.id.item_settings:
-                    switchFragment(fragmentSettings);
-                    break;
-                case R.id.item_about:
-                    Log.d("POKE", "go to about");
-                    break;
-                default:
-                    break;
 
-            }
-            return false;
+            checkedItemId = item.getItemId();
+
+            return true;
         }
-
     }
 
 }
