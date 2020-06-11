@@ -11,7 +11,6 @@ import it.thetarangers.thetamon.R;
 import it.thetarangers.thetamon.activities.MainActivity;
 import it.thetarangers.thetamon.activities.PokedexActivity;
 import it.thetarangers.thetamon.utilities.PreferencesHandler;
-import it.thetarangers.thetamon.utilities.SettingsDialogPreference;
 
 public class FragmentSettings extends PreferenceFragmentCompat implements Preference.OnPreferenceChangeListener {
 
@@ -33,16 +32,13 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Prefer
 
     @Override
     public void onDisplayPreferenceDialog(Preference preference) {
-        SettingsDialogPreference dialogPreference = (SettingsDialogPreference) preference;
-        if (dialogPreference != null) {
-            if (preference.getKey().equals(getString(R.string.first_use_pref))) {
-                FragmentResetDataDialog dialogFragment = FragmentResetDataDialog
-                        .newInstance(dialogPreference.getKey());
-                dialogFragment.setTargetFragment(this, 0);
-                dialogFragment.show(getParentFragmentManager(), null);
-            }
+        if (preference.getKey().equals(getString(R.string.first_use_pref))) {
+            FragmentResetDataDialog dialogFragment = FragmentResetDataDialog
+                    .newInstance(preference.getKey());
+            dialogFragment.setTargetFragment(this, 0);
+            dialogFragment.show(getParentFragmentManager(), null);
         } else {
-            super.onDisplayPreferenceDialog(null);
+            super.onDisplayPreferenceDialog(preference);
         }
     }
 
