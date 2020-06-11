@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Setted android:showAsAction and not app:showAsAction because the second doesn' t work
+        with ActionMode and this menu is used in a ActionMode -->
+
+    <!-- TODO add optional drawable-->
+    <item android:title = "Manage favourites"
+        android:showAsAction = "never">
+
+        <menu >
+            <item
+                android:id = "@+id/item_addAll"
+                android:title = "Add all to favourites"/>
+
+            <item android:id = "@+id/item_removeAll"
+                  android:title = "Remove all from favourites"/>
+
+
+        </menu>
+
+    </item>
+
+    <item
+        android:id = "@+id/item_deselect"
+        android:showAsAction = "never"
+        android:title = "Deselect all"/>
+
+</menu>

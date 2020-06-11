@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -37,50 +38,6 @@ public class FragmentPokedex extends Fragment implements SelectorCallback {
     private Holder holder;
 
     private ActionMode actionMode = null;
-
-    @Override
-    public void onSelect(int size) {
-        if (actionMode != null) {
-
-            if (size == 0)
-                actionMode.finish();
-            else
-                actionMode.setTitle("Selected " + size + "/10 pokemons");
-            return;
-
-        }
-
-        actionMode = requireActivity().startActionMode(new android.view.ActionMode.Callback() {
-            @Override
-            public boolean onCreateActionMode(android.view.ActionMode mode, Menu menu) {
-                mode.getMenuInflater().inflate(R.menu.menu_navigation_view, menu);
-                ((PokedexActivity) requireActivity()).lockDrawer();
-                holder.onFastScrollStart();
-                mode.setTitle("Selected " + size + " pokemons");
-                Log.d("POKE", "inflated");
-                return true;
-            }
-
-            @Override
-            public boolean onPrepareActionMode(android.view.ActionMode mode, Menu menu) {
-                return false;
-            }
-
-            @Override
-            public boolean onActionItemClicked(android.view.ActionMode mode, MenuItem item) {
-                return false;
-            }
-
-            @Override
-            public void onDestroyActionMode(android.view.ActionMode mode) {
-                holder.adapter.deselectAll();
-                ((PokedexActivity) requireActivity()).unlockDrawer();
-                holder.onFastScrollStop();
-                actionMode = null;
-            }
-        });
-
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -151,6 +108,67 @@ public class FragmentPokedex extends Fragment implements SelectorCallback {
 
         holder.adapter.setPokemonList(tmp);
     }
+
+    @Override
+    public void onSelect(int size) {
+        if (actionMode != null) {
+
+            if (size == 0)
+                actionMode.finish();
+            else
+                actionMode.setTitle("Selected " + size + "/10 pokemons");
+            return;
+
+        }
+
+        actionMode = requireActivity().startActionMode(new Callback());
+
+
+    }
+
+    class Callback implements android.view.ActionMode.Callback {
+            @Override
+            public boolean onCreateActionMode(android.view.ActionMode mode, Menu menu) {
+                mode.getMenuInflater().inflate(R.menu.menu_action_mode, menu);
+                ((PokedexActivity) requireActivity()).lockDrawer();
+                holder.onFastScrollStart();
+                mode.setTitle("Selected 1/10 pokemons");
+                Log.d("POKE", "inflated");
+                return true;
+            }
+
+            @Override
+            public boolean onPrepareActionMode(android.view.ActionMode mode, Menu menu) {
+                return false;
+            }
+
+            @Override
+            public boolean onActionItemClicked(android.view.ActionMode mode, MenuItem item) {
+                switch(item.getItemId()){
+                    case R.id.item_deselect:
+                        mode.finish();
+                        break;
+                    case R.id.item_addAll:
+                        Toast.makeText(getActivity().getApplicationContext(),"add elements to fav",Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.item_removeAll:
+                        Toast.makeText(getActivity().getApplicationContext(),"remove elements from fav",Toast.LENGTH_SHORT).show();
+                        break;
+                    default:
+                        break;
+                }
+
+                return false;
+            }
+
+            @Override
+            public void onDestroyActionMode(android.view.ActionMode mode) {
+                holder.adapter.deselectAll();
+                ((PokedexActivity) requireActivity()).unlockDrawer();
+                holder.onFastScrollStop();
+                actionMode = null;
+            }
+        }
 
     class Holder implements View.OnClickListener, OnFastScrollStateChangeListener {
 
