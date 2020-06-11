@@ -8,7 +8,7 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity(tableName = "Pokemon")
@@ -37,14 +37,45 @@ public class Pokemon implements Parcelable {
     private int genderRate;
 
     @ColumnInfo(name = "captureRate")
-    private int capture_rate;
+    private int captureRate;
 
     @ColumnInfo(name = "growthRate")
-    private String growth_rate;
+    private String growthRate;
+
+    @ColumnInfo(name = "height")
+    private int height;
+
+    @ColumnInfo(name = "weight")
+    private int weight;
+
+    @ColumnInfo(name = "hp")
+    private int hp;
+
+    @ColumnInfo(name = "attack")
+    private int attack;
+
+    @ColumnInfo(name = "defense")
+    private int defense;
+
+    @ColumnInfo(name = "specialAttack")
+    private int specialAttack;
+
+    @ColumnInfo(name = "specialDefense")
+    private int specialDefense;
+
+    @ColumnInfo(name = "speed")
+    private int speed;
+
+    @ColumnInfo(name = "habitat")
+    private String habitat;
 
     //TODO foreign key
     @Ignore
-    public List<Move> movesList;
+    private List<Move> movesList;
+
+    //TODO foreign keu
+    @Ignore
+    private List<Ability> abilityList;
 
     public Pokemon(int id, String name){
         this.id = id;
@@ -53,6 +84,7 @@ public class Pokemon implements Parcelable {
 
     @Ignore
     protected Pokemon(Parcel in) {
+        //TODO fix parcelable
         id = in.readInt();
         name = in.readString();
         type1 = in.readString();
@@ -160,20 +192,130 @@ public class Pokemon implements Parcelable {
         this.genderRate = genderRate;
     }
 
-    public int getCapture_rate() {
-        return capture_rate;
+    public int getCaptureRate() {
+        return captureRate;
     }
 
-    public void setCapture_rate(int capture_rate) {
-        this.capture_rate = capture_rate;
+    public void setCaptureRate(int captureRate) {
+        this.captureRate = captureRate;
     }
 
-    public String getGrowth_rate() {
-        return growth_rate;
+    public String getGrowthRate() {
+        return growthRate;
     }
 
-    public void setGrowth_rate(String growth_rate) {
-        this.growth_rate = growth_rate;
+    public void setGrowthRate(String growthRate) {
+        this.growthRate = growthRate;
+    }
+
+    public List<Move> getMovesList() {
+        return movesList;
+    }
+
+    public void setMovesList(List<Move> movesList) {
+        this.movesList = movesList;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public int getWeight() {
+        return weight;
+    }
+
+    public void setWeight(int weight) {
+        this.weight = weight;
+    }
+
+    public List<Ability> getAbilityList() {
+        return abilityList;
+    }
+
+    public void setAbilityList(List<Ability> abilityList) {
+        this.abilityList = abilityList;
+    }
+
+    public void setStats(int hp, int attack, int defense, int specialAttack, int specialDefense, int speed){
+        this.hp = hp;
+        this.attack = attack;
+        this.defense = defense;
+        this.specialAttack = specialAttack;
+        this.specialDefense = specialDefense;
+        this.speed = speed;
+    }
+
+    public List<Integer> getStats(){
+        List<Integer> statList = new ArrayList<>();
+
+        statList.add(hp);
+        statList.add(attack);
+        statList.add(defense);
+        statList.add(specialAttack);
+        statList.add(specialDefense);
+        statList.add(speed);
+
+        return statList;
+    }
+
+    public int getHp() {
+        return hp;
+    }
+
+    public void setHp(int hp) {
+        this.hp = hp;
+    }
+
+    public int getAttack() {
+        return attack;
+    }
+
+    public void setAttack(int attack) {
+        this.attack = attack;
+    }
+
+    public int getDefense() {
+        return defense;
+    }
+
+    public void setDefense(int defense) {
+        this.defense = defense;
+    }
+
+    public int getSpecialAttack() {
+        return specialAttack;
+    }
+
+    public void setSpecialAttack(int specialAttack) {
+        this.specialAttack = specialAttack;
+    }
+
+    public int getSpecialDefense() {
+        return specialDefense;
+    }
+
+    public void setSpecialDefense(int specialDefense) {
+        this.specialDefense = specialDefense;
+    }
+
+    public int getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(int speed) {
+        this.speed = speed;
+    }
+
+    public String getHabitat() {
+        return habitat;
+    }
+
+    public void setHabitat(String habitat) {
+        this.habitat = habitat;
     }
 
     @Override

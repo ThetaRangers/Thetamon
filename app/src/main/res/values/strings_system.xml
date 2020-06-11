@@ -4,6 +4,7 @@
     <string name="extension">.png</string>
     <string name="color_type">colorType</string>
     <string name="url">https://pokeapi.co/api/v2/pokemon?limit=10000</string>
+    <string name="url_all_moves">https://pokeapi.co/api/v2/move?limit=10000</string>
     <string name="url_type">https://pokeapi.co/api/v2/type/%s</string>
     <string name="url_sprites">https://github.com/ThetaRangers/Thetamon/blob/master/sprites.zip?raw=true</string>
     <string name="url_species">https://pokeapi.co/api/v2/pokemon-species/%d</string>

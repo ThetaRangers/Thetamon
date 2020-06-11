@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,34 +38,42 @@ public class PokemonDetailActivity extends AppCompatActivity {
         final ShapeableImageView ivBackground;
         final TextView tvName;
         final TextView tvID;
+        final TextView tvHabitat;
+        final TextView tvHp;
+
         ImageManager imageManager = new ImageManager();
 
-        VolleyPokemonDetail volley = new VolleyPokemonDetail(PokemonDetailActivity.this) {
-            @Override
-            public void fill(Pokemon pokemon) {
-
-            }
-        };
-
         Holder(Context context){
-            volley.getPokemonDetail(pokemon);
-
             tvID = findViewById(R.id.tvId);
+            tvHabitat = findViewById(R.id.tvHabitat);
+            tvName = findViewById(R.id.tvName);
+            ivBackground = findViewById(R.id.ivBackground);
+            ivSprite = findViewById(R.id.ivSprite);
+            ivOverlay = findViewById(R.id.ivOverlay);
+            tvHp = findViewById(R.id.tvHp);
+
+            VolleyPokemonDetail volley = new VolleyPokemonDetail(PokemonDetailActivity.this, pokemon) {
+                @Override
+                public void fill(Pokemon pokemon) {
+                    //Fill text views with pokemon's details
+                    tvHabitat.setText(pokemon.getHabitat());
+                    tvHp.setText(pokemon.getHp() + "");
+                }
+            };
+
+            volley.getPokemonDetail();  //Fill information of the pokemon
+
             tvID.setText(String.format("#%d", pokemon.getId()));
 
-            tvName = findViewById(R.id.tvName);
             tvName.setText(StringManager.capitalize(pokemon.getName()));
 
-            ivBackground = findViewById(R.id.ivBackground);
             ivBackground.setBackgroundColor(Color.parseColor(pokemon.getAverageColor()));
 
-            ivSprite = findViewById(R.id.ivSprite);
             ivSprite.setImageBitmap(imageManager.loadFromDisk(
                     context.getFilesDir() + context.getString(R.string.sprites_front),
                     pokemon.getId() + context.getString(R.string.extension)));
 
-            ivOverlay = findViewById(R.id.ivOverlay);
-            float radius = 100;
+            float radius = context.getResources().getDimension(R.dimen.pokemon_detail_image_radius);
 
             ivOverlay.setShapeAppearanceModel(ivOverlay.getShapeAppearanceModel()
                     .toBuilder()

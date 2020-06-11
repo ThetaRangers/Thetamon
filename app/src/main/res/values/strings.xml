@@ -21,4 +21,6 @@
     <string name="about">About</string>
     <string name="open_drawer_toggle">Open Navigation Drawer</string>
     <string name="close_drawer_toggle">Close Navigation Drawer</string>
+    <string name="habitat_name">Habitat</string>
+    <string name="stat_hp">Hp</string>
 </resources>
