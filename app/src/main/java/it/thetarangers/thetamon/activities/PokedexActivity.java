@@ -111,6 +111,15 @@ public class PokedexActivity extends AppCompatActivity {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
     }
 
+
+    public void lockDrawer(){
+        holder.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+    }
+
+    public void unlockDrawer(){
+        holder.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+    }
+
     class Holder implements NavigationView.OnNavigationItemSelectedListener {
 
         private final NavigationView navView;

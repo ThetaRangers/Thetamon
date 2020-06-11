@@ -1,5 +1,6 @@
 package it.thetarangers.thetamon.listener;
 
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.View;
 
@@ -10,11 +11,13 @@ public class SelectorListener implements View.OnLongClickListener {
     final private int MAX_COUNT = 10;
     private SparseBooleanArray selectedList;
     private int count;
+    private SelectorCallback call;
 
 
-    public SelectorListener(){
+    public SelectorListener(SelectorCallback call){
         this.selectedList = new SparseBooleanArray();
         this.count = 0;
+        this.call = call;
     }
 
 
@@ -34,12 +37,17 @@ public class SelectorListener implements View.OnLongClickListener {
                 v.setSelected(true);
                 selectedList.put(position, true);
                 count++;
+                Log.d("POKE","selected "+selectedList.size());
             }
         }
-        //TODO add callback to activity
+        //callback to activity
+        if(call !=null) {
+            call.onSelect(selectedList.size());
+        }
 
-        ((RecyclerView)v.getParent()).getAdapter().notifyDataSetChanged();
+        ((RecyclerView) v.getParent()).getAdapter().notifyDataSetChanged();
         return true;
+
     }
 
 
@@ -54,6 +62,7 @@ public class SelectorListener implements View.OnLongClickListener {
     public void clearList(){
         selectedList.clear();
         count = 0;
+        Log.d("POKE","selected "+selectedList.size());
     }
 
 

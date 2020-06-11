@@ -1,7 +1,11 @@
 package it.thetarangers.thetamon.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -20,15 +24,61 @@ import java.util.ArrayList;
 import java.util.List;
 
 import it.thetarangers.thetamon.R;
+import it.thetarangers.thetamon.activities.PokedexActivity;
 import it.thetarangers.thetamon.adapters.PokedexAdapter;
 import it.thetarangers.thetamon.database.DaoThread;
+import it.thetarangers.thetamon.listener.SelectorCallback;
 import it.thetarangers.thetamon.model.Pokemon;
 import it.thetarangers.thetamon.viewmodel.PokemonListViewModel;
 
-public class FragmentPokedex extends Fragment {
+public class FragmentPokedex extends Fragment implements SelectorCallback {
 
     private PokemonListViewModel pokemonListViewModel;
     private Holder holder;
+
+    private ActionMode actionMode = null;
+
+    @Override
+    public void onSelect(int size) {
+        if (actionMode != null) {
+
+            if (size == 0)
+                actionMode.finish();
+            else
+                actionMode.setTitle("Selected " + size + "/10 pokemons");
+            return;
+
+        }
+
+        actionMode = requireActivity().startActionMode(new android.view.ActionMode.Callback() {
+            @Override
+            public boolean onCreateActionMode(android.view.ActionMode mode, Menu menu) {
+                mode.getMenuInflater().inflate(R.menu.menu_navigation_view, menu);
+                ((PokedexActivity) requireActivity()).lockDrawer();
+                mode.setTitle("Selected " + size + " pokemons");
+                Log.d("POKE", "inflated");
+                return true;
+            }
+
+            @Override
+            public boolean onPrepareActionMode(android.view.ActionMode mode, Menu menu) {
+                return false;
+            }
+
+            @Override
+            public boolean onActionItemClicked(android.view.ActionMode mode, MenuItem item) {
+                return false;
+            }
+
+            @Override
+            public void onDestroyActionMode(android.view.ActionMode mode) {
+                holder.adapter.deselectAll();
+                ((PokedexActivity) requireActivity()).unlockDrawer();
+                actionMode = null;
+            }
+        });
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -131,7 +181,7 @@ public class FragmentPokedex extends Fragment {
 
             rvPokedex = fp.findViewById(R.id.rvPokedex);
             rvPokedex.setLayoutManager(new LinearLayoutManager(getContext()));
-            adapter = new PokedexAdapter(getActivity());
+            adapter = new PokedexAdapter(getActivity(), FragmentPokedex.this);
             adapter.setStateRestorationPolicy(RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY);
 
             rvPokedex.setAdapter(adapter);
@@ -145,6 +195,7 @@ public class FragmentPokedex extends Fragment {
         }
 
         public void showIn(final View v) {
+            v.setVisibility(View.VISIBLE);
             v.setAlpha(0f);
             v.setTranslationY(v.getHeight());
             v.animate().setDuration(200).translationY(0).alpha(1f).start();
@@ -158,7 +209,7 @@ public class FragmentPokedex extends Fragment {
 
         public void init(final View v) {
             v.setTranslationY(0);
-            v.setAlpha(0f);
+            v.setVisibility(View.GONE);
         }
 
         public void collapseFab() {
@@ -177,6 +228,7 @@ public class FragmentPokedex extends Fragment {
 
         @Override
         public void onClick(View v) {
+            if (actionMode != null) actionMode.finish();
             switch (v.getId()) {
                 case R.id.fabAdd:
                     if (isOpen) {
