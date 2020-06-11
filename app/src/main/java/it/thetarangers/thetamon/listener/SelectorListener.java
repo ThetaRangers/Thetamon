@@ -6,6 +6,9 @@ import android.view.View;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SelectorListener implements View.OnLongClickListener {
 
     final private int MAX_COUNT = 10;
@@ -63,6 +66,15 @@ public class SelectorListener implements View.OnLongClickListener {
         selectedList.clear();
         count = 0;
         Log.d("POKE","selected "+selectedList.size());
+    }
+
+    public List<Integer> getSelectedPosition(){
+        List<Integer> temp = new ArrayList<>();
+        for(int i=0;i<selectedList.size();i++){
+            temp.add(selectedList.keyAt(i));
+        }
+
+        return temp;
     }
 
 

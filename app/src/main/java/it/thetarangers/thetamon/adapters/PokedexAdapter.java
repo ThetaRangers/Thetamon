@@ -58,6 +58,20 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHold
     }
 
 
+    public List<Pokemon> getSelected(){
+
+        List<Pokemon> selected = new ArrayList<>();
+        List<Integer> selectIndex = selectList.getSelectedPosition();
+        Log.d("POKE","in adapter");
+        for(int i=0; i<selectIndex.size();i++){
+            Pokemon temp = pokemonList.get(selectIndex.get(i));
+            selected.add(temp);
+            Log.d("POKE", "pokemon ID "+temp.getId()+ "pokemon name "+temp.getName());
+        }
+
+        return selected;
+    }
+
     public void setPokemonList(List<Pokemon> pokemonList) {
         if (pokemonList.size() > 0) {
             this.pokemonList = pokemonList;

@@ -149,6 +149,12 @@ public class FragmentPokedex extends Fragment implements SelectorCallback {
                         mode.finish();
                         break;
                     case R.id.item_addAll:
+                        List<Pokemon> sel = holder.adapter.getSelected();
+                        Log.d("POKE","in fragment");
+                        for(int i=0; i<sel.size();i++){
+                            Pokemon temp = sel.get(i);
+                            Log.d("POKE", "pokemon ID "+temp.getId()+ "pokemon name "+temp.getName());
+                        }
                         Toast.makeText(getActivity().getApplicationContext(),"add elements to fav",Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.item_removeAll:
