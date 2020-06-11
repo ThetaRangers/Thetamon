@@ -1,12 +1,17 @@
 package it.thetarangers.thetamon.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.preference.Preference;
+import androidx.preference.PreferenceDialogFragmentCompat;
 import androidx.preference.PreferenceFragmentCompat;
 
 import it.thetarangers.thetamon.R;
+import it.thetarangers.thetamon.activities.MainActivity;
 import it.thetarangers.thetamon.activities.PokedexActivity;
+import it.thetarangers.thetamon.utilities.PreferencesHandler;
+import it.thetarangers.thetamon.utilities.SettingsDialogPreference;
 
 public class FragmentSettings extends PreferenceFragmentCompat implements Preference.OnPreferenceChangeListener {
 
@@ -25,4 +30,42 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Prefer
             ((PokedexActivity) requireActivity()).switchTheme((String) newValue);
         return true;
     }
+
+    @Override
+    public void onDisplayPreferenceDialog(Preference preference) {
+        SettingsDialogPreference dialogPreference = (SettingsDialogPreference) preference;
+        if (dialogPreference != null) {
+            if (preference.getKey().equals(getString(R.string.first_use_pref))) {
+                FragmentResetDataDialog dialogFragment = FragmentResetDataDialog
+                        .newInstance(dialogPreference.getKey());
+                dialogFragment.setTargetFragment(this, 0);
+                dialogFragment.show(getParentFragmentManager(), null);
+            }
+        } else {
+            super.onDisplayPreferenceDialog(null);
+        }
+    }
+
+    public static class FragmentResetDataDialog extends PreferenceDialogFragmentCompat {
+
+        public static FragmentResetDataDialog newInstance(String key) {
+            FragmentResetDataDialog fragment = new FragmentResetDataDialog();
+            Bundle bundle = new Bundle(1);
+            bundle.putString(PreferenceDialogFragmentCompat.ARG_KEY, key);
+            fragment.setArguments(bundle);
+            return fragment;
+        }
+
+        @Override
+        public void onDialogClosed(boolean positiveResult) {
+            if (positiveResult) {
+                PreferencesHandler.setIsFirstUse(requireContext(), true);
+                Intent intent = new Intent(requireContext(), MainActivity.class);
+                startActivity(intent);
+                requireActivity().finish();
+            }
+        }
+
+    }
+
 }
