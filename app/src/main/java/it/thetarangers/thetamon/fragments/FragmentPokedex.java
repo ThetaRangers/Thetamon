@@ -55,6 +55,7 @@ public class FragmentPokedex extends Fragment implements SelectorCallback {
             public boolean onCreateActionMode(android.view.ActionMode mode, Menu menu) {
                 mode.getMenuInflater().inflate(R.menu.menu_navigation_view, menu);
                 ((PokedexActivity) requireActivity()).lockDrawer();
+                holder.onFastScrollStart();
                 mode.setTitle("Selected " + size + " pokemons");
                 Log.d("POKE", "inflated");
                 return true;
@@ -74,6 +75,7 @@ public class FragmentPokedex extends Fragment implements SelectorCallback {
             public void onDestroyActionMode(android.view.ActionMode mode) {
                 holder.adapter.deselectAll();
                 ((PokedexActivity) requireActivity()).unlockDrawer();
+                holder.onFastScrollStop();
                 actionMode = null;
             }
         });
@@ -195,21 +197,23 @@ public class FragmentPokedex extends Fragment implements SelectorCallback {
         }
 
         public void showIn(final View v) {
-            v.setVisibility(View.VISIBLE);
             v.setAlpha(0f);
             v.setTranslationY(v.getHeight());
             v.animate().setDuration(200).translationY(0).alpha(1f).start();
+            v.setEnabled(true);
         }
 
         public void showOut(final View v) {
             v.setAlpha(1f);
             v.setTranslationY(0);
             v.animate().setDuration(200).translationY(v.getHeight()).alpha(0f).start();
+            v.setEnabled(false);
         }
 
         public void init(final View v) {
             v.setTranslationY(0);
-            v.setVisibility(View.GONE);
+            v.animate().setDuration(0).translationY(v.getHeight()).alpha(0f).start();
+            v.setEnabled(false);
         }
 
         public void collapseFab() {
@@ -228,7 +232,6 @@ public class FragmentPokedex extends Fragment implements SelectorCallback {
 
         @Override
         public void onClick(View v) {
-            if (actionMode != null) actionMode.finish();
             switch (v.getId()) {
                 case R.id.fabAdd:
                     if (isOpen) {
