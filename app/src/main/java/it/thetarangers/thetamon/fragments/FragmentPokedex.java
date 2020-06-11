@@ -1,8 +1,6 @@
 package it.thetarangers.thetamon.fragments;
 
 import android.os.Bundle;
-
-
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -38,26 +36,27 @@ public class FragmentPokedex extends Fragment implements SelectorCallback {
     private PokemonListViewModel pokemonListViewModel;
     private Holder holder;
 
-    private ActionMode actionMode =null;
+    private ActionMode actionMode = null;
+
     @Override
     public void onSelect(int size) {
         if (actionMode != null) {
 
-            if (size == 0) {
+            if (size == 0)
                 actionMode.finish();
-            }
-            actionMode.setTitle("Selected "+size+"/10 pokemons");
+            else
+                actionMode.setTitle("Selected " + size + "/10 pokemons");
             return;
 
         }
 
-        actionMode = getActivity().startActionMode(new android.view.ActionMode.Callback() {
+        actionMode = requireActivity().startActionMode(new android.view.ActionMode.Callback() {
             @Override
             public boolean onCreateActionMode(android.view.ActionMode mode, Menu menu) {
                 mode.getMenuInflater().inflate(R.menu.menu_navigation_view, menu);
-                ((PokedexActivity)getActivity()).lockDrawer();
-                mode.setTitle("Selected "+size+ " pokemons");
-                Log.d("POKE","inflated");
+                ((PokedexActivity) requireActivity()).lockDrawer();
+                mode.setTitle("Selected " + size + " pokemons");
+                Log.d("POKE", "inflated");
                 return true;
             }
 
@@ -74,7 +73,7 @@ public class FragmentPokedex extends Fragment implements SelectorCallback {
             @Override
             public void onDestroyActionMode(android.view.ActionMode mode) {
                 holder.adapter.deselectAll();
-                ((PokedexActivity)getActivity()).unlockDrawer();
+                ((PokedexActivity) requireActivity()).unlockDrawer();
                 actionMode = null;
             }
         });
@@ -182,7 +181,7 @@ public class FragmentPokedex extends Fragment implements SelectorCallback {
 
             rvPokedex = fp.findViewById(R.id.rvPokedex);
             rvPokedex.setLayoutManager(new LinearLayoutManager(getContext()));
-            adapter = new PokedexAdapter(getActivity(), FragmentPokedex.this::onSelect);
+            adapter = new PokedexAdapter(getActivity(), FragmentPokedex.this);
             adapter.setStateRestorationPolicy(RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY);
 
             rvPokedex.setAdapter(adapter);
@@ -196,6 +195,7 @@ public class FragmentPokedex extends Fragment implements SelectorCallback {
         }
 
         public void showIn(final View v) {
+            v.setVisibility(View.VISIBLE);
             v.setAlpha(0f);
             v.setTranslationY(v.getHeight());
             v.animate().setDuration(200).translationY(0).alpha(1f).start();
@@ -209,7 +209,7 @@ public class FragmentPokedex extends Fragment implements SelectorCallback {
 
         public void init(final View v) {
             v.setTranslationY(0);
-            v.setAlpha(0f);
+            v.setVisibility(View.GONE);
         }
 
         public void collapseFab() {
@@ -228,7 +228,7 @@ public class FragmentPokedex extends Fragment implements SelectorCallback {
 
         @Override
         public void onClick(View v) {
-            if(actionMode!= null) actionMode.finish();
+            if (actionMode != null) actionMode.finish();
             switch (v.getId()) {
                 case R.id.fabAdd:
                     if (isOpen) {
