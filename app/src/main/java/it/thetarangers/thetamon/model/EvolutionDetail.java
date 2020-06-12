@@ -18,6 +18,7 @@ public class EvolutionDetail {
     private String time_of_day;
     private String trade_species;
     private String trigger;
+    private int nextPokemonId;
 
     public String getGender() {
         return gender;
@@ -153,5 +154,13 @@ public class EvolutionDetail {
 
     public void setTrigger(String trigger) {
         this.trigger = trigger;
+    }
+
+    public int getNextPokemonId() {
+        return nextPokemonId;
+    }
+
+    public void setNextPokemonId(int nextPokemonId) {
+        this.nextPokemonId = nextPokemonId;
     }
 }

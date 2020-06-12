@@ -65,6 +65,9 @@ public class Pokemon implements Parcelable {
     @ColumnInfo(name = "habitat")
     private String habitat;
 
+    @Ignore
+    private String urlEvolutionChain;
+
     //TODO foreign key
     @Ignore
     private List<Move> movesList;
@@ -312,6 +315,14 @@ public class Pokemon implements Parcelable {
 
     public void setSprites(HashMap<String, String> sprites) {
         this.sprites = sprites;
+    }
+
+    public String getUrlEvolutionChain() {
+        return urlEvolutionChain;
+    }
+
+    public void setUrlEvolutionChain(String urlEvolutionChain) {
+        this.urlEvolutionChain = urlEvolutionChain;
     }
 
     @Override
