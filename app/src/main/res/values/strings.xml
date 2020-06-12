@@ -29,4 +29,5 @@
     <string name="warning">Warning!</string>
     <string name="habitat_name">Habitat</string>
     <string name="stat_hp">Hp</string>
+    <string name="no_habitat">Unknown</string>
 </resources>
