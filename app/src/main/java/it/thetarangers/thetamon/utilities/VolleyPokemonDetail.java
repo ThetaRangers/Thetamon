@@ -151,8 +151,14 @@ public abstract class VolleyPokemonDetail implements Response.ErrorListener, Res
                 int genderRate = jsonObject.getInt("gender_rate");
                 int captureRate = jsonObject.getInt("capture_rate");
                 String growthRate = jsonObject.getJSONObject("growth_rate").getString("name");
+                String habitat;
 
-                String habitat = jsonObject.getJSONObject("habitat").getString("name");
+
+                if(jsonObject.isNull("habitat")){
+                    habitat = context.getResources().getString(R.string.no_habitat);
+                } else {
+                    habitat = jsonObject.getJSONObject("habitat").getString("name");
+                }
 
                 pokemon.setGenderRate(genderRate);
                 pokemon.setCaptureRate(captureRate);
