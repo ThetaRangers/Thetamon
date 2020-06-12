@@ -69,6 +69,11 @@ public class PokemonDetailActivity extends AppCompatActivity {
             tvHp = findViewById(R.id.tvHp);
             rvMoves = findViewById(R.id.rvMoves);
 
+            // programmatically resize the height of ivSprite based on screen height
+            double resize = 0.25;
+            int screenHeight = context.getResources().getDisplayMetrics().heightPixels;
+            ivSprite.getLayoutParams().height = (int) (screenHeight * resize);
+
             rvMoves.setLayoutManager(new LinearLayoutManager(context));
 
             Runnable update = () -> {
