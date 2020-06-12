@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import it.thetarangers.thetamon.R;
+import it.thetarangers.thetamon.model.Move;
 import it.thetarangers.thetamon.model.Pokemon;
 
 public class TypeTextViewManager {
@@ -50,6 +51,20 @@ public class TypeTextViewManager {
         } else {
             tvType2.setVisibility(View.GONE);
         }
+    }
+
+    public static void moveTextViewInit(Context context, Move move, TextView tvType) {
+        String type = move.getType();
+        type = StringManager.capitalize(type);
+
+        // Initialize type1 TextView
+        String color = context.getString(R.string.color_type) + type;
+        int colorID = context.getResources().getIdentifier(color, "color", context.getPackageName());
+        GradientDrawable bg = (GradientDrawable) tvType.getBackground();
+        bg.setColor(context
+                .getColor(colorID));
+        bg.setStroke((int) context.getResources().getDimension(R.dimen.stroke_tv_type), Color.WHITE);
+        tvType.setText(type.toUpperCase());
     }
 
 }

@@ -1,7 +1,6 @@
 package it.thetarangers.thetamon.fragments;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +21,8 @@ import java.util.List;
 
 import it.thetarangers.thetamon.R;
 import it.thetarangers.thetamon.model.Move;
+import it.thetarangers.thetamon.utilities.StringManager;
+import it.thetarangers.thetamon.utilities.TypeTextViewManager;
 
 public class FragmentMoves extends BottomSheetDialogFragment {
 
@@ -51,7 +52,19 @@ public class FragmentMoves extends BottomSheetDialogFragment {
         this.moveList = moveList;
     }
 
-    static class MovesAdapter extends RecyclerView.Adapter<MoveHolder> {
+    static class MoveHolder extends RecyclerView.ViewHolder {
+        TextView tvMove;
+        TextView tvMoveType;
+
+        public MoveHolder(@NonNull View itemView) {
+            super(itemView);
+
+            tvMove = itemView.findViewById(R.id.tvMove);
+            tvMoveType = itemView.findViewById(R.id.tvMoveType);
+        }
+    }
+
+    class MovesAdapter extends RecyclerView.Adapter<MoveHolder> {
 
         private List<Move> moveList;
 
@@ -75,25 +88,14 @@ public class FragmentMoves extends BottomSheetDialogFragment {
         public void onBindViewHolder(@NonNull MoveHolder holder, int position) {
             Move move = moveList.get(position);
 
-            holder.tvMove.setText(move.getName());
+            holder.tvMove.setText(StringManager.capitalize(move.getName()));
 
-            //TODO set move type
-            Log.d("POKE", "move: " + move.getName() + " type: " + move.getType());
+            TypeTextViewManager.moveTextViewInit(requireContext(), move, holder.tvMoveType);
         }
 
         @Override
         public int getItemCount() {
             return moveList.size();
-        }
-    }
-
-    static class MoveHolder extends RecyclerView.ViewHolder {
-        TextView tvMove;
-
-        public MoveHolder(@NonNull View itemView) {
-            super(itemView);
-
-            tvMove = itemView.findViewById(R.id.tvMove);
         }
     }
 
