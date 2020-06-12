@@ -56,6 +56,24 @@ public class DaoThread extends Thread {
         this.start();
     }
 
+    public void getMoveType(final Context context, List<Move> moves, Handler handler, Runnable update){
+        runnable = () ->{
+            PokemonDb db = PokemonDb.getInstance(context);
+            MoveDao dao = db.moveDao();
+            for(int i = 0; i < moves.size(); i++) {
+                String temp = dao.getMoveType(moves.get(i).getName());
+                moves.get(i).setType(temp);
+            }
+
+            if(handler != null){
+                handler.post(update);
+            }
+
+            };
+
+        this.start();
+    }
+
     public void getPokemonFromName(final Context context, final String query) {
 
         runnable = () -> {

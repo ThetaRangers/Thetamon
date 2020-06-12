@@ -3,6 +3,8 @@ package it.thetarangers.thetamon.activities;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +25,7 @@ import java.util.List;
 
 import it.thetarangers.thetamon.R;
 import it.thetarangers.thetamon.adapters.PokedexAdapter;
+import it.thetarangers.thetamon.database.DaoThread;
 import it.thetarangers.thetamon.model.Move;
 import it.thetarangers.thetamon.model.Pokemon;
 import it.thetarangers.thetamon.utilities.ImageManager;
@@ -31,6 +34,8 @@ import it.thetarangers.thetamon.utilities.VolleyPokemonDetail;
 
 public class PokemonDetailActivity extends AppCompatActivity {
     Pokemon pokemon;
+    Handler handler;
+    List<Move> moves;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +43,7 @@ public class PokemonDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_pokemon_detail);
 
         pokemon = getIntent().getParcelableExtra("pokemon");
-
+        handler = new Handler();
         new Holder(PokemonDetailActivity.this);
     }
 
@@ -66,14 +71,26 @@ public class PokemonDetailActivity extends AppCompatActivity {
 
             rvMoves.setLayoutManager(new LinearLayoutManager(context));
 
+            Runnable update = () -> {
+                rvMoves.setAdapter(new MovesAdapter(moves));;
+            };
+
             VolleyPokemonDetail volley = new VolleyPokemonDetail(PokemonDetailActivity.this, pokemon) {
                 @Override
                 public void fill(Pokemon pokemon) {
                     //Fill text views with pokemon's details
                     tvHabitat.setText(pokemon.getHabitat());
                     tvHp.setText(pokemon.getHp() + "");
+                    moves = pokemon.getMovesList();
 
-                    rvMoves.setAdapter(new MovesAdapter(pokemon.getMovesList()));
+                    Thread t = new Thread(() -> {
+                        DaoThread daoThread = new DaoThread();
+
+                        daoThread.getMoveType(PokemonDetailActivity.this, moves, handler, update);
+
+                    });
+
+                    t.start();
                 }
             };
 
@@ -130,6 +147,9 @@ public class PokemonDetailActivity extends AppCompatActivity {
             Move move = moveList.get(position);
 
             holder.tvMove.setText(move.getName());
+
+            //TODO set move type
+            Log.d("POKE", "move: "+move.getName()+" type: "+move.getType());
         }
 
         @Override
