@@ -1,6 +1,7 @@
 package it.thetarangers.thetamon.fragments;
 
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,13 +47,14 @@ public class FragmentMoves extends BottomSheetDialogFragment {
         assert dialog != null;
         BottomSheetBehavior<FrameLayout> behavior = dialog.getBehavior();
         behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        behavior.setSkipCollapsed(true);
     }
 
     public void setMoveList(List<Move> moveList) {
         this.moveList = moveList;
     }
 
-    static class MoveHolder extends RecyclerView.ViewHolder {
+    static class MoveHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView tvMove;
         TextView tvMoveType;
 
@@ -61,7 +63,15 @@ public class FragmentMoves extends BottomSheetDialogFragment {
 
             tvMove = itemView.findViewById(R.id.tvMove);
             tvMoveType = itemView.findViewById(R.id.tvMoveType);
+            itemView.setOnClickListener(this);
         }
+
+
+        @Override
+        public void onClick(View v) {
+            // TODO
+        }
+
     }
 
     class MovesAdapter extends RecyclerView.Adapter<MoveHolder> {
@@ -99,18 +109,21 @@ public class FragmentMoves extends BottomSheetDialogFragment {
         }
     }
 
-    class Holder implements View.OnClickListener {
+    class Holder {
 
         Holder(View fm) {
+            DisplayMetrics displayMetrics = new DisplayMetrics();
+            requireActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+            int height = (int) (displayMetrics.heightPixels * 0.60);
+
+            // Init RecyclerView
             RecyclerView rvMoves = fm.findViewById(R.id.rvMoves);
             rvMoves.setLayoutManager(new LinearLayoutManager(requireContext()));
             MovesAdapter movesAdapter = new MovesAdapter(moveList);
             rvMoves.setAdapter(movesAdapter);
-        }
 
-        @Override
-        public void onClick(View v) {
-            // TODO
+            // Set RecyclerView's height to 60% of screen
+            rvMoves.getLayoutParams().height = height;
         }
 
     }

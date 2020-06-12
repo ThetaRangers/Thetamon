@@ -144,7 +144,7 @@ public class PokemonDetailActivity extends AppCompatActivity {
             tvLoading.setText("");
 
             //Fill text views with pokemon's details
-            tvHabitat.setText(pokemon.getHabitat());
+            tvHabitat.setText(StringManager.capitalize(pokemon.getHabitat()));
             tvHp.setText("Base HP: " + pokemon.getHp());
 
             // Start parsing moves from DB
