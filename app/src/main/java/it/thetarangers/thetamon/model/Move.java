@@ -2,6 +2,7 @@ package it.thetarangers.thetamon.model;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "Move")
@@ -14,6 +15,15 @@ public class Move {
 
     @ColumnInfo(name = "url")
     private String url;
+
+    @ColumnInfo(name = "Type")
+    private String type;
+
+    @Ignore
+    private int level;
+
+    @Ignore
+    private String learnMethod;
 
     public String getName() {
         return name;
@@ -46,5 +56,29 @@ public class Move {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public String getLearnMethod() {
+        return learnMethod;
+    }
+
+    public void setLearnMethod(String learnMethod) {
+        this.learnMethod = learnMethod;
     }
 }
