@@ -158,6 +158,8 @@ public abstract class VolleyPokemonDetail implements Response.ErrorListener, Res
                 String growthRate = jsonObject.getJSONObject("growth_rate").getString("name");
                 String habitat;
 
+                String evolutionChain = jsonObject.getJSONObject("evolution_chain").getString("url");
+
 
                 if(jsonObject.isNull("habitat")){
                     habitat = context.getResources().getString(R.string.no_habitat);
@@ -169,6 +171,7 @@ public abstract class VolleyPokemonDetail implements Response.ErrorListener, Res
                 pokemon.setCaptureRate(captureRate);
                 pokemon.setGrowthRate(growthRate);
                 pokemon.setHabitat(habitat);
+                pokemon.setUrlEvolutionChain(evolutionChain);
 
                 fill(pokemon);
             } catch (JSONException exception) {
