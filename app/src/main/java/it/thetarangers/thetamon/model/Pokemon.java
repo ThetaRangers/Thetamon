@@ -9,6 +9,7 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Entity(tableName = "Pokemon")
@@ -71,6 +72,10 @@ public class Pokemon implements Parcelable {
     //TODO foreign key
     @Ignore
     private List<Ability> abilityList;
+
+    //TODO how to save?
+    @Ignore
+    private HashMap<String, String> sprites;
 
     public Pokemon(int id, String name) {
         this.id = id;
@@ -299,6 +304,14 @@ public class Pokemon implements Parcelable {
 
     public void setHabitat(String habitat) {
         this.habitat = habitat;
+    }
+
+    public HashMap<String, String> getSprites() {
+        return sprites;
+    }
+
+    public void setSprites(HashMap<String, String> sprites) {
+        this.sprites = sprites;
     }
 
     @Override

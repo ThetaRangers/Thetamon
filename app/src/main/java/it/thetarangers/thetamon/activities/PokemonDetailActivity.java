@@ -3,23 +3,30 @@ package it.thetarangers.thetamon.activities;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.shape.CornerFamily;
 
 import java.util.List;
 
 import it.thetarangers.thetamon.R;
+import it.thetarangers.thetamon.adapters.PokedexAdapter;
 import it.thetarangers.thetamon.model.Move;
 import it.thetarangers.thetamon.model.Pokemon;
 import it.thetarangers.thetamon.utilities.ImageManager;
 import it.thetarangers.thetamon.utilities.StringManager;
-import it.thetarangers.thetamon.utilities.VolleyMove;
 import it.thetarangers.thetamon.utilities.VolleyPokemonDetail;
 
 public class PokemonDetailActivity extends AppCompatActivity {
@@ -43,10 +50,11 @@ public class PokemonDetailActivity extends AppCompatActivity {
         final TextView tvID;
         final TextView tvHabitat;
         final TextView tvHp;
+        final RecyclerView rvMoves;
 
         ImageManager imageManager = new ImageManager();
 
-        Holder(Context context){
+        Holder(Context context) {
             tvID = findViewById(R.id.tvId);
             tvHabitat = findViewById(R.id.tvHabitat);
             tvName = findViewById(R.id.tvName);
@@ -54,6 +62,9 @@ public class PokemonDetailActivity extends AppCompatActivity {
             ivSprite = findViewById(R.id.ivSprite);
             ivOverlay = findViewById(R.id.ivOverlay);
             tvHp = findViewById(R.id.tvHp);
+            rvMoves = findViewById(R.id.rvMoves);
+
+            rvMoves.setLayoutManager(new LinearLayoutManager(context));
 
             VolleyPokemonDetail volley = new VolleyPokemonDetail(PokemonDetailActivity.this, pokemon) {
                 @Override
@@ -61,6 +72,8 @@ public class PokemonDetailActivity extends AppCompatActivity {
                     //Fill text views with pokemon's details
                     tvHabitat.setText(pokemon.getHabitat());
                     tvHp.setText(pokemon.getHp() + "");
+
+                    rvMoves.setAdapter(new MovesAdapter(pokemon.getMovesList()));
                 }
             };
 
@@ -80,15 +93,58 @@ public class PokemonDetailActivity extends AppCompatActivity {
 
             ivOverlay.setShapeAppearanceModel(ivOverlay.getShapeAppearanceModel()
                     .toBuilder()
-                    .setBottomLeftCorner(CornerFamily.ROUNDED,radius)
-                    .setBottomRightCorner(CornerFamily.ROUNDED,radius)
+                    .setBottomLeftCorner(CornerFamily.ROUNDED, radius)
+                    .setBottomRightCorner(CornerFamily.ROUNDED, radius)
                     .build());
 
             ivBackground.setShapeAppearanceModel(ivOverlay.getShapeAppearanceModel()
                     .toBuilder()
-                    .setBottomLeftCorner(CornerFamily.ROUNDED,radius)
-                    .setBottomRightCorner(CornerFamily.ROUNDED,radius)
+                    .setBottomLeftCorner(CornerFamily.ROUNDED, radius)
+                    .setBottomRightCorner(CornerFamily.ROUNDED, radius)
                     .build());
+        }
+    }
+
+    class MovesAdapter extends RecyclerView.Adapter<MoveHolder> {
+
+        private List<Move> moveList;
+
+        MovesAdapter(List<Move> moveList) {
+            this.moveList = moveList;
+        }
+
+        @NonNull
+        @Override
+        public MoveHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            ConstraintLayout cl;
+            // Inflate row of RecyclerView
+            cl = (ConstraintLayout) LayoutInflater
+                    .from(parent.getContext())
+                    .inflate(R.layout.item_move, parent, false);
+
+            return new MoveHolder(cl);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull MoveHolder holder, int position) {
+            Move move = moveList.get(position);
+
+            holder.tvMove.setText(move.getName());
+        }
+
+        @Override
+        public int getItemCount() {
+            return moveList.size();
+        }
+    }
+
+    class MoveHolder extends RecyclerView.ViewHolder {
+        TextView tvMove;
+
+        public MoveHolder(@NonNull View itemView) {
+            super(itemView);
+
+            tvMove = itemView.findViewById(R.id.tvMove);
         }
     }
 }

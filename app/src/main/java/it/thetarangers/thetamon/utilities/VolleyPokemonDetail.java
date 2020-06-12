@@ -17,6 +17,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import it.thetarangers.thetamon.R;
@@ -115,15 +116,19 @@ public abstract class VolleyPokemonDetail implements Response.ErrorListener, Res
             Log.d("POKE", spritesObj.getString("front_default"));
 
             //TODO how to set sprites?
-            spritesObj.getString("back_default");
-            spritesObj.getString("back_female");
-            spritesObj.getString("back_shiny");
-            spritesObj.getString("back_shiny_female");
+            HashMap<String, String> sprites = new HashMap<>();
 
-            spritesObj.getString("front_default");
-            spritesObj.getString("front_female");
-            spritesObj.getString("front_shiny");
-            spritesObj.getString("front_female");
+            sprites.put("back_default", spritesObj.getString("back_default"));
+            sprites.put("back_female", spritesObj.getString("back_female"));
+            sprites.put("back_shiny", spritesObj.getString("back_shiny"));
+            sprites.put("back_shiny_female", spritesObj.getString("back_shiny_female"));
+
+            sprites.put("front_default", spritesObj.getString("front_default"));
+            sprites.put("front_female", spritesObj.getString("front_female"));
+            sprites.put("front_shiny", spritesObj.getString("front_shiny"));
+            sprites.put("front_female", spritesObj.getString("front_female"));
+
+            pokemon.setSprites(sprites);
 
             getPokemonSpeciesDetail();
         } catch (JSONException exception) {
@@ -154,7 +159,6 @@ public abstract class VolleyPokemonDetail implements Response.ErrorListener, Res
                 pokemon.setGrowthRate(growthRate);
                 pokemon.setHabitat(habitat);
 
-                //??????????
                 fill(pokemon);
             } catch (JSONException exception) {
                 exception.printStackTrace();
