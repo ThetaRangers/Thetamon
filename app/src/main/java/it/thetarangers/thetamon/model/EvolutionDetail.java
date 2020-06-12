@@ -1,8 +1,5 @@
 package it.thetarangers.thetamon.model;
 
-import androidx.room.Entity;
-
-@Entity
 public class EvolutionDetail {
     private String gender;
     private String held_item;
