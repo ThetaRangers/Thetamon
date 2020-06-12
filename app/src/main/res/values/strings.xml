@@ -30,4 +30,5 @@
     <string name="habitat_name">Habitat</string>
     <string name="stat_hp">Hp</string>
     <string name="no_habitat">Unknown</string>
+    <string name="fetchingResult">Fetching result from API, please wait...</string>
 </resources>

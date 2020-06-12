@@ -33,6 +33,7 @@ import it.thetarangers.thetamon.listener.SelectorListener;
 import it.thetarangers.thetamon.model.Pokemon;
 import it.thetarangers.thetamon.utilities.ImageManager;
 import it.thetarangers.thetamon.utilities.StringManager;
+import it.thetarangers.thetamon.utilities.TypeTextViewManager;
 
 public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHolder>
         implements FastScrollRecyclerView.SectionedAdapter {
@@ -40,7 +41,7 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHold
     private Activity context;
 
     private ImageManager imageManager = new ImageManager();
-    private SelectorListener selectList ;
+    private SelectorListener selectList;
     private SelectorCallback call;
 
     //aggiustare chi crea l adapter
@@ -52,21 +53,21 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHold
 
     }
 
-    public void deselectAll(){
+    public void deselectAll() {
         selectList.clearList();
         notifyDataSetChanged();
     }
 
 
-    public List<Pokemon> getSelected(){
+    public List<Pokemon> getSelected() {
 
         List<Pokemon> selected = new ArrayList<>();
         List<Integer> selectIndex = selectList.getSelectedPosition();
-        Log.d("POKE","in adapter");
-        for(int i=0; i<selectIndex.size();i++){
+        Log.d("POKE", "in adapter");
+        for (int i = 0; i < selectIndex.size(); i++) {
             Pokemon temp = pokemonList.get(selectIndex.get(i));
             selected.add(temp);
-            Log.d("POKE", "pokemon ID "+temp.getId()+ "pokemon name "+temp.getName());
+            Log.d("POKE", "pokemon ID " + temp.getId() + "pokemon name " + temp.getName());
         }
 
         return selected;
@@ -90,7 +91,7 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHold
         }
     }
 
-    public List<Pokemon> getPokemonList(){
+    public List<Pokemon> getPokemonList() {
         return this.pokemonList;
     }
 
@@ -121,38 +122,13 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHold
                 context.getFilesDir() + context.getString(R.string.sprites_front),
                 pokemon.getId() + context.getString(R.string.extension)));
 
-        // Initialize type1 TextView
-        String type1 = pokemon.getType1();
-        type1 = StringManager.capitalize(type1);
-        String color1 = context.getString(R.string.color_type) + type1;
-        int color1ID = context.getResources().getIdentifier(color1, "color", context.getPackageName());
-        GradientDrawable bg1 = (GradientDrawable) holder.tvType1.getBackground();
-        bg1.setColor(context
-                .getColor(color1ID));
-        bg1.setStroke((int) context.getResources().getDimension(R.dimen.stroke_tv_type), Color.WHITE);
-        holder.tvType1.setText(type1.toUpperCase());
-
-        String type2 = pokemon.getType2();
-        // Initialize type2 TextView if exists
-        if (type2 != null) {
-            type2 = StringManager.capitalize(type2);
-            String color2 = context.getString(R.string.color_type) + type2;
-            int color2ID = context.getResources().getIdentifier(color2, "color", context.getPackageName());
-            GradientDrawable bg2 = (GradientDrawable) holder.tvType2.getBackground();
-            bg2.setColor(context.getColor(color2ID));
-            bg2.setStroke((int) context.getResources().getDimension(R.dimen.stroke_tv_type), Color.WHITE);
-            holder.tvType2.setText(type2.toUpperCase());
-            holder.tvType2.setVisibility(View.VISIBLE);
-        } else {
-            holder.tvType2.setVisibility(View.GONE);
-        }
+        TypeTextViewManager typeTextViewManager = new TypeTextViewManager(pokemon, holder.tvType1, holder.tvType2);
+        typeTextViewManager.setup();
 
         boolean isSelected = selectList.isSelected(position);
-        if(isSelected)
-                holder.cvPokemon.setSelected(true);
+        if (isSelected)
+            holder.cvPokemon.setSelected(true);
         else holder.cvPokemon.setSelected(false);
-
-
     }
 
     @Override
@@ -166,7 +142,7 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHold
         return String.valueOf(pokemonList.get(position).getId());
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView ivSprite;
         ImageView imageView;
         TextView tvName;
@@ -194,9 +170,9 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHold
         @Override
         public void onClick(View v) {
 
-            if(selectList.selectedSize()>0)
+            if (selectList.selectedSize() > 0)
                 selectList.onLongClick(v);
-            else{
+            else {
                 String id = tvId.getText().toString().substring(1);
 
                 for (int i = 0; i < pokemonList.size(); i++) {
@@ -204,16 +180,19 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHold
                         Intent data = new Intent(context, PokemonDetailActivity.class);
                         data.putExtra("pokemon", pokemonList.get(i));
 
+                        // TODO: make it work with tvId and tvName
                         ActivityOptions options = ActivityOptions
-                                .makeSceneTransitionAnimation(context, Pair.create(imageView, "cardExpansion"),
-                                        Pair.create(ivSprite, "imageExpansion"));
+                                .makeSceneTransitionAnimation(context,
+                                        Pair.create(imageView, "cardExpansion"),
+                                        Pair.create(ivSprite, "imageExpansion"),
+                                        Pair.create(tvId, "transId"),
+                                        Pair.create(tvName, "transName"));
 
                         context.startActivity(data, options.toBundle());
                     }
                 }
             }
         }
-
 
 
     }

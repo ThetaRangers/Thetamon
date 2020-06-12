@@ -56,9 +56,11 @@
             android:background="@drawable/tv_background"
             android:text="#123"
             android:textColor="@android:color/black"
+            android:textSize="18sp"
             app:layout_constraintBottom_toTopOf="@+id/tvType1"
             app:layout_constraintStart_toStartOf="@+id/tvType1"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:transitionName="transId" />
 
         <TextView
             android:id="@+id/tvName"
@@ -70,7 +72,8 @@
             android:textColor="@android:color/black"
             app:layout_constraintBottom_toTopOf="@+id/tvType1"
             app:layout_constraintStart_toEndOf="@+id/tvId"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:transitionName="transName" />
 
         <TextView
             android:id="@+id/tvType1"
