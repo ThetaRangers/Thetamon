@@ -5,6 +5,7 @@ import android.os.Handler;
 
 import java.util.List;
 
+import it.thetarangers.thetamon.model.Move;
 import it.thetarangers.thetamon.model.Pokemon;
 import it.thetarangers.thetamon.viewmodel.PokemonListViewModel;
 
@@ -35,6 +36,22 @@ public class DaoThread extends Thread {
             for (int i = 0; i < pokemons.size(); i++) {
                 dao.insertPokemon(pokemons.get(i));
             }
+
+            if (handler != null)
+                handler.post(update);
+        };
+        this.start();
+    }
+
+    public void fillMoves(final Context context, final List<Move> moves,
+                     Handler handler, Runnable update) {
+        runnable = () -> {
+            PokemonDb db = PokemonDb.getInstance(context);
+            final MoveDao dao = db.moveDao();
+
+            dao.deleteAll();
+
+            dao.insertAll(moves);
 
             if (handler != null)
                 handler.post(update);

@@ -13,59 +13,54 @@ import java.util.List;
 
 @Entity(tableName = "Pokemon")
 public class Pokemon implements Parcelable {
+
+    public static final Creator<Pokemon> CREATOR = new Creator<Pokemon>() {
+        @Override
+        public Pokemon createFromParcel(Parcel in) {
+            return new Pokemon(in);
+        }
+
+        @Override
+        public Pokemon[] newArray(int size) {
+            return new Pokemon[size];
+        }
+    };
+
     @PrimaryKey
     private int id;
-
     @ColumnInfo(name = "name")
     private String name;
-
     @ColumnInfo(name = "Type1")
     private String type1;
-
     @ColumnInfo(name = "Type2")
     private String type2;
-
     @ColumnInfo(name = "averageColor")
     private String averageColor;
-
     private String url;
-
     @ColumnInfo(name = "flavorText")
     private String flavorText;
-
     @ColumnInfo(name = "genderRate")
     private int genderRate;
-
     @ColumnInfo(name = "captureRate")
     private int captureRate;
-
     @ColumnInfo(name = "growthRate")
     private String growthRate;
-
     @ColumnInfo(name = "height")
     private int height;
-
     @ColumnInfo(name = "weight")
     private int weight;
-
     @ColumnInfo(name = "hp")
     private int hp;
-
     @ColumnInfo(name = "attack")
     private int attack;
-
     @ColumnInfo(name = "defense")
     private int defense;
-
     @ColumnInfo(name = "specialAttack")
     private int specialAttack;
-
     @ColumnInfo(name = "specialDefense")
     private int specialDefense;
-
     @ColumnInfo(name = "speed")
     private int speed;
-
     @ColumnInfo(name = "habitat")
     private String habitat;
 
@@ -73,11 +68,11 @@ public class Pokemon implements Parcelable {
     @Ignore
     private List<Move> movesList;
 
-    //TODO foreign keu
+    //TODO foreign key
     @Ignore
     private List<Ability> abilityList;
 
-    public Pokemon(int id, String name){
+    public Pokemon(int id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -94,27 +89,11 @@ public class Pokemon implements Parcelable {
     }
 
     @Ignore
-    public Pokemon(String name){
+    public Pokemon(String name) {
         this.name = name;
     }
 
-    public static final Creator<Pokemon> CREATOR = new Creator<Pokemon>() {
-        @Override
-        public Pokemon createFromParcel(Parcel in) {
-            return new Pokemon(in);
-        }
-
-        @Override
-        public Pokemon[] newArray(int size) {
-            return new Pokemon[size];
-        }
-    };
-
-    public void setId(int id){
-        this.id = id;
-    }
-
-    public int setIdFromUrl(){
+    public int setIdFromUrl() {
         //Parse URL to get id
         String temp = this.url;
         temp = temp.substring("https://pokeapi.co/api/v2/pokemon/".length());
@@ -124,20 +103,20 @@ public class Pokemon implements Parcelable {
         return this.id = Integer.parseInt(temp);
     }
 
-    public void setType(String type, int slot){
-        if(slot == 1) {
+    public void setType(String type, int slot) {
+        if (slot == 1) {
             this.type1 = type;
         } else {
             this.type2 = type;
         }
     }
 
-    public void setAverageColor(String averageColor){
-        this.averageColor = averageColor;
-    }
-
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -150,6 +129,10 @@ public class Pokemon implements Parcelable {
 
     public String getAverageColor() {
         return averageColor;
+    }
+
+    public void setAverageColor(String averageColor) {
+        this.averageColor = averageColor;
     }
 
     public String getUrl() {
@@ -240,7 +223,7 @@ public class Pokemon implements Parcelable {
         this.abilityList = abilityList;
     }
 
-    public void setStats(int hp, int attack, int defense, int specialAttack, int specialDefense, int speed){
+    public void setStats(int hp, int attack, int defense, int specialAttack, int specialDefense, int speed) {
         this.hp = hp;
         this.attack = attack;
         this.defense = defense;
@@ -249,7 +232,7 @@ public class Pokemon implements Parcelable {
         this.speed = speed;
     }
 
-    public List<Integer> getStats(){
+    public List<Integer> getStats() {
         List<Integer> statList = new ArrayList<>();
 
         statList.add(hp);

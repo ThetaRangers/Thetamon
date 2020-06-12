@@ -3,20 +3,23 @@ package it.thetarangers.thetamon.activities;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.shape.CornerFamily;
 
+import java.util.List;
+
 import it.thetarangers.thetamon.R;
+import it.thetarangers.thetamon.model.Move;
 import it.thetarangers.thetamon.model.Pokemon;
 import it.thetarangers.thetamon.utilities.ImageManager;
 import it.thetarangers.thetamon.utilities.StringManager;
+import it.thetarangers.thetamon.utilities.VolleyMove;
 import it.thetarangers.thetamon.utilities.VolleyPokemonDetail;
 
 public class PokemonDetailActivity extends AppCompatActivity {

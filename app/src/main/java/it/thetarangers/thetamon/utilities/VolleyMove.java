@@ -21,10 +21,10 @@ import java.util.List;
 import it.thetarangers.thetamon.R;
 import it.thetarangers.thetamon.model.Move;
 
-public abstract class VolleyMoves implements Response.ErrorListener, Response.Listener<String> {
+public abstract class VolleyMove implements Response.ErrorListener, Response.Listener<String> {
     private Context context;
 
-    public VolleyMoves(Context context) {
+    public VolleyMove(Context context) {
         this.context = context;
     }
 
@@ -59,6 +59,10 @@ public abstract class VolleyMoves implements Response.ErrorListener, Response.Li
             }.getType();    //Setting up the type for the conversion
 
             moveList = gson.fromJson(result, listType);
+
+            for(Move m : moveList){
+                m.setIdFromUrl();
+            }
 
             fill(moveList);
         } catch (JSONException exception) {

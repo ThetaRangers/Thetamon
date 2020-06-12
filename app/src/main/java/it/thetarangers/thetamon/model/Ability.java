@@ -7,7 +7,10 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "Ability")
 public class Ability {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
+    private int id;
+
+    @ColumnInfo(name = "name")
     private String name;
 
     @ColumnInfo(name = "url")
@@ -27,5 +30,13 @@ public class Ability {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
