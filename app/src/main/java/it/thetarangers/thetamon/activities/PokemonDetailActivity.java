@@ -3,6 +3,7 @@ package it.thetarangers.thetamon.activities;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,6 +64,11 @@ public class PokemonDetailActivity extends AppCompatActivity {
             ivOverlay = findViewById(R.id.ivOverlay);
             tvHp = findViewById(R.id.tvHp);
             rvMoves = findViewById(R.id.rvMoves);
+
+            // programmatically resize the height of ivSprite based on screen height
+            double resize = 0.25;
+            int screenHeight = context.getResources().getDisplayMetrics().heightPixels;
+            ivSprite.getLayoutParams().height = (int) (screenHeight * resize);
 
             rvMoves.setLayoutManager(new LinearLayoutManager(context));
 
