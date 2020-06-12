@@ -7,9 +7,6 @@ import it.thetarangers.thetamon.R;
 
 public class PreferencesHandler {
 
-    private static Boolean isFirstUse;
-    private static String isNightMode;
-
     private PreferencesHandler() {
     }
 
@@ -19,33 +16,25 @@ public class PreferencesHandler {
     }
 
     public static synchronized Boolean isFirstUse(Context context) {
-        if (isFirstUse == null) {
-            SharedPreferences sharedPreferences = getSharedPreferences(context);
-            isFirstUse = sharedPreferences.getBoolean(context.getString(R.string.first_use_pref), true);
-        }
-        return isFirstUse;
+        SharedPreferences sharedPreferences = getSharedPreferences(context);
+        return sharedPreferences.getBoolean(context.getString(R.string.first_use_pref), true);
     }
 
     public static synchronized void setIsFirstUse(Context context, Boolean value) {
         SharedPreferences.Editor editor = getSharedPreferences(context).edit();
         editor.putBoolean(context.getString(R.string.first_use_pref), value);
         editor.apply();
-        isFirstUse = value;
     }
 
     public static synchronized String isNightMode(Context context) {
-        if (isNightMode == null) {
-            SharedPreferences sharedPreferences = getSharedPreferences(context);
-            isNightMode = sharedPreferences.getString(context.getString(R.string.night_mode_pref), context.getString(R.string.system_enum));
-        }
-        return isNightMode;
+        SharedPreferences sharedPreferences = getSharedPreferences(context);
+        return sharedPreferences.getString(context.getString(R.string.night_mode_pref), context.getString(R.string.system_enum));
     }
 
     public static synchronized void setIsNightMode(Context context, String value) {
         SharedPreferences.Editor editor = getSharedPreferences(context).edit();
         editor.putString(context.getString(R.string.night_mode_pref), value);
         editor.apply();
-        isNightMode = value;
     }
 
 }

@@ -21,6 +21,12 @@
     <string name="about">About</string>
     <string name="open_drawer_toggle">Open Navigation Drawer</string>
     <string name="close_drawer_toggle">Close Navigation Drawer</string>
+    <string name="reset_data">Reset Data</string>
+    <string name="reset_data_summary">Download all resources and clear local database</string>
+    <string name="reset_data_confirm">RESET</string>
+    <string name="reset_data_exit">EXIT</string>
+    <string name="reset_data_dialog">By clicking on \'RESET\' you will lose all of your favorite Pokémons!</string>
+    <string name="warning">Warning!</string>
     <string name="habitat_name">Habitat</string>
     <string name="stat_hp">Hp</string>
 </resources>

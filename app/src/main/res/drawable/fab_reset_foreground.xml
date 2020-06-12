@@ -9,6 +9,6 @@
         </shape>
     </item>
     <item
-        android:drawable="@drawable/ic_reset"
+        android:drawable="@drawable/ic_reset_filters"
         android:gravity="center" />
 </layer-list>

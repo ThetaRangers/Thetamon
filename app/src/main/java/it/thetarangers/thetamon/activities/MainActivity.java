@@ -85,8 +85,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    // Blocking method
     private void downloadFile(String URL, String path, String name) throws InterruptedException {
-        // Blocking method
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(URL));
         request.setDescription(getString(R.string.app_name));
         request.setTitle(name);
@@ -104,42 +104,35 @@ public class MainActivity extends AppCompatActivity {
 
     private Boolean unpack() {
         // Prepare file to unzip
-        File file = new File(getApplicationContext().getExternalFilesDir(null),
+        File file = new File(getExternalFilesDir(null),
                 String.format(Locale.getDefault(), "%s/%s",
                         getString(R.string.sprites_temp_path),
                         getString(R.string.sprites_archive)));
         FileUnzipper fu = new FileUnzipper();
 
         // Unzip it
-        if (!fu.unzip(file, getApplicationContext().getFilesDir().getAbsolutePath())) {
+        if (!fu.unzip(file, getFilesDir().getAbsolutePath())) {
             handler.post(() -> Toast.makeText(this, getString(R.string.error_unzip),
                     Toast.LENGTH_LONG).show());
-            cleanUpExternal();
             return false;
         }
 
-        cleanUpExternal();
         return true;
     }
 
     private void cleanUpExternal() {
         try {
-            FileUtils.forceDelete(Objects.requireNonNull(getApplicationContext()
-                    .getExternalFilesDir(null)));
+            FileUtils.forceDelete(Objects.requireNonNull(getExternalFilesDir(null)));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     private void cleanUpInternal() {
-        File file = new File(getApplicationContext()
-                .getFilesDir(), getString(R.string.sprites_front));
-        if (file.exists()) {
-            try {
-                FileUtils.forceDelete(file);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        try {
+            FileUtils.forceDelete(getFilesDir());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -147,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
         ImageManager imageManager = new ImageManager();
 
         for (int i = 0; i < pokemons.size(); i++) {
-            Bitmap bitmap = imageManager.loadFromDisk(MainActivity.this.getFilesDir() +
+            Bitmap bitmap = imageManager.loadFromDisk(getFilesDir() +
                     getString(R.string.sprites_front), pokemons.get(i).getId() +
                     getString(R.string.extension));
 
@@ -207,6 +200,9 @@ public class MainActivity extends AppCompatActivity {
         public void run() {
 
             // Remove resources already in internal memory
+            cleanUpInternal();
+
+            // Remove files in external memory
             cleanUpExternal();
 
             // Do the blocking operation
@@ -221,14 +217,14 @@ public class MainActivity extends AppCompatActivity {
             // Notify user when download is complete
             handler.post(() -> holder.setTvLoading(R.string.extracting));
 
-            // Remove resources already in internal memory
-            cleanUpInternal();
-
             // Extract resources in internal memory
             if (!unpack()) {
                 handler.post(MainActivity.this::finishAndRemoveTask);
                 return;
             }
+
+            // Remove resources archive to save space
+            cleanUpExternal();
 
             // Notify the user when the extraction is complete
             handler.post(() -> holder.setTvLoading(R.string.updating_db));
