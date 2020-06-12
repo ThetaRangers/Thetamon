@@ -28,7 +28,10 @@ import it.thetarangers.thetamon.R;
 import it.thetarangers.thetamon.activities.PokedexActivity;
 import it.thetarangers.thetamon.adapters.PokedexAdapter;
 import it.thetarangers.thetamon.database.DaoThread;
+import it.thetarangers.thetamon.database.MoveDao;
+import it.thetarangers.thetamon.database.PokemonDb;
 import it.thetarangers.thetamon.listener.SelectorCallback;
+import it.thetarangers.thetamon.model.Move;
 import it.thetarangers.thetamon.model.Pokemon;
 import it.thetarangers.thetamon.viewmodel.PokemonListViewModel;
 

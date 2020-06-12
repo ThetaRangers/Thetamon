@@ -32,7 +32,6 @@ public class DaoThread extends Thread {
             PokemonDb db = PokemonDb.getInstance(context);
             final PokemonDao dao = db.pokemonDao();
 
-            dao.deleteAll();
             for (int i = 0; i < pokemons.size(); i++) {
                 dao.insertPokemon(pokemons.get(i));
             }
@@ -48,8 +47,6 @@ public class DaoThread extends Thread {
         runnable = () -> {
             PokemonDb db = PokemonDb.getInstance(context);
             final MoveDao dao = db.moveDao();
-
-            dao.deleteAll();
 
             dao.insertAll(moves);
 

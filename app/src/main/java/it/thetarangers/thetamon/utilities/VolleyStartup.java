@@ -17,26 +17,29 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 import it.thetarangers.thetamon.R;
+import it.thetarangers.thetamon.model.Move;
 import it.thetarangers.thetamon.model.Pokemon;
 import it.thetarangers.thetamon.model.PokemonType;
 
-public abstract class VolleyPokemon implements Response.ErrorListener, Response.Listener<String> {
+public abstract class VolleyStartup implements Response.ErrorListener, Response.Listener<String> {
     private final int POKEDEX_LENGHT = 807;
     private final int TYPES_NUMBER = PokemonType.values().length;
     private final Context context;
     private List<Pokemon> pokemonList;
+    private List<Move> moveList = new ArrayList<>();
 
     private TypeListener listener;
 
-    public VolleyPokemon(Context context) {
+    public VolleyStartup(Context context) {
         this.context = context;
         listener = new TypeListener();
     }
 
-    public abstract void fill(List<Pokemon> pokemonList);
+    public abstract void fill(List<Pokemon> pokemonList, List<Move> moveList);
 
     public void getPokemonList() {
         RequestQueue requestQueue;
@@ -124,13 +127,25 @@ public abstract class VolleyPokemon implements Response.ErrorListener, Response.
                     if (id < POKEDEX_LENGHT) {
                         pokemonList.get(id).setType(name, slot);
                     }
-
                 }
+
+                String moves = jsonObject.getJSONArray("moves").toString();
+                Type listType = new TypeToken<List<Move>>() {
+                }.getType();    //Setting up the type for the conversion
+
+                List<Move> moveTmp;
+                moveTmp = gson.fromJson(moves, listType);
+                for (Move m : moveTmp) {
+                    m.setIdFromUrl();
+                    m.setType(name);
+                }
+
+                moveList.addAll(moveTmp);
 
                 num++;
 
                 if (num == TYPES_NUMBER) {
-                    fill(pokemonList);
+                    fill(pokemonList, moveList);
                 }
             } catch (JSONException exception) {
                 exception.printStackTrace();

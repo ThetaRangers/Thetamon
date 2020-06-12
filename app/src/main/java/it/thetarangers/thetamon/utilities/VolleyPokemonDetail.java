@@ -76,6 +76,11 @@ public abstract class VolleyPokemonDetail implements Response.ErrorListener, Res
                 JSONObject tempMove = tempObj.getJSONObject("move");
 
                 Move temp = gson.fromJson(tempMove.toString(), Move.class);
+
+                JSONObject levelObj = tempObj.getJSONArray("version_group_details").getJSONObject(0);
+                temp.setLevel(levelObj.getInt("level_learned_at"));
+                temp.setLearnMethod(levelObj.getJSONObject("move_learn_method").getString("name"));
+
                 moveList.add(temp);
             }
 
@@ -126,7 +131,7 @@ public abstract class VolleyPokemonDetail implements Response.ErrorListener, Res
             sprites.put("front_default", spritesObj.getString("front_default"));
             sprites.put("front_female", spritesObj.getString("front_female"));
             sprites.put("front_shiny", spritesObj.getString("front_shiny"));
-            sprites.put("front_female", spritesObj.getString("front_female"));
+            sprites.put("front_shiny_female", spritesObj.getString("front_shiny_female"));
 
             pokemon.setSprites(sprites);
 

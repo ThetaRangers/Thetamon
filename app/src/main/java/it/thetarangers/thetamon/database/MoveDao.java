@@ -2,6 +2,7 @@ package it.thetarangers.thetamon.database;
 
 import androidx.room.Dao;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import java.util.List;
@@ -11,7 +12,7 @@ import it.thetarangers.thetamon.model.Move;
 @Dao
 public abstract class MoveDao {
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     public abstract void insertAll(List<Move> moves);
 
     @Query("DELETE FROM Move")

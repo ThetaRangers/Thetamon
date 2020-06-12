@@ -29,11 +29,12 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import it.thetarangers.thetamon.R;
 import it.thetarangers.thetamon.database.DaoThread;
+import it.thetarangers.thetamon.model.Move;
 import it.thetarangers.thetamon.model.Pokemon;
 import it.thetarangers.thetamon.utilities.FileUnzipper;
 import it.thetarangers.thetamon.utilities.ImageManager;
 import it.thetarangers.thetamon.utilities.PreferencesHandler;
-import it.thetarangers.thetamon.utilities.VolleyPokemon;
+import it.thetarangers.thetamon.utilities.VolleyStartup;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -42,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
     Thread thread;
     ReentrantLock lock;
     DownloadManager manager;
-    VolleyPokemon volley;
+    VolleyStartup volley;
     long id;
 
     @Override
@@ -65,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
+
         holder = new Holder();
 
         handler = new Handler();
@@ -75,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
         registerReceiver(receiver, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
 
         // Prepare Volley
-        volley = new MainActivityVolleyPokemon(MainActivity.this);
+        volley = new MainActivityVolleyStartup(MainActivity.this);
 
         lock = new ReentrantLock();
         lock.lock(); // Released after Download finishes
@@ -234,14 +236,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    class MainActivityVolleyPokemon extends VolleyPokemon {
+    class MainActivityVolleyStartup extends VolleyStartup {
 
-        public MainActivityVolleyPokemon(Context context) {
+        public MainActivityVolleyStartup(Context context) {
             super(context);
         }
 
         @Override
-        public void fill(List<Pokemon> pokemonList) {
+        public void fill(List<Pokemon> pokemonList, List<Move> moveList) {
 
             Runnable update = () -> {
                 PreferencesHandler.setIsFirstUse(MainActivity.this, false);
@@ -251,14 +253,20 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             };
 
+            Thread threadMoves = new Thread(() -> {
+                DaoThread daoThread = new DaoThread();
+                daoThread.fillMoves(MainActivity.this, moveList, handler, update);
+            });
+
             // Let another thread calculate average color
             Thread t = new Thread(() -> {
                 avgColor(pokemonList);
                 DaoThread daoThread = new DaoThread();
-                daoThread.fill(MainActivity.this, pokemonList, handler, update);
-            });
-            t.start();
 
+                daoThread.fill(MainActivity.this, pokemonList, handler, threadMoves::start);
+            });
+
+            t.start();
         }
     }
 
