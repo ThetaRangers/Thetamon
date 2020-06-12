@@ -31,4 +31,5 @@
     <string name="stat_hp">Hp</string>
     <string name="no_habitat">Unknown</string>
     <string name="fetchingResult">Fetching result from API, please wait...</string>
+    <string name="special_location">Needs a special location</string>
 </resources>
