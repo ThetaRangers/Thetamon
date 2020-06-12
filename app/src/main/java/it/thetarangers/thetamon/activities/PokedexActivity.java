@@ -104,6 +104,8 @@ public class PokedexActivity extends AppCompatActivity {
 
     private void switchFragment(Fragment fragment) {
         getSupportFragmentManager().beginTransaction()
+                .setCustomAnimations(R.animator.fade_in,
+                        R.animator.fade_out, 0, 0)
                 .replace(R.id.flMain, fragment)
                 .commitNowAllowingStateLoss();
     }
@@ -118,11 +120,11 @@ public class PokedexActivity extends AppCompatActivity {
     }
 
 
-    public void lockDrawer(){
+    public void lockDrawer() {
         holder.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
     }
 
-    public void unlockDrawer(){
+    public void unlockDrawer() {
         holder.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
     }
 
