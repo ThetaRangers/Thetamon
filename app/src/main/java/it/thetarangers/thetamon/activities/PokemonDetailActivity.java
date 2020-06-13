@@ -3,6 +3,7 @@ package it.thetarangers.thetamon.activities;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -13,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.shape.CornerFamily;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import it.thetarangers.thetamon.R;
@@ -160,7 +162,9 @@ public class PokemonDetailActivity extends AppCompatActivity {
         public void onClick(View v) {
             if (v.getId() == R.id.btnMoves) {
                 FragmentMoves fragmentMoves = new FragmentMoves();
-                fragmentMoves.setMoveList(moves);
+                Bundle args = new Bundle();
+                args.putParcelableArrayList(FragmentMoves.MOVES, (ArrayList<? extends Parcelable>) moves);
+                fragmentMoves.setArguments(args);
                 fragmentMoves.show(getSupportFragmentManager(), FragmentMoves.TAG);
             }
         }

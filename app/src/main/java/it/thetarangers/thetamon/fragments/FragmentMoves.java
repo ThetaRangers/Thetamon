@@ -28,6 +28,7 @@ import it.thetarangers.thetamon.utilities.TypeTextViewManager;
 public class FragmentMoves extends BottomSheetDialogFragment {
 
     public static String TAG = "FragmentMoves";
+    public static String MOVES = "moves";
     Holder holder;
     private List<Move> moveList;
 
@@ -41,6 +42,8 @@ public class FragmentMoves extends BottomSheetDialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        assert getArguments() != null;
+        this.moveList = getArguments().getParcelableArrayList(MOVES);
         holder = new Holder(view);
 
         BottomSheetDialog dialog = (BottomSheetDialog) this.getDialog();
@@ -48,10 +51,6 @@ public class FragmentMoves extends BottomSheetDialogFragment {
         BottomSheetBehavior<FrameLayout> behavior = dialog.getBehavior();
         behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         behavior.setSkipCollapsed(true);
-    }
-
-    public void setMoveList(List<Move> moveList) {
-        this.moveList = moveList;
     }
 
     static class MoveHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
