@@ -8,6 +8,7 @@ import androidx.room.Query;
 import java.util.List;
 
 import it.thetarangers.thetamon.model.Pokemon;
+import it.thetarangers.thetamon.utilities.StringManager;
 
 @Dao
 public abstract class PokemonDao {
@@ -27,6 +28,6 @@ public abstract class PokemonDao {
     abstract List<Pokemon> getPokemonFromNameInterface(String name);
 
     public List<Pokemon> getPokemonsFromName(String name){
-        return getPokemonFromNameInterface(name + "%");
+        return getPokemonFromNameInterface(StringManager.decapitalize(name) + "%");
     }
 }

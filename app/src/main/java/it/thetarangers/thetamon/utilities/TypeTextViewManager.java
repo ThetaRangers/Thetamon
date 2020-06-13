@@ -32,8 +32,7 @@ public class TypeTextViewManager {
         String color1 = context.getString(R.string.color_type) + type1;
         int color1ID = context.getResources().getIdentifier(color1, "color", context.getPackageName());
         GradientDrawable bg1 = (GradientDrawable) tvType1.getBackground();
-        bg1.setColor(context
-                .getColor(color1ID));
+        bg1.setColor(context.getColor(color1ID));
         bg1.setStroke((int) context.getResources().getDimension(R.dimen.stroke_tv_type), Color.WHITE);
         tvType1.setText(type1.toUpperCase());
 
