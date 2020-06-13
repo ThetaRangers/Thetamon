@@ -1,12 +1,15 @@
 package it.thetarangers.thetamon.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "Move")
-public class Move {
+public class Move implements Parcelable {
     @PrimaryKey
     private int id;
 
@@ -24,6 +27,30 @@ public class Move {
 
     @Ignore
     private String learnMethod;
+
+    public static final Creator<Move> CREATOR = new Creator<Move>() {
+        @Override
+        public Move createFromParcel(Parcel in) {
+            return new Move(in);
+        }
+
+        @Override
+        public Move[] newArray(int size) {
+            return new Move[size];
+        }
+    };
+
+    public Move() {
+    }
+
+    protected Move(Parcel in) {
+        id = in.readInt();
+        name = in.readString();
+        url = in.readString();
+        type = in.readString();
+        level = in.readInt();
+        learnMethod = in.readString();
+    }
 
     public String getName() {
         return name;
@@ -80,5 +107,20 @@ public class Move {
 
     public void setLearnMethod(String learnMethod) {
         this.learnMethod = learnMethod;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(name);
+        dest.writeString(url);
+        dest.writeString(type);
+        dest.writeInt(level);
+        dest.writeString(learnMethod);
     }
 }
