@@ -9,41 +9,7 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "Move")
-public class Move implements Parcelable {
-    @PrimaryKey
-    private int id;
-
-    @ColumnInfo(name = "name")
-    private String name;
-
-    @ColumnInfo(name = "url")
-    private String url;
-
-    @ColumnInfo(name = "Type")
-    private transient String type;
-
-    private Integer accuracy;
-
-    private Integer power;
-
-    private Integer priority;
-
-    private Integer pp;
-
-    private String flavorText;
-
-    private transient String target;
-
-    private String damageClass;
-
-    private String effect;
-
-    @Ignore
-    private int level;
-
-    @Ignore
-    private String learnMethod;
-
+public class Move implements Parcelable, Comparable<Move> {
     public static final Creator<Move> CREATOR = new Creator<Move>() {
         @Override
         public Move createFromParcel(Parcel in) {
@@ -55,6 +21,27 @@ public class Move implements Parcelable {
             return new Move[size];
         }
     };
+    @PrimaryKey
+    private int id;
+    @ColumnInfo(name = "name")
+    private String name;
+    @ColumnInfo(name = "url")
+    private String url;
+    @ColumnInfo(name = "Type")
+    private transient String type;
+    private Integer accuracy;
+    private Integer power;
+    private Integer priority;
+    private Integer pp;
+    private String flavorText;
+    private transient String target;
+    @ColumnInfo(name = "damage_class")
+    private String damageClass;
+    private String effect;
+    @Ignore
+    private int level;
+    @Ignore
+    private String learnMethod;
 
     public Move() {
     }
@@ -84,21 +71,21 @@ public class Move implements Parcelable {
         this.url = url;
     }
 
-    public int getId(){
+    public int getId() {
         return this.id;
     }
 
-    public int setIdFromUrl(){
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int setIdFromUrl() {
         String temp = this.url;
         temp = temp.substring("https://pokeapi.co/api/v2/move/".length());
         temp = temp.substring(0, temp.length() - 1);
 
         //Set id from parsed string
         return this.id = Integer.parseInt(temp);
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getType() {
@@ -202,5 +189,10 @@ public class Move implements Parcelable {
         dest.writeString(type);
         dest.writeInt(level);
         dest.writeString(learnMethod);
+    }
+
+    @Override
+    public int compareTo(Move m) {
+        return id - m.id;
     }
 }

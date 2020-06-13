@@ -37,7 +37,7 @@ public class DaoThread {
     }
 
     public void fillMoves(final Context context, final List<Move> moves,
-                     Handler handler, Runnable update) {
+                          Handler handler, Runnable update) {
         Runnable runnable = () -> {
             PokemonDb db = PokemonDb.getInstance(context);
             final MoveDao dao = db.moveDao();
@@ -50,7 +50,7 @@ public class DaoThread {
         new Thread(runnable).start();
     }
 
-    public void getMoveType(final Context context, List<Move> moves, Handler handler, Runnable update){
+    /*public void getMoveType(final Context context, List<Move> moves, Handler handler, Runnable update){
         Runnable runnable = () -> {
             PokemonDb db = PokemonDb.getInstance(context);
             MoveDao dao = db.moveDao();
@@ -64,6 +64,25 @@ public class DaoThread {
             }
 
             };
+
+        new Thread(runnable).start();
+    }*/
+
+    public void getMoveDetails(final Context context, List<Move> moves, Handler handler, Runnable update) {
+        Runnable runnable = () -> {
+            PokemonDb db = PokemonDb.getInstance(context);
+            MoveDao dao = db.moveDao();
+            for (int i = 0; i < moves.size(); i++) {
+                MoveDao.MoveDetail temp = dao.getMoveDetails(moves.get(i).getName());
+                moves.get(i).setType(temp.type);
+                moves.get(i).setDamageClass(temp.damageClass);
+            }
+
+            if (handler != null) {
+                handler.post(update);
+            }
+
+        };
 
         new Thread(runnable).start();
     }

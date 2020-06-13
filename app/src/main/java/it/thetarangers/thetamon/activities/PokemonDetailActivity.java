@@ -154,7 +154,7 @@ public class PokemonDetailActivity extends AppCompatActivity {
 
             DaoThread daoThread = new DaoThread();
 
-            daoThread.getMoveType(PokemonDetailActivity.this, moves, handler, this::enableButton);
+            daoThread.getMoveDetails(PokemonDetailActivity.this, moves, handler, this::enableButton);
 
         }
 

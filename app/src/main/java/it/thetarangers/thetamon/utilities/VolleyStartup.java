@@ -18,25 +18,30 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import it.thetarangers.thetamon.R;
 import it.thetarangers.thetamon.model.Move;
+import it.thetarangers.thetamon.model.MoveDamageClass;
 import it.thetarangers.thetamon.model.Pokemon;
 import it.thetarangers.thetamon.model.PokemonType;
 
 public abstract class VolleyStartup implements Response.ErrorListener, Response.Listener<String> {
-    private final int POKEDEX_LENGHT = 807;
+    private final int POKEDEX_LENGTH = 807;
     private final int TYPES_NUMBER = PokemonType.values().length;
+    private final int DAMAGE_CLASSES_NUMBER = MoveDamageClass.values().length;
     private final Context context;
     private List<Pokemon> pokemonList;
     private List<Move> moveList = new ArrayList<>();
 
     private TypeListener listener;
+    private DamageClassListener damageClassListener;
 
     public VolleyStartup(Context context) {
         this.context = context;
         listener = new TypeListener();
+        damageClassListener = new DamageClassListener();
     }
 
     public abstract void fill(List<Pokemon> pokemonList, List<Move> moveList);
@@ -65,6 +70,20 @@ public abstract class VolleyStartup implements Response.ErrorListener, Response.
         }
     }
 
+    private void getMovesListWithDamageClass() {
+        RequestQueue requestQueue;
+        requestQueue = Volley.newRequestQueue(context);
+
+        for (MoveDamageClass damageClass : MoveDamageClass.values()) {
+            StringRequest stringRequest = new StringRequest(Request.Method.GET,
+                    String.format(context.getString(R.string.url_damage_classes),
+                            damageClass.getValue()),
+                    damageClassListener,
+                    this);
+            requestQueue.add(stringRequest);
+        }
+    }
+
     @Override
     public void onErrorResponse(VolleyError error) {
         //TODO make error Response
@@ -83,7 +102,7 @@ public abstract class VolleyStartup implements Response.ErrorListener, Response.
             }.getType();    //Setting up the type for the conversion
 
             pokemonList = gson.fromJson(result, listType);
-            pokemonList = pokemonList.subList(0, POKEDEX_LENGHT);
+            pokemonList = pokemonList.subList(0, POKEDEX_LENGTH);
 
             for (int i = 0; i < pokemonList.size(); i++) {
                 pokemonList.get(i).setIdFromUrl();
@@ -124,7 +143,7 @@ public abstract class VolleyStartup implements Response.ErrorListener, Response.
 
                     int id = temp.setIdFromUrl() - 1;
 
-                    if (id < POKEDEX_LENGHT) {
+                    if (id < POKEDEX_LENGTH) {
                         pokemonList.get(id).setType(name, slot);
                     }
                 }
@@ -145,12 +164,50 @@ public abstract class VolleyStartup implements Response.ErrorListener, Response.
                 num++;
 
                 if (num == TYPES_NUMBER) {
-                    fill(pokemonList, moveList);
+                    Collections.sort(moveList);
+                    getMovesListWithDamageClass();
                 }
             } catch (JSONException exception) {
                 exception.printStackTrace();
             }
         }
+    }
+
+    class DamageClassListener implements Response.Listener<String> {
+        Gson gson = new Gson();
+        int num = 0;
+
+        @Override
+        public void onResponse(String response) {
+
+            try {
+                JSONObject jsonObject = new JSONObject(response);
+                String name = jsonObject.getString("name");
+
+                JSONArray moves = jsonObject.getJSONArray("moves");
+
+                for (int i = 0; i < moves.length(); i++) {
+                    JSONObject move = moves.getJSONObject(i);
+                    Move temp = gson.fromJson(move.toString(), Move.class);
+
+                    int index = temp.setIdFromUrl() - 1;
+
+                    if (index < 10000) // Ignore shadow moves
+                        moveList.get(index).setDamageClass(name);
+
+                }
+
+                num++;
+
+                if (num == DAMAGE_CLASSES_NUMBER) {
+                    fill(pokemonList, moveList);
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 }
 
