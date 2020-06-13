@@ -33,9 +33,11 @@ public abstract class VolleyEvolutionChain implements Response.ErrorListener, Re
 
     public abstract void fill(List<EvolutionDetail> evolutionDetails);
 
-    public void getEvolutionChain(Pokemon pokemon, String chain) {
+    public void getEvolutionChain(String chain) {
         RequestQueue requestQueue;
         requestQueue = Volley.newRequestQueue(context);
+
+        Log.d("POKE", chain);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET,
                 chain,
@@ -95,7 +97,7 @@ public abstract class VolleyEvolutionChain implements Response.ErrorListener, Re
 
             firstEvolution.setNextPokemon(secondEvolutions);
 
-            Log.d("POKE", "Numero Evoluzioni 1:" + 1 + " 2: " + firstEvolution.getNextPokemon().size());
+            Log.d("POKE", "Evoluzionissima " + firstEvolution.getNextPokemon().get(0).getName());
 
         } catch (JSONException exception) {
             exception.printStackTrace();
@@ -106,8 +108,78 @@ public abstract class VolleyEvolutionChain implements Response.ErrorListener, Re
 
         JSONObject tmp = obj.getJSONArray("evolution_details").getJSONObject(0);
 
-        EvolutionDetail ev = gson.fromJson(tmp.toString(), EvolutionDetail.class);
+        EvolutionDetail ev = new EvolutionDetail();
 
+        if (!tmp.isNull("location")) {
+            ev.setLocationName(context.getResources().getString(R.string.special_location));
+        }
+
+        if(!tmp.isNull("known_move_type")){
+            ev.setKnown_move_type(tmp.getJSONObject("known_move_type").getString("name"));
+        }
+
+        if(!tmp.isNull("gender")){
+            ev.setGender(tmp.getInt("gender"));
+        }
+
+
+        if(!tmp.isNull("held_item")){
+            ev.setHeld_item(tmp.getJSONObject("held_item").getString("name"));
+        }
+
+        if(!tmp.isNull("item")){
+            ev.setItem(tmp.getJSONObject("item").getString("name"));
+        }
+
+        if(!tmp.isNull("known_move")){
+            ev.setKnown_move(tmp.getJSONObject("known_move").getString("name"));
+        }
+
+        if(!tmp.isNull("min_affection")){
+            ev.setMin_affection(tmp.getInt("min_affection"));
+        }
+
+        if(!tmp.isNull("min_beauty")){
+            ev.setMin_beauty(tmp.getInt("min_beauty"));
+        }
+
+        if(!tmp.isNull("min_happiness")){
+            ev.setMin_happiness(tmp.getInt("min_happiness"));
+        }
+
+        if(!tmp.isNull("min_level")){
+            ev.setMin_level(tmp.getInt("min_level"));
+        }
+
+        if(!tmp.isNull("party_species")){
+            ev.setParty_species(tmp.getJSONObject("party_species").getString("party_species"));
+        }
+
+        if(!tmp.isNull("party_type")){
+            ev.setParty_type(tmp.getJSONObject("party_type").getString("party_type"));
+        }
+
+        if(!tmp.isNull("relative_physical_stats")){
+            ev.setRelative_physical_stats(tmp.getInt("relative_physical_stats"));
+        }
+
+        String timeOfDay = tmp.getString("time_of_day");
+        if(!timeOfDay.equals("")){
+            ev.setTime_of_day(timeOfDay);
+        }
+
+        if(!tmp.isNull("trade_species")){
+            ev.setTrade_species(tmp.getJSONObject("trade_species").getString("name"));
+        }
+
+        if(!tmp.isNull("trigger")){
+            ev.setTrigger(tmp.getJSONObject("trigger").getString("name"));
+        }
+
+        Log.d("POKE", tmp.getJSONObject("trigger").getString("name"));
+
+        ev.setTurn_upside_down(tmp.getBoolean("turn_upside_down"));
+        ev.setNeeds_overworld_rain(tmp.getBoolean("needs_overworld_rain"));
         ev.setName(obj.getJSONObject("species").getString("name"));
 
         return ev;

@@ -20,7 +20,23 @@ public class Move implements Parcelable {
     private String url;
 
     @ColumnInfo(name = "Type")
-    private String type;
+    private transient String type;
+
+    private Integer accuracy;
+
+    private Integer power;
+
+    private Integer priority;
+
+    private Integer pp;
+
+    private String flavorText;
+
+    private transient String target;
+
+    private String damageClass;
+
+    private String effect;
 
     @Ignore
     private int level;
@@ -107,6 +123,70 @@ public class Move implements Parcelable {
 
     public void setLearnMethod(String learnMethod) {
         this.learnMethod = learnMethod;
+    }
+
+    public Integer getAccuracy() {
+        return accuracy;
+    }
+
+    public void setAccuracy(Integer accuracy) {
+        this.accuracy = accuracy;
+    }
+
+    public Integer getPower() {
+        return power;
+    }
+
+    public void setPower(Integer power) {
+        this.power = power;
+    }
+
+    public Integer getPriority() {
+        return priority;
+    }
+
+    public void setPriority(Integer priority) {
+        this.priority = priority;
+    }
+
+    public Integer getPp() {
+        return pp;
+    }
+
+    public void setPp(Integer pp) {
+        this.pp = pp;
+    }
+
+    public String getFlavorText() {
+        return flavorText;
+    }
+
+    public void setFlavorText(String flavorText) {
+        this.flavorText = flavorText;
+    }
+
+    public String getTarget() {
+        return target;
+    }
+
+    public void setTarget(String target) {
+        this.target = target;
+    }
+
+    public String getDamageClass() {
+        return damageClass;
+    }
+
+    public void setDamageClass(String damageClass) {
+        this.damageClass = damageClass;
+    }
+
+    public String getEffect() {
+        return effect;
+    }
+
+    public void setEffect(String effect) {
+        this.effect = effect;
     }
 
     @Override

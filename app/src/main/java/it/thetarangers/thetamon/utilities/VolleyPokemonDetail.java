@@ -160,11 +160,23 @@ public abstract class VolleyPokemonDetail implements Response.ErrorListener, Res
 
                 String evolutionChain = jsonObject.getJSONObject("evolution_chain").getString("url");
 
-
                 if(jsonObject.isNull("habitat")){
                     habitat = context.getResources().getString(R.string.no_habitat);
                 } else {
                     habitat = jsonObject.getJSONObject("habitat").getString("name");
+                }
+
+                String lang = context.getResources().getString(R.string.localization);
+
+                JSONArray flavorTexts = jsonObject.getJSONArray("flavor_text_entries");
+                for(int i = flavorTexts.length() - 1; i >= 0; i--){
+                    JSONObject tmp = flavorTexts.getJSONObject(i);
+
+                    if (lang.equals(tmp.getJSONObject("language").getString("name"))){
+                        pokemon.setFlavorText(String.format("%s version: %s",
+                                tmp.getString("flavor_text"), tmp.getJSONObject("version").getString("name")));
+                        break;
+                    }
                 }
 
                 pokemon.setGenderRate(genderRate);

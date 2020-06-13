@@ -16,6 +16,10 @@ public class Ability {
     @ColumnInfo(name = "url")
     private String url;
 
+    private String flavor_text;
+
+    private String effect;
+
     public String getName() {
         return name;
     }
@@ -38,5 +42,21 @@ public class Ability {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getFlavor_text() {
+        return flavor_text;
+    }
+
+    public void setFlavor_text(String flavor_text) {
+        this.flavor_text = flavor_text;
+    }
+
+    public String getEffect() {
+        return effect;
+    }
+
+    public void setEffect(String effect) {
+        this.effect = effect;
     }
 }

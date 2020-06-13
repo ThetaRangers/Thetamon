@@ -1,116 +1,109 @@
 package it.thetarangers.thetamon.model;
 
-import java.util.ArrayList;
+import org.json.JSONObject;
+
 import java.util.List;
 
 public class EvolutionDetail {
-    private String gender;
-    private Object held_item;
-    private Object item;
-    private Object known_move;
-    private Object knownMoveType;
-    private Object locationName;
-    private int min_affection;
-    private int min_beauty;
-    private int min_happiness;
-    private int min_level;
+    private Integer gender;
+    private String held_item;
+    private String item;
+    private String known_move;
+    private String known_move_type;
+    private String locationName;
+    private Integer min_affection;
+    private Integer min_beauty;
+    private Integer min_happiness;
+    private Integer min_level;
     private Boolean needs_overworld_rain;
-    private Object party_species;
-    private Object party_type;
-    private Object relative_physical_stats;
+    private String party_species;
+    private String party_type;
+    private Integer relative_physical_stats;
     private String time_of_day;
-    private Object trade_species;
-    private Object trigger;
+    private String trade_species;
+    private String trigger;
     private Boolean turn_upside_down;
 
     private List<EvolutionDetail> nextPokemon;
     private String name;
 
-    public String getGender() {
+    public Integer getGender() {
         return gender;
     }
 
-    public void setGender(String gender) {
+    public void setGender(Integer gender) {
         this.gender = gender;
     }
 
-    public Object getHeld_item() {
+    public String getHeld_item() {
         return held_item;
     }
 
-    public void setHeld_item(Object held_item) {
+    public void setHeld_item(String held_item) {
         this.held_item = held_item;
     }
 
-    public Object getItem() {
+    public String getItem() {
         return item;
     }
 
-    public void setItem(Object item) {
+    public void setItem(String item) {
         this.item = item;
     }
 
-    public Object getKnown_move() {
+    public String getKnown_move() {
         return known_move;
     }
 
-    public void setKnown_move(Object known_move) {
+    public void setKnown_move(String known_move) {
         this.known_move = known_move;
     }
 
-    public Object getKnownMoveType() {
-        return knownMoveType;
+    public String getKnown_move_type() {
+        return known_move_type;
     }
 
-    public void setKnownMoveType(Object knownMoveType) {
-        this.knownMoveType = knownMoveType;
+    public void setKnown_move_type(String known_move_type) {
+        this.known_move_type = known_move_type;
     }
 
-    public Object getLocationName() {
+    public String getLocationName() {
         return locationName;
     }
 
-    public void setLocationName(Object locationName) {
+    public void setLocationName(String locationName) {
         this.locationName = locationName;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getMin_affection() {
+    public Integer getMin_affection() {
         return min_affection;
     }
 
-    public void setMin_affection(int min_affection) {
+    public void setMin_affection(Integer min_affection) {
         this.min_affection = min_affection;
     }
 
-    public int getMin_beauty() {
+    public Integer getMin_beauty() {
         return min_beauty;
     }
 
-    public void setMin_beauty(int min_beauty) {
+    public void setMin_beauty(Integer min_beauty) {
         this.min_beauty = min_beauty;
     }
 
-    public int getMin_happiness() {
+    public Integer getMin_happiness() {
         return min_happiness;
     }
 
-    public void setMin_happiness(int min_happiness) {
+    public void setMin_happiness(Integer min_happiness) {
         this.min_happiness = min_happiness;
     }
 
-    public int getMin_level() {
+    public Integer getMin_level() {
         return min_level;
     }
 
-    public void setMin_level(int min_level) {
+    public void setMin_level(Integer min_level) {
         this.min_level = min_level;
     }
 
@@ -122,27 +115,27 @@ public class EvolutionDetail {
         this.needs_overworld_rain = needs_overworld_rain;
     }
 
-    public Object getParty_species() {
+    public String getParty_species() {
         return party_species;
     }
 
-    public void setParty_species(Object party_species) {
+    public void setParty_species(String party_species) {
         this.party_species = party_species;
     }
 
-    public Object getParty_type() {
+    public String getParty_type() {
         return party_type;
     }
 
-    public void setParty_type(Object party_type) {
+    public void setParty_type(String party_type) {
         this.party_type = party_type;
     }
 
-    public Object getRelative_physical_stats() {
+    public Integer getRelative_physical_stats() {
         return relative_physical_stats;
     }
 
-    public void setRelative_physical_stats(Object relative_physical_stats) {
+    public void setRelative_physical_stats(Integer relative_physical_stats) {
         this.relative_physical_stats = relative_physical_stats;
     }
 
@@ -154,32 +147,20 @@ public class EvolutionDetail {
         this.time_of_day = time_of_day;
     }
 
-    public Object getTrade_species() {
+    public String getTrade_species() {
         return trade_species;
     }
 
-    public void setTrade_species(Object trade_species) {
+    public void setTrade_species(String trade_species) {
         this.trade_species = trade_species;
     }
 
-    public Object getTrigger() {
+    public String getTrigger() {
         return trigger;
     }
 
-    public void setTrigger(Object trigger) {
+    public void setTrigger(String trigger) {
         this.trigger = trigger;
-    }
-
-    public List<EvolutionDetail> getNextPokemon() {
-        return nextPokemon;
-    }
-
-    public void setNextPokemon(List<EvolutionDetail> nextPokemonList) {
-        this.nextPokemon = nextPokemonList;
-    }
-
-    public void setNextPokemon(EvolutionDetail nextPokemon){
-        this.nextPokemon.add(nextPokemon);
     }
 
     public Boolean getTurn_upside_down() {
@@ -188,5 +169,21 @@ public class EvolutionDetail {
 
     public void setTurn_upside_down(Boolean turn_upside_down) {
         this.turn_upside_down = turn_upside_down;
+    }
+
+    public List<EvolutionDetail> getNextPokemon() {
+        return nextPokemon;
+    }
+
+    public void setNextPokemon(List<EvolutionDetail> nextPokemon) {
+        this.nextPokemon = nextPokemon;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

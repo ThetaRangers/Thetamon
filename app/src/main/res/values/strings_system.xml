@@ -16,4 +16,6 @@
     <string name="system_enum">0</string>
     <string name="light_enum">1</string>
     <string name="dark_enum">2</string>
+    <string name="url_move_detail">https://pokeapi.co/api/v2/move/</string>
+    <string name="url_ability_detail">https://pokeapi.co/api/v2/ability/</string>
 </resources>
