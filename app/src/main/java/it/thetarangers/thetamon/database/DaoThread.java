@@ -9,9 +9,8 @@ import it.thetarangers.thetamon.model.Move;
 import it.thetarangers.thetamon.model.Pokemon;
 import it.thetarangers.thetamon.viewmodel.PokemonListViewModel;
 
-public class DaoThread extends Thread {
+public class DaoThread {
 
-    private Runnable runnable;
     private PokemonListViewModel pokemonListViewModel;
 
     public DaoThread() {
@@ -21,14 +20,9 @@ public class DaoThread extends Thread {
         this.pokemonListViewModel = pokemonListViewModel;
     }
 
-    @Override
-    public void run() {
-        runnable.run();
-    }
-
     public void fill(final Context context, final List<Pokemon> pokemons,
                      Handler handler, Runnable update) {
-        runnable = () -> {
+        Runnable runnable = () -> {
             PokemonDb db = PokemonDb.getInstance(context);
             final PokemonDao dao = db.pokemonDao();
 
@@ -39,12 +33,12 @@ public class DaoThread extends Thread {
             if (handler != null)
                 handler.post(update);
         };
-        this.start();
+        new Thread(runnable).start();
     }
 
     public void fillMoves(final Context context, final List<Move> moves,
                      Handler handler, Runnable update) {
-        runnable = () -> {
+        Runnable runnable = () -> {
             PokemonDb db = PokemonDb.getInstance(context);
             final MoveDao dao = db.moveDao();
 
@@ -53,30 +47,30 @@ public class DaoThread extends Thread {
             if (handler != null)
                 handler.post(update);
         };
-        this.start();
+        new Thread(runnable).start();
     }
 
     public void getMoveType(final Context context, List<Move> moves, Handler handler, Runnable update){
-        runnable = () ->{
+        Runnable runnable = () -> {
             PokemonDb db = PokemonDb.getInstance(context);
             MoveDao dao = db.moveDao();
-            for(int i = 0; i < moves.size(); i++) {
+            for (int i = 0; i < moves.size(); i++) {
                 String temp = dao.getMoveType(moves.get(i).getName());
                 moves.get(i).setType(temp);
             }
 
-            if(handler != null){
+            if (handler != null) {
                 handler.post(update);
             }
 
             };
 
-        this.start();
+        new Thread(runnable).start();
     }
 
     public void getPokemonFromName(final Context context, final String query) {
 
-        runnable = () -> {
+        Runnable runnable = () -> {
             PokemonDb db = PokemonDb.getInstance(context);
             PokemonDao dao = db.pokemonDao();
 
@@ -85,12 +79,12 @@ public class DaoThread extends Thread {
             pokemonListViewModel.setPokemonsAsynchronous(tempList);
         };
 
-        this.start();
+        new Thread(runnable).start();
     }
 
     public void getPokemonFromId(final Context context, final int id) {
 
-        runnable = () -> {
+        Runnable runnable = () -> {
             PokemonDb db = PokemonDb.getInstance(context);
             PokemonDao dao = db.pokemonDao();
 
@@ -99,7 +93,7 @@ public class DaoThread extends Thread {
             pokemonListViewModel.setPokemonsAsynchronous(tempList);
         };
 
-        this.start();
+        new Thread(runnable).start();
     }
 
 }
