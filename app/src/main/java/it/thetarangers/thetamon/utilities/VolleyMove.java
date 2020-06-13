@@ -66,7 +66,7 @@ public abstract class VolleyMove implements Response.ErrorListener, Response.Lis
 
             for (int index = 0; index < effects.length(); index++){
                 effectObj = effects.getJSONObject(index);
-                if(lang.equals(effectObj.getJSONObject("language").getString("name")))
+                if("en".equals(effectObj.getJSONObject("language").getString("name")))
                     break;
             }
 

@@ -58,13 +58,12 @@ public abstract class VolleyAbility implements Response.ErrorListener, Response.
 
             for (int index = 0; index < effects.length(); index++) {
                 effectObj = effects.getJSONObject(index);
-                if (lang.equals(effectObj.getJSONObject("language").getString("name"))) {
+                if ("en".equals(effectObj.getJSONObject("language").getString("name"))) {
                     String effect = effectObj.getString("effect");
                     ability.setEffect(effect);
                     break;
                 }
             }
-
 
             JSONArray flavorTexts = jsonObject.getJSONArray("flavor_text_entries");
             for (int i = flavorTexts.length() - 1; i >= 0; i--) {
@@ -81,8 +80,6 @@ public abstract class VolleyAbility implements Response.ErrorListener, Response.
         } catch (JSONException exception) {
             exception.printStackTrace();
         }
-
-
     }
 
 }
