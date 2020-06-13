@@ -28,14 +28,11 @@ import it.thetarangers.thetamon.R;
 import it.thetarangers.thetamon.activities.PokedexActivity;
 import it.thetarangers.thetamon.adapters.PokedexAdapter;
 import it.thetarangers.thetamon.database.DaoThread;
-import it.thetarangers.thetamon.database.MoveDao;
-import it.thetarangers.thetamon.database.PokemonDb;
 import it.thetarangers.thetamon.listener.SelectorCallback;
-import it.thetarangers.thetamon.model.Move;
 import it.thetarangers.thetamon.model.Pokemon;
 import it.thetarangers.thetamon.viewmodel.PokemonListViewModel;
 
-public class FragmentPokedex extends Fragment implements SelectorCallback {
+public class FragmentPokedex extends Fragment implements SelectorCallback, PokedexActivity.OnActivityResultCallback {
 
     private PokemonListViewModel pokemonListViewModel;
     private Holder holder;
@@ -126,58 +123,63 @@ public class FragmentPokedex extends Fragment implements SelectorCallback {
 
         actionMode = requireActivity().startActionMode(new Callback());
 
+    }
 
+    @Override
+    public void onActivityResultCallback(int requestCode, int resultCode) {
+        if (requestCode == PokedexAdapter.REQ_CODE)
+            holder.adapter.setClickable(true);
     }
 
     class Callback implements android.view.ActionMode.Callback {
-            @Override
-            public boolean onCreateActionMode(android.view.ActionMode mode, Menu menu) {
-                mode.getMenuInflater().inflate(R.menu.menu_action_mode, menu);
-                ((PokedexActivity) requireActivity()).lockDrawer();
-                holder.onFastScrollStart();
-                mode.setTitle("Selected 1/10 pokemons");
-                Log.d("POKE", "inflated");
-                return true;
-            }
-
-            @Override
-            public boolean onPrepareActionMode(android.view.ActionMode mode, Menu menu) {
-                return false;
-            }
-
-            @Override
-            public boolean onActionItemClicked(android.view.ActionMode mode, MenuItem item) {
-                switch(item.getItemId()){
-                    case R.id.item_deselect:
-                        mode.finish();
-                        break;
-                    case R.id.item_addAll:
-                        List<Pokemon> sel = holder.adapter.getSelected();
-                        Log.d("POKE","in fragment");
-                        for(int i=0; i<sel.size();i++){
-                            Pokemon temp = sel.get(i);
-                            Log.d("POKE", "pokemon ID "+temp.getId()+ "pokemon name "+temp.getName());
-                        }
-                        Toast.makeText(getActivity().getApplicationContext(),"add elements to fav",Toast.LENGTH_SHORT).show();
-                        break;
-                    case R.id.item_removeAll:
-                        Toast.makeText(getActivity().getApplicationContext(),"remove elements from fav",Toast.LENGTH_SHORT).show();
-                        break;
-                    default:
-                        break;
-                }
-
-                return false;
-            }
-
-            @Override
-            public void onDestroyActionMode(android.view.ActionMode mode) {
-                holder.adapter.deselectAll();
-                ((PokedexActivity) requireActivity()).unlockDrawer();
-                holder.onFastScrollStop();
-                actionMode = null;
-            }
+        @Override
+        public boolean onCreateActionMode(android.view.ActionMode mode, Menu menu) {
+            mode.getMenuInflater().inflate(R.menu.menu_action_mode, menu);
+            ((PokedexActivity) requireActivity()).lockDrawer();
+            holder.onFastScrollStart();
+            mode.setTitle("Selected 1/10 pokemons");
+            Log.d("POKE", "inflated");
+            return true;
         }
+
+        @Override
+        public boolean onPrepareActionMode(android.view.ActionMode mode, Menu menu) {
+            return false;
+        }
+
+        @Override
+        public boolean onActionItemClicked(android.view.ActionMode mode, MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.item_deselect:
+                    mode.finish();
+                    break;
+                case R.id.item_addAll:
+                    List<Pokemon> sel = holder.adapter.getSelected();
+                    Log.d("POKE", "in fragment");
+                    for (int i = 0; i < sel.size(); i++) {
+                        Pokemon temp = sel.get(i);
+                        Log.d("POKE", "pokemon ID " + temp.getId() + "pokemon name " + temp.getName());
+                    }
+                    Toast.makeText(getActivity().getApplicationContext(), "add elements to fav", Toast.LENGTH_SHORT).show();
+                    break;
+                case R.id.item_removeAll:
+                    Toast.makeText(getActivity().getApplicationContext(), "remove elements from fav", Toast.LENGTH_SHORT).show();
+                    break;
+                default:
+                    break;
+            }
+
+            return false;
+        }
+
+        @Override
+        public void onDestroyActionMode(android.view.ActionMode mode) {
+            holder.adapter.deselectAll();
+            ((PokedexActivity) requireActivity()).unlockDrawer();
+            holder.onFastScrollStop();
+            actionMode = null;
+        }
+    }
 
     class Holder implements View.OnClickListener, OnFastScrollStateChangeListener {
 

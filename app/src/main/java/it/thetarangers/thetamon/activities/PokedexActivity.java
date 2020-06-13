@@ -1,9 +1,11 @@
 package it.thetarangers.thetamon.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -96,6 +98,21 @@ public class PokedexActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        for (Integer key : fragments.keySet()) {
+            if (Objects.requireNonNull(fragments.get(key)).isAdded()) {
+                if (key == R.id.item_pokedex) {
+                    OnActivityResultCallback callback = (OnActivityResultCallback) fragments.get(key);
+                    assert callback != null;
+                    callback.onActivityResultCallback(requestCode, resultCode);
+                }
+                break;
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
     private void saveCurrentState() {
         Fragment current = fragments.get(checkedItemId);
         if (current != null)
@@ -119,13 +136,16 @@ public class PokedexActivity extends AppCompatActivity {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
     }
 
-
     public void lockDrawer() {
         holder.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
     }
 
     public void unlockDrawer() {
         holder.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+    }
+
+    public interface OnActivityResultCallback {
+        void onActivityResultCallback(int requestCode, int resultCode);
     }
 
     class Holder implements NavigationView.OnNavigationItemSelectedListener {
