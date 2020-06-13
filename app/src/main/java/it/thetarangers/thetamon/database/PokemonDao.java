@@ -2,6 +2,7 @@ package it.thetarangers.thetamon.database;
 
 import androidx.room.Dao;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import java.util.List;
@@ -13,7 +14,7 @@ public abstract class PokemonDao {
     @Query("SELECT * FROM Pokemon")
     public abstract List<Pokemon> getPokemons();
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     public abstract void insertPokemon(Pokemon pokemon);
 
     @Query("DELETE FROM Pokemon")

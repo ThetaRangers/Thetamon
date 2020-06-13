@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ListPreference
+        app:defaultValue="@string/system_enum"
+        app:entries="@array/night_mode_prefs"
+        app:entryValues="@array/night_mode_prefs_enum"
+        app:icon="@drawable/ic_night_mode"
+        app:key="@string/night_mode_pref"
+        app:summary="@string/night_mode_summary"
+        app:title="@string/night_mode" />
+
+    <it.thetarangers.thetamon.utilities.SettingsDialogPreference
+        app:dialogMessage="@string/reset_data_dialog"
+        app:dialogTitle="@string/warning"
+        app:icon="@drawable/ic_reset_data"
+        app:key="@string/first_use_pref"
+        app:negativeButtonText="@string/reset_data_exit"
+        app:positiveButtonText="@string/reset_data_confirm"
+        app:summary="@string/reset_data_summary"
+        app:title="@string/reset_data" />
+
+</PreferenceScreen>

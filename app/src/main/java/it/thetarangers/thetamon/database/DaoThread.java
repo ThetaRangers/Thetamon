@@ -2,10 +2,10 @@ package it.thetarangers.thetamon.database;
 
 import android.content.Context;
 import android.os.Handler;
-import android.util.Log;
 
 import java.util.List;
 
+import it.thetarangers.thetamon.model.Move;
 import it.thetarangers.thetamon.model.Pokemon;
 import it.thetarangers.thetamon.viewmodel.PokemonListViewModel;
 
@@ -32,7 +32,6 @@ public class DaoThread extends Thread {
             PokemonDb db = PokemonDb.getInstance(context);
             final PokemonDao dao = db.pokemonDao();
 
-            dao.deleteAll();
             for (int i = 0; i < pokemons.size(); i++) {
                 dao.insertPokemon(pokemons.get(i));
             }
@@ -40,6 +39,38 @@ public class DaoThread extends Thread {
             if (handler != null)
                 handler.post(update);
         };
+        this.start();
+    }
+
+    public void fillMoves(final Context context, final List<Move> moves,
+                     Handler handler, Runnable update) {
+        runnable = () -> {
+            PokemonDb db = PokemonDb.getInstance(context);
+            final MoveDao dao = db.moveDao();
+
+            dao.insertAll(moves);
+
+            if (handler != null)
+                handler.post(update);
+        };
+        this.start();
+    }
+
+    public void getMoveType(final Context context, List<Move> moves, Handler handler, Runnable update){
+        runnable = () ->{
+            PokemonDb db = PokemonDb.getInstance(context);
+            MoveDao dao = db.moveDao();
+            for(int i = 0; i < moves.size(); i++) {
+                String temp = dao.getMoveType(moves.get(i).getName());
+                moves.get(i).setType(temp);
+            }
+
+            if(handler != null){
+                handler.post(update);
+            }
+
+            };
+
         this.start();
     }
 
@@ -51,7 +82,7 @@ public class DaoThread extends Thread {
 
             List<Pokemon> tempList = dao.getPokemonsFromName(query);
 
-            pokemonListViewModel.setPokemons(tempList);
+            pokemonListViewModel.setPokemonsAsynchronous(tempList);
         };
 
         this.start();
@@ -65,7 +96,7 @@ public class DaoThread extends Thread {
 
             List<Pokemon> tempList = dao.getPokemonFromId(id);
 
-            pokemonListViewModel.setPokemons(tempList);
+            pokemonListViewModel.setPokemonsAsynchronous(tempList);
         };
 
         this.start();

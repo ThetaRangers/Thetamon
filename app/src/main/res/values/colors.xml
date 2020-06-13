@@ -1,12 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#ee1515</color>
-    <color name="colorPrimaryDark">#b20000</color>
-    <color name="colorAccent">#eeaa00</color>
     <color name="colorTest1">#CCFFFFFF</color>
     <color name="colorOverlayCard">#40FFFFFF</color>
     <color name="colorOverlaySprite">#80FFFFFF</color>
-    <color name="colorFilter">#F0F0F0F0</color>
+    <color name="colorOverlaySum">#C0FFFFFF</color>
+
+    <!--Color palette-->
+
+    <color name="red_200">#ED9EA6</color> <!--Color primary (dark)-->
+    <color name="red_500">#F74951</color> <!--Color primary (light)-->
+    <color name="red_600">#E8414F</color> <!--Color primary variant (dark)-->
+    <color name="red_700">#D53848</color> <!--Color primary variant (light)-->
+
+    <color name="yellow_200">#F6DB80</color> <!--Color error (dark)-->
+    <color name="yellow_600">#EEAA00</color> <!--Color error (light)-->
+
+    <!--Color surface (light), color on error (light), -->
+    <!--color on surface (dark), color on surface (dark)-->
+    <color name="white_50">#ffffff</color>
+
+    <color name="black_800">#121212</color> <!--Color surface (dark)-->
+    <color name="black_700">#272727</color> <!--Color surface (dark) for elevation effect-->
+    <!--Color on secondary (light), color on background (light),-->
+    <!--color on surface (light)-->
+    <color name="black_900">#000000</color>
 
     <!-- Type Palette -->
     <color name="colorTypeNormal">#7D858D</color>

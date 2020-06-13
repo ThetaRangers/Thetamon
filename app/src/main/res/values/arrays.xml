@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="night_mode_prefs">
+        <item name="system">@string/system</item>
+        <item name="light">@string/light</item>
+        <item name="dark">@string/dark</item>
+    </string-array>
+    <string-array name="night_mode_prefs_enum">
+        <item name="system">@string/system_enum</item>
+        <item name="light">@string/light_enum</item>
+        <item name="dark">@string/dark_enum</item>
+    </string-array>
+</resources>
