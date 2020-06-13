@@ -4,10 +4,8 @@ import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.util.Log;
 import android.util.Pair;
-import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.card.MaterialCardView;
@@ -37,8 +34,10 @@ import it.thetarangers.thetamon.utilities.TypeTextViewManager;
 
 public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHolder>
         implements FastScrollRecyclerView.SectionedAdapter {
+    public static Integer REQ_CODE = 42;
     private List<Pokemon> pokemonList;
     private Activity context;
+    private Boolean isClickable;
 
     private ImageManager imageManager = new ImageManager();
     private SelectorListener selectList;
@@ -48,9 +47,14 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHold
     public PokedexAdapter(Activity context, SelectorCallback call) {
         this.pokemonList = new ArrayList<>();
         this.context = context;
+        isClickable = true;
         this.call = call;
         this.selectList = new SelectorListener(call);
 
+    }
+
+    public void setClickable(Boolean isClickable) {
+        this.isClickable = isClickable;
     }
 
     public void deselectAll() {
@@ -73,6 +77,10 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHold
         return selected;
     }
 
+    public List<Pokemon> getPokemonList() {
+        return this.pokemonList;
+    }
+
     public void setPokemonList(List<Pokemon> pokemonList) {
         if (pokemonList.size() > 0) {
             this.pokemonList = pokemonList;
@@ -89,10 +97,6 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHold
                 t.show();
             }
         }
-    }
-
-    public List<Pokemon> getPokemonList() {
-        return this.pokemonList;
     }
 
     @NonNull
@@ -169,6 +173,8 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHold
 
         @Override
         public void onClick(View v) {
+            if (!isClickable)
+                return;
 
             if (selectList.selectedSize() > 0)
                 selectList.onLongClick(v);
@@ -188,7 +194,8 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHold
                                         Pair.create(tvId, "transId"),
                                         Pair.create(tvName, "transName"));
 
-                        context.startActivity(data, options.toBundle());
+                        setClickable(false);
+                        context.startActivityForResult(data, REQ_CODE, options.toBundle());
                     }
                 }
             }
