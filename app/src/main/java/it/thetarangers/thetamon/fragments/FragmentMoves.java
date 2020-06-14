@@ -6,10 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,6 +24,7 @@ import java.util.List;
 
 import it.thetarangers.thetamon.R;
 import it.thetarangers.thetamon.model.Move;
+import it.thetarangers.thetamon.model.MoveDamageClass;
 import it.thetarangers.thetamon.utilities.StringManager;
 import it.thetarangers.thetamon.utilities.TypeTextViewManager;
 
@@ -56,12 +59,14 @@ public class FragmentMoves extends BottomSheetDialogFragment {
     static class MoveHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView tvMove;
         TextView tvMoveType;
+        ImageView ivDamageClass;
 
         public MoveHolder(@NonNull View itemView) {
             super(itemView);
 
             tvMove = itemView.findViewById(R.id.tvMove);
             tvMoveType = itemView.findViewById(R.id.tvMoveType);
+            ivDamageClass = itemView.findViewById(R.id.ivDamageClass);
             itemView.setOnClickListener(this);
         }
 
@@ -98,6 +103,25 @@ public class FragmentMoves extends BottomSheetDialogFragment {
             Move move = moveList.get(position);
 
             holder.tvMove.setText(StringManager.capitalize(move.getName()));
+
+            String damageClass = move.getDamageClass();
+
+            if (damageClass.equals(MoveDamageClass.STATUS_NAME)) {
+                holder.ivDamageClass.setImageDrawable(ContextCompat.getDrawable(requireContext(),
+                        R.drawable.status));
+                holder.ivDamageClass.setBackground(ContextCompat.getDrawable(requireContext(),
+                        R.drawable.iv_status_background));
+            } else if (damageClass.equals(MoveDamageClass.PHYSICAL_NAME)) {
+                holder.ivDamageClass.setImageDrawable(ContextCompat.getDrawable(requireContext(),
+                        R.drawable.physical));
+                holder.ivDamageClass.setBackground(ContextCompat.getDrawable(requireContext(),
+                        R.drawable.iv_physical_background));
+            } else {
+                holder.ivDamageClass.setImageDrawable(ContextCompat.getDrawable(requireContext(),
+                        R.drawable.special));
+                holder.ivDamageClass.setBackground(ContextCompat.getDrawable(requireContext(),
+                        R.drawable.iv_special_background));
+            }
 
             TypeTextViewManager.moveTextViewInit(requireContext(), move, holder.tvMoveType);
         }

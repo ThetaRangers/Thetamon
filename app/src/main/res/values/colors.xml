@@ -44,4 +44,8 @@
     <color name="colorTypeDragon">#085DA6</color>
     <color name="colorTypeDark">#474150</color>
     <color name="colorTypeFairy">#D676D1</color>
+
+    <color name="colorPhysical">#F66C33</color>
+    <color name="colorStatus">#BAB8E0</color>
+    <color name="colorSpecial">#28BBFE</color>
 </resources>
