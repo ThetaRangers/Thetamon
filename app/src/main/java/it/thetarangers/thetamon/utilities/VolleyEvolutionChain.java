@@ -31,7 +31,7 @@ public abstract class VolleyEvolutionChain implements Response.ErrorListener, Re
         this.context = context;
     }
 
-    public abstract void fill(List<EvolutionDetail> evolutionDetails);
+    public abstract void fill(EvolutionDetail evolutionDetail);
 
     public void getEvolutionChain(String chain) {
         RequestQueue requestQueue;
@@ -97,8 +97,7 @@ public abstract class VolleyEvolutionChain implements Response.ErrorListener, Re
 
             firstEvolution.setNextPokemon(secondEvolutions);
 
-            Log.d("POKE", "Evoluzionissima " + firstEvolution.getNextPokemon().get(0).getName());
-
+            fill(firstEvolution);
         } catch (JSONException exception) {
             exception.printStackTrace();
         }
