@@ -24,6 +24,7 @@
         <item name="colorOnSurface">@color/black_900</item>
         <item name="colorOnError">@color/black_900</item>
         <item name="colorSheet">@color/white_50</item>
+        <item name="colorCard">#CDCDCD</item>
 
         <item name="android:statusBarColor" tools:ignore="NewApi">?colorPrimary</item>
     </style>

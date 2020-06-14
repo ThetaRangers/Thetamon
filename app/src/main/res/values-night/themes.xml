@@ -11,5 +11,6 @@
         <item name="colorOnSurface">@color/white_50</item>
         <item name="android:statusBarColor" tools:ignore="NewApi">@color/black_700</item>
         <item name="colorSheet">@color/black_700</item>
+        <item name="colorCard">#3D3D3D</item>
     </style>
 </resources>
