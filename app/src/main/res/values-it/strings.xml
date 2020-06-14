@@ -11,7 +11,7 @@
     <string name="error_download">Errore nel download delle risorse</string>
     <string name="extracting">Estrazione Risorse</string>
     <string name="updating_db">Aggiornamento Database</string>
-    <string name="night_mode">Modalità notte</string>
+    <string name="night_mode">Modalità Notte</string>
     <string name="night_mode_summary">La modalità notte mostra colori scuri nella maggior parte della UI</string>
     <string name="system">Predefinito di sistema</string>
     <string name="light">Tema chiaro</string>
@@ -19,7 +19,7 @@
     <string name="favorites">Preferiti</string>
     <string name="settings">Impostazioni</string>
     <string name="about">Informazioni</string>
-    <string name="reset_data">Resetta dati</string>
+    <string name="reset_data">Resetta Dati</string>
     <string name="reset_data_summary">Download di tutte le risorse e pulizia del database</string>
     <string name="reset_data_exit">ESCI</string>
     <string name="reset_data_dialog">Cliccando su \"RESET\" perderai tutti i tuoi Pokémon preferiti!</string>
