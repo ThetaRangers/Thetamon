@@ -2,32 +2,44 @@ package it.thetarangers.thetamon.fragments;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.textfield.TextInputLayout;
+
+import java.util.Objects;
+
 import it.thetarangers.thetamon.R;
-import it.thetarangers.thetamon.activities.MainActivity;
-import it.thetarangers.thetamon.database.DaoThread;
 import it.thetarangers.thetamon.database.PokemonDao;
 import it.thetarangers.thetamon.database.PokemonDb;
 import it.thetarangers.thetamon.model.Pokemon;
 import it.thetarangers.thetamon.utilities.ImageManager;
+import it.thetarangers.thetamon.utilities.StringManager;
 
 public class FragmentGame extends Fragment {
     Pokemon pokemon;
     Bitmap bitmapNormal;
     Bitmap bitmapObscure;
     Holder holder;
+    Thread t;
     ImageManager imageManager = new ImageManager();
+    MediaPlayer mp;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -39,29 +51,35 @@ public class FragmentGame extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        startGame();
         holder = new Holder(view);
+        mp = MediaPlayer.create(getContext(), R.raw.game);
+        mp.setVolume((float)1.5,(float)1.5);
+        startGame();
     }
 
-    class Holder implements View.OnClickListener{
-        final ImageView ivPokemon;
-        final Button btnReveal;
+    private void tryName(String name) {
 
-        Holder(View fv) {
-            ivPokemon = fv.findViewById(R.id.ivPokemon);
-            btnReveal = fv.findViewById(R.id.btnReveal);
+        Log.d("POKE", "searched " + holder.tilPokemonName.getEditText().getText());
+        if(pokemon.getName().equals(StringManager.decapitalize(name))){
+            Log.d("POKE","correct");
+            holder.tilPokemonName.setError(null);
+            holder.ivPokemon.setImageBitmap(bitmapNormal);
+            holder.btnConfirm.setEnabled(false);
+            Toast.makeText(getContext(),"It' s correct",Toast.LENGTH_LONG).show();
 
-            btnReveal.setOnClickListener(this);
+        }else{
+            Log.d("POKE", "you're wrong");
+            holder.tilPokemonName.setError("OPS you' re wrong");
         }
 
-        @Override
-        public void onClick(View v) {
-            startGame();
-        }
+
     }
 
-    public void startGame(){
+
+    private void startGame() {
+        mp.start();
+        Objects.requireNonNull(holder.tilPokemonName.getEditText()).clearFocus();
+        Objects.requireNonNull(holder.tilPokemonName.getEditText()).getText().clear();
         Handler handler = new Handler();
         Runnable runnable = new Runnable() {
             @Override
@@ -72,33 +90,81 @@ public class FragmentGame extends Fragment {
         Thread thread = new Thread(() -> {
             PokemonDao dao = PokemonDb.getInstance(getContext()).pokemonDao();
             pokemon = dao.getRandomPokemon();
+            Log.d("POKE", "poke :" + pokemon.getName());
             bitmapNormal = imageManager.loadFromDisk(
                     getContext().getFilesDir() + getContext().getString(R.string.sprites_front),
                     pokemon.getId() + getContext().getString(R.string.extension));
 
-            bitmapObscure = darkenBitmap(bitmapNormal);
+            bitmapObscure = holder.darkenBitmap(bitmapNormal);
             handler.post(runnable);
         });
 
         thread.start();
     }
 
-    private Bitmap darkenBitmap(Bitmap bitmap) {
-        int row = bitmap.getHeight();
-        int col = bitmap.getWidth();
 
-        Bitmap darkenedBitmap = Bitmap.createBitmap(row, col, Bitmap.Config.ARGB_8888);
+    class Holder implements View.OnClickListener, EditText.OnEditorActionListener {
+        final ImageView ivPokemon;
+        final Button btnConfirm;
+        final Button btnNext;
+        final TextInputLayout tilPokemonName;
 
-        for(int i = 0; i < row; i++) {
-            for(int j = 0; j < col; j++){
-                int pixel = bitmap.getPixel(i, j);
+        Holder(View fv) {
+            ivPokemon = fv.findViewById(R.id.ivPokemon);
+            btnNext = fv.findViewById(R.id.btnNext);
+            btnNext.setOnClickListener(this);
 
-                if (pixel != Color.TRANSPARENT) {
-                    darkenedBitmap.setPixel(i, j, Color.BLACK);
-                }
+            btnConfirm = fv.findViewById(R.id.btnConfirm);
+            btnConfirm.setOnClickListener(this);
+
+            tilPokemonName = fv.findViewById(R.id.tilPokemonName);
+            Objects.requireNonNull(tilPokemonName.getEditText()).setOnEditorActionListener(this);
+        }
+
+        @Override
+        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                Objects.requireNonNull(tilPokemonName.getEditText()).clearFocus();
+                tryName(tilPokemonName.getEditText().getText().toString());
+            }
+            return false;
+        }
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.btnNext:
+                    btnConfirm.setEnabled(true);
+                    tilPokemonName.setError(null);
+                    startGame();
+                    break;
+                case R.id.btnConfirm:
+                    Objects.requireNonNull(tilPokemonName.getEditText())
+                            .onEditorAction(EditorInfo.IME_ACTION_DONE);
+                    break;
+                default:
+                    break;
             }
         }
 
-        return darkenedBitmap;
+
+        public Bitmap darkenBitmap(Bitmap bitmap) {
+            int row = bitmap.getHeight();
+            int col = bitmap.getWidth();
+
+            Bitmap darkenedBitmap = Bitmap.createBitmap(row, col, Bitmap.Config.ARGB_8888);
+
+            for (int i = 0; i < row; i++) {
+                for (int j = 0; j < col; j++) {
+                    int pixel = bitmap.getPixel(i, j);
+
+                    if (pixel != Color.TRANSPARENT) {
+                        darkenedBitmap.setPixel(i, j, Color.BLACK);
+                    }
+                }
+            }
+
+            return darkenedBitmap;
+        }
     }
 }
