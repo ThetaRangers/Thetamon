@@ -14,26 +14,26 @@
     <string name="system">System default</string>
     <string name="light">Light theme</string>
     <string name="dark">Dark theme</string>
-    <string name="pokedex">Pokédex</string>
+    <string name="pokedex" translatable="false">Pokédex</string>
     <string name="favorites">Favorites</string>
-    <string name="game">Who\'s That Pokémon?</string>
+    <string name="game" translatable="false">Who\'s That Pokémon?</string>
     <string name="settings">Settings</string>
     <string name="about">About</string>
-    <string name="open_drawer_toggle">Open Navigation Drawer</string>
-    <string name="close_drawer_toggle">Close Navigation Drawer</string>
+    <string name="open_drawer_toggle" translatable="false">Open Navigation Drawer</string>
+    <string name="close_drawer_toggle" translatable="false">Close Navigation Drawer</string>
     <string name="reset_data">Reset Data</string>
     <string name="reset_data_summary">Download all resources and clear local database</string>
-    <string name="reset_data_confirm">RESET</string>
+    <string name="reset_data_confirm" translatable="false">RESET</string>
     <string name="reset_data_exit">EXIT</string>
     <string name="reset_data_dialog">By clicking on \'RESET\' you will lose all of your favorite Pokémons!</string>
     <string name="warning">Warning!</string>
-    <string name="habitat_name">Habitat</string>
-    <string name="stat_hp">Hp</string>
+    <string name="habitat_name" translatable="false">Habitat</string>
+    <string name="stat_hp" translatable="false">Hp</string>
     <string name="no_habitat">Unknown</string>
     <string name="fetchingResult">Fetching result from API, please wait...</string>
     <string name="special_location">Needs a special location</string>
-    <string name="localization">en</string>
     <string name="label_ability">Abilities</string>
-    <string name="label_flavor">Flavor Text</string>
-    <string name="label_effect">Effect Text</string>
+    <string name="label_flavor" translatable="false">Flavor Text</string>
+    <string name="label_effect" translatable="false">Effect Text</string>
+    <string name="localization">en</string>
 </resources>

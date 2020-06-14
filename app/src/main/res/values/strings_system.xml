@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="sprites_front">/sprites_front</string>
-    <string name="extension">.png</string>
-    <string name="color_type">colorType</string>
-    <string name="url">https://pokeapi.co/api/v2/pokemon?limit=10000</string>
-    <string name="url_all_moves">https://pokeapi.co/api/v2/move?limit=10000</string>
-    <string name="url_type">https://pokeapi.co/api/v2/type/%s</string>
-    <string name="url_sprites">https://github.com/ThetaRangers/Thetamon/blob/master/sprites.zip?raw=true</string>
-    <string name="url_species">https://pokeapi.co/api/v2/pokemon-species/%d</string>
-    <string name="sprites_temp_path">Sprites</string>
-    <string name="sprites_archive">sprites.zip</string>
-    <string name="preferences_name">it.thetarangers.thetamon</string>
-    <string name="first_use_pref">first_use</string>
-    <string name="night_mode_pref">night_mode</string>
-    <string name="system_enum">0</string>
-    <string name="light_enum">1</string>
-    <string name="dark_enum">2</string>
-    <string name="url_move_detail">https://pokeapi.co/api/v2/move/</string>
-    <string name="url_ability_detail">https://pokeapi.co/api/v2/ability/</string>
-    <string name="url_damage_classes">https://pokeapi.co/api/v2/move-damage-class/%d</string>
+    <string name="sprites_front" translatable="false">/sprites_front</string>
+    <string name="extension" translatable="false">.png</string>
+    <string name="color_type" translatable="false">colorType</string>
+    <string name="url" translatable="false">https://pokeapi.co/api/v2/pokemon?limit=10000</string>
+    <string name="url_all_moves" translatable="false">https://pokeapi.co/api/v2/move?limit=10000</string>
+    <string name="url_type" translatable="false">https://pokeapi.co/api/v2/type/%s</string>
+    <string name="url_sprites" translatable="false">https://github.com/ThetaRangers/Thetamon/blob/master/sprites.zip?raw=true</string>
+    <string name="url_species" translatable="false">https://pokeapi.co/api/v2/pokemon-species/%d</string>
+    <string name="sprites_temp_path" translatable="false">Sprites</string>
+    <string name="sprites_archive" translatable="false">sprites.zip</string>
+    <string name="preferences_name" translatable="false">it.thetarangers.thetamon</string>
+    <string name="first_use_pref" translatable="false">first_use</string>
+    <string name="night_mode_pref" translatable="false">night_mode</string>
+    <string name="system_enum" translatable="false">0</string>
+    <string name="light_enum" translatable="false">1</string>
+    <string name="dark_enum" translatable="false">2</string>
+    <string name="url_move_detail" translatable="false">https://pokeapi.co/api/v2/move/</string>
+    <string name="url_ability_detail" translatable="false">https://pokeapi.co/api/v2/ability/</string>
+    <string name="url_damage_classes" translatable="false">https://pokeapi.co/api/v2/move-damage-class/%d</string>
 </resources>

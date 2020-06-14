@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Thetamon</string>
+    <string name="localization">it</string>
+    <string name="no_pokemon_found">Nessun pokemon trovato</string>
+    <string name="pokemon_search_string">inserisci nome o id</string>
+    <string name="volley_error">Errore nella richiesta a PokeApi</string>
+    <string name="not_found">Nessun pokemon trovato</string>
+    <string name="downloading">Download delle risorse</string>
+    <string name="error_unzip">Errore nella decompressione del file</string>
+    <string name="error_download">Errore nel download delle risorse</string>
+    <string name="extracting">Estrazione Risorse</string>
+    <string name="updating_db">Aggiornamento Database</string>
+    <string name="night_mode">Modalità notte</string>
+    <string name="night_mode_summary">La modalità notte mostra colori scuri nella maggior parte della UI</string>
+    <string name="system">Predefinito di sistema</string>
+    <string name="light">Tema chiaro</string>
+    <string name="dark">Tema scuro</string>
+    <string name="favorites">Preferiti</string>
+    <string name="settings">Impostazioni</string>
+    <string name="about">Informazioni</string>
+    <string name="reset_data">Resetta dati</string>
+    <string name="reset_data_summary">"Download di tutte le risorse e pulisti database "</string>
+    <string name="reset_data_exit">ESCI</string>
+    <string name="reset_data_dialog">Cliccando su \'RESET\' perderai tutti i tuoi Pokémon preferiti!</string>
+    <string name="warning">Attenzione!</string>
+    <string name="no_habitat">Sconosciuto</string>
+    <string name="fetchingResult">Caricando dati dall\'API, attendi perfavore...</string>
+    <string name="special_location">Necessita di un luogo speciale</string>
+    <string name="label_ability">Abilità</string>
+</resources>
