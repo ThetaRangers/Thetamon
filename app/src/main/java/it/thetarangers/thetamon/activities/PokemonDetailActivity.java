@@ -4,13 +4,17 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.shape.CornerFamily;
 
@@ -19,7 +23,9 @@ import java.util.List;
 
 import it.thetarangers.thetamon.R;
 import it.thetarangers.thetamon.database.DaoThread;
+import it.thetarangers.thetamon.fragments.FragmentAbility;
 import it.thetarangers.thetamon.fragments.FragmentMoves;
+import it.thetarangers.thetamon.model.Ability;
 import it.thetarangers.thetamon.model.Move;
 import it.thetarangers.thetamon.model.Pokemon;
 import it.thetarangers.thetamon.utilities.ImageManager;
@@ -51,6 +57,7 @@ public class PokemonDetailActivity extends AppCompatActivity {
         final TextView tvID;
         final TextView tvHabitat;
         final TextView tvHp;
+        final LinearLayout llAbilities;
 
         final TextView tvLoading, tvType1, tvType2;
 
@@ -74,6 +81,8 @@ public class PokemonDetailActivity extends AppCompatActivity {
             btnMoves = findViewById(R.id.btnMoves);
             btnMoves.setOnClickListener(this);
             btnMoves.setEnabled(false);
+
+            llAbilities = findViewById(R.id.llAbilities);
 
             imageManager = new ImageManager();
 
@@ -151,7 +160,7 @@ public class PokemonDetailActivity extends AppCompatActivity {
 
             // Start parsing moves from DB
             moves = pokemon.getMovesList();
-
+            fillAbilities(pokemon);
             DaoThread daoThread = new DaoThread();
 
             daoThread.getMoveDetails(PokemonDetailActivity.this, moves, handler, this::enableButton);
@@ -166,6 +175,31 @@ public class PokemonDetailActivity extends AppCompatActivity {
                 args.putParcelableArrayList(FragmentMoves.MOVES, (ArrayList<? extends Parcelable>) moves);
                 fragmentMoves.setArguments(args);
                 fragmentMoves.show(getSupportFragmentManager(), FragmentMoves.TAG);
+            } if(v.getId() == R.id.cvAbility) {
+                FragmentAbility fragmentAbility = new FragmentAbility();
+
+                TextView tv = v.findViewById(R.id.tvAbility);
+
+                Bundle arg = new Bundle();
+                arg.putString("name", StringManager.decapitalize(tv.getText().toString()));
+                fragmentAbility.setArguments(arg);
+                fragmentAbility.show(getSupportFragmentManager(), FragmentMoves.TAG);
+            }
+        }
+
+        private void fillAbilities(Pokemon pokemon) {
+            List<Ability> abilityList = pokemon.getAbilityList();
+
+            for(int i = 0; i < abilityList.size(); i++) {
+
+                MaterialCardView card = (MaterialCardView) View.inflate(PokemonDetailActivity.this, R.layout.item_ability, null);
+                TextView tvAbility = card.findViewById(R.id.tvAbility);
+
+                card.setOnClickListener(this);
+
+                tvAbility.setText(StringManager.capitalize(abilityList.get(i).getName()));
+
+                llAbilities.addView(card);
             }
         }
     }

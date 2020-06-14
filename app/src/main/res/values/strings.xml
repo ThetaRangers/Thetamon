@@ -33,4 +33,7 @@
     <string name="fetchingResult">Fetching result from API, please wait...</string>
     <string name="special_location">Needs a special location</string>
     <string name="localization">en</string>
+    <string name="label_ability">Abilities</string>
+    <string name="label_flavor">Flavor Text</string>
+    <string name="label_effect">Effect Text</string>
 </resources>
