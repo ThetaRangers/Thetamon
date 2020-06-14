@@ -30,4 +30,7 @@ public abstract class PokemonDao {
     public List<Pokemon> getPokemonsFromName(String name){
         return getPokemonFromNameInterface(StringManager.decapitalize(name) + "%");
     }
+
+    @Query("SELECT * FROM Pokemon ORDER BY RANDOM() LIMIT 1;")
+    public abstract Pokemon getRandomPokemon();
 }

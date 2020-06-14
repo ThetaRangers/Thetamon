@@ -73,9 +73,10 @@ public class DaoThread {
             PokemonDb db = PokemonDb.getInstance(context);
             MoveDao dao = db.moveDao();
             for (int i = 0; i < moves.size(); i++) {
-                MoveDao.MoveDetail temp = dao.getMoveDetails(moves.get(i).getName());
-                moves.get(i).setType(temp.type);
-                moves.get(i).setDamageClass(temp.damageClass);
+                Move temp = dao.getMoveDetails(moves.get(i).getName());
+                moves.get(i).setType(temp.getType());
+                moves.get(i).setDamageClass(temp.getDamageClass());
+                moves.get(i).setId(temp.getId());
             }
 
             if (handler != null) {
@@ -114,5 +115,4 @@ public class DaoThread {
 
         new Thread(runnable).start();
     }
-
 }
