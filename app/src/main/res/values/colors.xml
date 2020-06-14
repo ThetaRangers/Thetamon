@@ -48,4 +48,7 @@
     <color name="colorPhysical">#F66C33</color>
     <color name="colorStatus">#BAB8E0</color>
     <color name="colorSpecial">#28BBFE</color>
+
+    <color name="colorVascoRossi">#EEEEEE</color>
+    <color name="colorCardBlack">#3D3D3D</color>
 </resources>

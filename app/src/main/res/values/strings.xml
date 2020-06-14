@@ -25,15 +25,17 @@
     <string name="reset_data_summary">Download all resources and clear local database</string>
     <string name="reset_data_confirm" translatable="false">RESET</string>
     <string name="reset_data_exit">EXIT</string>
-    <string name="reset_data_dialog">By clicking on \'RESET\' you will lose all of your favorite Pokémons!</string>
+    <string name="reset_data_dialog">By clicking on \"RESET\" you will lose all of your favorite Pokémons!</string>
     <string name="warning">Warning!</string>
     <string name="habitat_name" translatable="false">Habitat</string>
     <string name="stat_hp" translatable="false">Hp</string>
     <string name="no_habitat">Unknown</string>
-    <string name="fetchingResult">Fetching result from API, please wait...</string>
+    <string name="fetchingResult">Fetching result from API, please wait…</string>
     <string name="special_location">Needs a special location</string>
-    <string name="label_ability">Abilities</string>
+    <string name="localization">en</string>
     <string name="label_flavor" translatable="false">Flavor Text</string>
     <string name="label_effect" translatable="false">Effect Text</string>
-    <string name="localization">en</string>
+    <string name="label_ability">Abilities</string>
+    <string name="learn_method">Learn method:</string>
+    <string name="level_learned">Learned at level:</string>
 </resources>

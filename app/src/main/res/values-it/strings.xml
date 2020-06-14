@@ -20,12 +20,14 @@
     <string name="settings">Impostazioni</string>
     <string name="about">Informazioni</string>
     <string name="reset_data">Resetta dati</string>
-    <string name="reset_data_summary">"Download di tutte le risorse e pulisti database "</string>
+    <string name="reset_data_summary">Download di tutte le risorse e pulizia del database</string>
     <string name="reset_data_exit">ESCI</string>
-    <string name="reset_data_dialog">Cliccando su \'RESET\' perderai tutti i tuoi Pokémon preferiti!</string>
+    <string name="reset_data_dialog">Cliccando su \"RESET\" perderai tutti i tuoi Pokémon preferiti!</string>
     <string name="warning">Attenzione!</string>
     <string name="no_habitat">Sconosciuto</string>
-    <string name="fetchingResult">Caricando dati dall\'API, attendi perfavore...</string>
+    <string name="fetchingResult">Caricando dati dall\'API, attendi per favore…</string>
     <string name="special_location">Necessita di un luogo speciale</string>
     <string name="label_ability">Abilità</string>
+    <string name="level_learned">Appresa al livello:</string>
+    <string name="learn_method">Appresa tramite:</string>
 </resources>

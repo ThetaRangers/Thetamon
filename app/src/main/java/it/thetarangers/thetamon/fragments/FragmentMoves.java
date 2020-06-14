@@ -21,6 +21,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.card.MaterialCardView;
 
 import java.util.List;
+import java.util.Locale;
 
 import it.thetarangers.thetamon.R;
 import it.thetarangers.thetamon.model.Move;
@@ -59,6 +60,8 @@ public class FragmentMoves extends BottomSheetDialogFragment {
     static class MoveHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView tvMove;
         TextView tvMoveType;
+        TextView tvLearnMethod;
+        TextView tvLevel;
         ImageView ivDamageClass;
 
         public MoveHolder(@NonNull View itemView) {
@@ -66,6 +69,8 @@ public class FragmentMoves extends BottomSheetDialogFragment {
 
             tvMove = itemView.findViewById(R.id.tvMove);
             tvMoveType = itemView.findViewById(R.id.tvMoveType);
+            tvLevel = itemView.findViewById(R.id.tvLevel);
+            tvLearnMethod = itemView.findViewById(R.id.tvLearnMethod);
             ivDamageClass = itemView.findViewById(R.id.ivDamageClass);
             itemView.setOnClickListener(this);
         }
@@ -103,6 +108,16 @@ public class FragmentMoves extends BottomSheetDialogFragment {
             Move move = moveList.get(position);
 
             holder.tvMove.setText(StringManager.capitalize(move.getName()));
+            holder.tvLearnMethod.setText(String.format(Locale.getDefault(),
+                    "%s %s", getString(R.string.learn_method),
+                    move.getLearnMethod()));
+
+            if (move.getLevel() != 0) {
+                holder.tvLevel.setText(String.format(Locale.getDefault(),
+                        "%s %d", getString(R.string.level_learned),
+                        move.getLevel()));
+                holder.tvLevel.setVisibility(View.VISIBLE);
+            }
 
             String damageClass = move.getDamageClass();
 
