@@ -15,17 +15,6 @@ import java.util.List;
 @Entity(tableName = "Pokemon")
 public class Pokemon implements Parcelable {
 
-    public static final Creator<Pokemon> CREATOR = new Creator<Pokemon>() {
-        @Override
-        public Pokemon createFromParcel(Parcel in) {
-            return new Pokemon(in);
-        }
-
-        @Override
-        public Pokemon[] newArray(int size) {
-            return new Pokemon[size];
-        }
-    };
 
     @PrimaryKey
     private int id;
@@ -86,20 +75,46 @@ public class Pokemon implements Parcelable {
     }
 
     @Ignore
+    public Pokemon(String name) {
+        this.name = name;
+    }
+
     protected Pokemon(Parcel in) {
-        //TODO fix parcelable
         id = in.readInt();
         name = in.readString();
         type1 = in.readString();
         type2 = in.readString();
         averageColor = in.readString();
         url = in.readString();
+        flavorText = in.readString();
+        genderRate = in.readInt();
+        captureRate = in.readInt();
+        growthRate = in.readString();
+        height = in.readInt();
+        weight = in.readInt();
+        hp = in.readInt();
+        attack = in.readInt();
+        defense = in.readInt();
+        specialAttack = in.readInt();
+        specialDefense = in.readInt();
+        speed = in.readInt();
+        habitat = in.readString();
+        urlEvolutionChain = in.readString();
+        movesList = in.createTypedArrayList(Move.CREATOR);
+        abilityList = in.createTypedArrayList(Ability.CREATOR);
     }
 
-    @Ignore
-    public Pokemon(String name) {
-        this.name = name;
-    }
+    public static final Creator<Pokemon> CREATOR = new Creator<Pokemon>() {
+        @Override
+        public Pokemon createFromParcel(Parcel in) {
+            return new Pokemon(in);
+        }
+
+        @Override
+        public Pokemon[] newArray(int size) {
+            return new Pokemon[size];
+        }
+    };
 
     public int setIdFromUrl() {
         //Parse URL to get id
@@ -338,5 +353,21 @@ public class Pokemon implements Parcelable {
         dest.writeString(type2);
         dest.writeString(averageColor);
         dest.writeString(url);
+        dest.writeString(flavorText);
+        dest.writeInt(genderRate);
+        dest.writeInt(captureRate);
+        dest.writeString(growthRate);
+        dest.writeInt(height);
+        dest.writeInt(weight);
+        dest.writeInt(hp);
+        dest.writeInt(attack);
+        dest.writeInt(defense);
+        dest.writeInt(specialAttack);
+        dest.writeInt(specialDefense);
+        dest.writeInt(speed);
+        dest.writeString(habitat);
+        dest.writeString(urlEvolutionChain);
+        dest.writeTypedList(movesList);
+        dest.writeTypedList(abilityList);
     }
 }

@@ -17,6 +17,7 @@ import it.thetarangers.thetamon.utilities.StringManager;
 import it.thetarangers.thetamon.utilities.VolleyAbility;
 
 public class FragmentAbility extends BottomSheetDialogFragment {
+    public static String TAG = "FragmentAbility";
     Ability ability;
     Holder holder;
 

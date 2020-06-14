@@ -12,7 +12,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.imageview.ShapeableImageView;
@@ -26,11 +25,13 @@ import it.thetarangers.thetamon.database.DaoThread;
 import it.thetarangers.thetamon.fragments.FragmentAbility;
 import it.thetarangers.thetamon.fragments.FragmentMoves;
 import it.thetarangers.thetamon.model.Ability;
+import it.thetarangers.thetamon.model.EvolutionDetail;
 import it.thetarangers.thetamon.model.Move;
 import it.thetarangers.thetamon.model.Pokemon;
 import it.thetarangers.thetamon.utilities.ImageManager;
 import it.thetarangers.thetamon.utilities.StringManager;
 import it.thetarangers.thetamon.utilities.TypeTextViewManager;
+import it.thetarangers.thetamon.utilities.VolleyEvolutionChain;
 import it.thetarangers.thetamon.utilities.VolleyPokemonDetail;
 
 public class PokemonDetailActivity extends AppCompatActivity {
@@ -89,12 +90,20 @@ public class PokemonDetailActivity extends AppCompatActivity {
             // set everything before having the detail of the pokemon
             this.beforeDetails();
 
+            VolleyEvolutionChain volleyEvolutionChain = new VolleyEvolutionChain(PokemonDetailActivity.this) {
+                @Override
+                public void fill(EvolutionDetail evolutionDetail) {
+
+                }
+            };
+
             VolleyPokemonDetail volley = new VolleyPokemonDetail(PokemonDetailActivity.this, pokemon) {
                 @Override
                 public void fill(Pokemon pokemon) {
                     // Set the reference to pokemon with details and call holder method
                     PokemonDetailActivity.this.pokemon = pokemon;
                     Holder.this.afterDetails();
+                    volleyEvolutionChain.getEvolutionChain(pokemon.getUrlEvolutionChain());
                 }
             };
 
@@ -183,7 +192,7 @@ public class PokemonDetailActivity extends AppCompatActivity {
                 Bundle arg = new Bundle();
                 arg.putString("name", StringManager.decapitalize(tv.getText().toString()));
                 fragmentAbility.setArguments(arg);
-                fragmentAbility.show(getSupportFragmentManager(), FragmentMoves.TAG);
+                fragmentAbility.show(getSupportFragmentManager(), FragmentAbility.TAG);
             }
         }
 
