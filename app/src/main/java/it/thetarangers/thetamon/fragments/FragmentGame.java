@@ -65,6 +65,7 @@ public class FragmentGame extends Fragment {
             holder.tilPokemonName.setError(null);
             holder.ivPokemon.setImageBitmap(bitmapNormal);
             holder.btnConfirm.setEnabled(false);
+            Objects.requireNonNull(holder.tilPokemonName.getEditText()).setEnabled(false);
             Toast.makeText(getContext(),"It' s correct",Toast.LENGTH_LONG).show();
 
         }else{
@@ -136,6 +137,7 @@ public class FragmentGame extends Fragment {
                 case R.id.btnNext:
                     btnConfirm.setEnabled(true);
                     tilPokemonName.setError(null);
+                    Objects.requireNonNull(holder.tilPokemonName.getEditText()).setEnabled(true);
                     startGame();
                     break;
                 case R.id.btnConfirm:
