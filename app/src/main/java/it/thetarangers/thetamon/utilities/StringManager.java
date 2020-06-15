@@ -1,5 +1,7 @@
 package it.thetarangers.thetamon.utilities;
 
+import android.content.Context;
+
 public class StringManager {
     public static String capitalize(String in) {
         String[] tmp = in.split("-");
@@ -24,5 +26,9 @@ public class StringManager {
 
     public static String format(String in) {
         return in.replace("\n", " ");
+    }
+
+    public static String formatFromR(Context context, int id, int value) {
+        return String.format("%s: %d", context.getResources().getString(id), value);
     }
 }

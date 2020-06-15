@@ -1,6 +1,7 @@
 package it.thetarangers.thetamon.utilities;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -12,6 +13,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 
+import org.apache.commons.io.output.ThresholdingOutputStream;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -78,10 +80,10 @@ public abstract class VolleyEvolutionChain implements Response.ErrorListener, Re
 
                 //Third evolutions
                 JSONArray thirdEvolutionJson = obj.getJSONArray("evolves_to");
-                if(thirdEvolutionJson.length() != 0) {
+                if (thirdEvolutionJson.length() != 0) {
                     List<EvolutionDetail> thirdEvolutions = new ArrayList<>();
 
-                    for(int j = 0; j < thirdEvolutionJson.length(); j++) {
+                    for (int j = 0; j < thirdEvolutionJson.length(); j++) {
                         JSONObject object = thirdEvolutionJson.getJSONObject(j);
 
                         EvolutionDetail evolutionDetail = parseEvolutionDetail(object);
@@ -111,67 +113,79 @@ public abstract class VolleyEvolutionChain implements Response.ErrorListener, Re
 
         if (!tmp.isNull("location")) {
             ev.setLocationName(context.getResources().getString(R.string.special_location));
+            ev.addCondition(context.getResources().getString(R.string.special_location));
         }
 
-        if(!tmp.isNull("known_move_type")){
+        if (!tmp.isNull("known_move_type")) {
             ev.setKnown_move_type(tmp.getJSONObject("known_move_type").getString("name"));
         }
 
-        if(!tmp.isNull("gender")){
+        if (!tmp.isNull("gender")) {
             ev.setGender(tmp.getInt("gender"));
         }
 
-
-        if(!tmp.isNull("held_item")){
+        if (!tmp.isNull("held_item")) {
             ev.setHeld_item(tmp.getJSONObject("held_item").getString("name"));
         }
 
-        if(!tmp.isNull("item")){
+        if (!tmp.isNull("item")) {
             ev.setItem(tmp.getJSONObject("item").getString("name"));
         }
 
-        if(!tmp.isNull("known_move")){
+        if (!tmp.isNull("known_move")) {
             ev.setKnown_move(tmp.getJSONObject("known_move").getString("name"));
         }
 
-        if(!tmp.isNull("min_affection")){
-            ev.setMin_affection(tmp.getInt("min_affection"));
+        // at affection XX
+        if (!tmp.isNull("min_affection")) {
+            Integer minAffection = tmp.getInt("min_affection");
+            ev.setMin_affection(minAffection);
+            ev.addCondition(StringManager.formatFromR(context, R.string.evo_affection, minAffection));
         }
 
-        if(!tmp.isNull("min_beauty")){
-            ev.setMin_beauty(tmp.getInt("min_beauty"));
+        // at beauty XX
+        if (!tmp.isNull("min_beauty")) {
+            Integer minBeauty = tmp.getInt("min_beauty");
+            ev.setMin_beauty(minBeauty);
+            ev.addCondition(StringManager.formatFromR(context, R.string.evo_beauty, minBeauty));
         }
 
-        if(!tmp.isNull("min_happiness")){
-            ev.setMin_happiness(tmp.getInt("min_happiness"));
+        // at happiness XX
+        if (!tmp.isNull("min_happiness")) {
+            Integer minHappiness = tmp.getInt("min_happinness");
+            ev.setMin_happiness(minHappiness);
+            ev.addCondition(StringManager.formatFromR(context, R.string.evo_happiness, minHappiness));
         }
 
-        if(!tmp.isNull("min_level")){
-            ev.setMin_level(tmp.getInt("min_level"));
+        // At level XX
+        if (!tmp.isNull("min_level")) {
+            Integer minLevel = tmp.getInt("min_level");
+            ev.setMin_level(minLevel);
+            ev.addCondition(StringManager.formatFromR(context, R.string.evo_level_up, minLevel));
         }
 
-        if(!tmp.isNull("party_species")){
+        if (!tmp.isNull("party_species")) {
             ev.setParty_species(tmp.getJSONObject("party_species").getString("party_species"));
         }
 
-        if(!tmp.isNull("party_type")){
+        if (!tmp.isNull("party_type")) {
             ev.setParty_type(tmp.getJSONObject("party_type").getString("party_type"));
         }
 
-        if(!tmp.isNull("relative_physical_stats")){
+        if (!tmp.isNull("relative_physical_stats")) {
             ev.setRelative_physical_stats(tmp.getInt("relative_physical_stats"));
         }
 
         String timeOfDay = tmp.getString("time_of_day");
-        if(!timeOfDay.equals("")){
+        if (!timeOfDay.equals("")) {
             ev.setTime_of_day(timeOfDay);
         }
 
-        if(!tmp.isNull("trade_species")){
+        if (!tmp.isNull("trade_species")) {
             ev.setTrade_species(tmp.getJSONObject("trade_species").getString("name"));
         }
 
-        if(!tmp.isNull("trigger")){
+        if (!tmp.isNull("trigger")) {
             ev.setTrigger(tmp.getJSONObject("trigger").getString("name"));
         }
 

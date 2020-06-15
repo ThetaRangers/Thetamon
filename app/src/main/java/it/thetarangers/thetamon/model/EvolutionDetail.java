@@ -1,8 +1,16 @@
 package it.thetarangers.thetamon.model;
 
+import android.content.Context;
+import android.content.res.Resources;
+import android.util.Log;
+
 import org.json.JSONObject;
 
+import java.lang.reflect.Field;
 import java.util.List;
+
+import it.thetarangers.thetamon.R;
+import it.thetarangers.thetamon.utilities.StringManager;
 
 public class EvolutionDetail {
     private Integer gender;
@@ -26,6 +34,8 @@ public class EvolutionDetail {
 
     private List<EvolutionDetail> nextPokemon;
     private String name;
+
+    private String evolutionCondition = "";
 
     public Integer getGender() {
         return gender;
@@ -185,5 +195,57 @@ public class EvolutionDetail {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void addCondition(String condition) {
+        this.evolutionCondition += ", " + condition;
+    }
+
+    public String getTriggerFormat(Context context) {
+        String result = "";
+        switch (this.getTrigger()) {
+            case "level-up":
+                result += context.getResources().getString(R.string.trigger_level_up);
+                break;
+            default:
+                break;
+        }
+        return result;
+    }
+
+    public String getEvolutionMethod(Context context) {
+        String result = "";
+
+        if (this.getTrigger() != null) {
+            result = this.getTriggerFormat(context);
+            result += this.evolutionCondition;
+        }
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "EvolutionDetail{" +
+                "gender=" + gender +
+                ", held_item='" + held_item + '\'' +
+                ", item='" + item + '\'' +
+                ", known_move='" + known_move + '\'' +
+                ", known_move_type='" + known_move_type + '\'' +
+                ", locationName='" + locationName + '\'' +
+                ", min_affection=" + min_affection +
+                ", min_beauty=" + min_beauty +
+                ", min_happiness=" + min_happiness +
+                ", min_level=" + min_level +
+                ", needs_overworld_rain=" + needs_overworld_rain +
+                ", party_species='" + party_species + '\'' +
+                ", party_type='" + party_type + '\'' +
+                ", relative_physical_stats=" + relative_physical_stats +
+                ", time_of_day='" + time_of_day + '\'' +
+                ", trade_species='" + trade_species + '\'' +
+                ", trigger='" + trigger + '\'' +
+                ", turn_upside_down=" + turn_upside_down +
+                ", nextPokemon=" + nextPokemon +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

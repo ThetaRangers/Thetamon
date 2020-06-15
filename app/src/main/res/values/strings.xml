@@ -49,4 +49,9 @@
     <string name="placeholder_name" translatable="false">Pikachu</string>
     <string name="game_error">Whoops, you are wrong!</string>
     <string name="game_correct">It\'s correct!</string>
+    <string name="trigger_level_up">Level up</string>
+    <string name="evo_level_up">at level</string>
+    <string name="evo_happiness">at happiness</string>
+    <string name="evo_beauty">at beauty</string>
+    <string name="evo_affection">at affection</string>
 </resources>

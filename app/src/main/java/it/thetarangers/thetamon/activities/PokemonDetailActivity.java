@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -118,7 +119,6 @@ public class PokemonDetailActivity extends AppCompatActivity {
 
             clBody = findViewById(R.id.clBody);
             clLoading = findViewById(R.id.clLoading);
-
 
 
             imageManager = new ImageManager();
@@ -266,13 +266,9 @@ public class PokemonDetailActivity extends AppCompatActivity {
 
         private void fillEvolution(EvolutionDetail firstEvolution) {
             MaterialCardView card = (MaterialCardView) View.inflate(PokemonDetailActivity.this, R.layout.item_evolution, null);
-            Pokemon firstPokemon = new Pokemon();
-            firstPokemon.setName(firstEvolution.getName());
-
-            fillCard(card, firstPokemon);
+            fillCard(card, firstEvolution);
 
             llEvolution1.addView(card);
-
             List<EvolutionDetail> secondEvolutions = firstEvolution.getNextPokemon();
 
             if (secondEvolutions != null) {
@@ -280,10 +276,8 @@ public class PokemonDetailActivity extends AppCompatActivity {
 
                 for (EvolutionDetail secondEvolution : secondEvolutions) {
                     card = (MaterialCardView) View.inflate(PokemonDetailActivity.this, R.layout.item_evolution, null);
-                    Pokemon pokemon = new Pokemon();
-                    pokemon.setName(secondEvolution.getName());
 
-                    fillCard(card, pokemon);
+                    fillCard(card, secondEvolution);
                     llEvolution2.addView(card);
 
                     List<EvolutionDetail> thirdEvolutions = secondEvolution.getNextPokemon();
@@ -294,9 +288,8 @@ public class PokemonDetailActivity extends AppCompatActivity {
                         for (EvolutionDetail thirdEvolution : thirdEvolutions) {
                             card = (MaterialCardView) View.inflate(PokemonDetailActivity.this, R.layout.item_evolution, null);
                             Pokemon pokemonThird = new Pokemon();
-                            pokemonThird.setName(thirdEvolution.getName());
 
-                            fillCard(card, pokemonThird);
+                            fillCard(card, thirdEvolution);
                             llEvolution3.addView(card);
                         }
                     }
@@ -305,9 +298,18 @@ public class PokemonDetailActivity extends AppCompatActivity {
             }
         }
 
-        private void fillCard(MaterialCardView card, Pokemon pokemon) {
+        private void fillCard(MaterialCardView card, EvolutionDetail evolutionDetail) {
+
+            Pokemon pokemon = new Pokemon();
+            pokemon.setName(evolutionDetail.getName());
+
+            Log.d("Tokyo", "Pokemon: " + pokemon.getName() +
+                    ", trigger: " + evolutionDetail.getEvolutionMethod(PokemonDetailActivity.this)
+                    + ", info: " + evolutionDetail.toString());
+
             DaoThread daoThread = new DaoThread();
             Handler handler = new Handler();
+
             TextView tvName = card.findViewById(R.id.tvName);
             ImageView ivPokemon = card.findViewById(R.id.ivPokemon);
 
