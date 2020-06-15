@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -70,6 +69,10 @@ public class PokemonDetailActivity extends AppCompatActivity {
 
         final TextView tvLoading, tvType1, tvType2;
 
+        final LinearLayout llEvolution1;
+        final LinearLayout llEvolution2;
+        final LinearLayout llEvolution3;
+
         final Button btnMoves;
 
         ImageManager imageManager;
@@ -100,6 +103,10 @@ public class PokemonDetailActivity extends AppCompatActivity {
 
             llAbilities = findViewById(R.id.llAbilities);
 
+            llEvolution1 = findViewById(R.id.llEvolution1);
+            llEvolution2 = findViewById(R.id.llEvolution2);
+            llEvolution3 = findViewById(R.id.llEvolution3);
+
             imageManager = new ImageManager();
 
             // set everything before having the detail of the pokemon
@@ -108,7 +115,8 @@ public class PokemonDetailActivity extends AppCompatActivity {
             VolleyEvolutionChain volleyEvolutionChain = new VolleyEvolutionChain(PokemonDetailActivity.this) {
                 @Override
                 public void fill(EvolutionDetail evolutionDetail) {
-
+                    fillEvolution(evolutionDetail);
+                    Holder.this.afterDetails();
                 }
             };
 
@@ -117,7 +125,6 @@ public class PokemonDetailActivity extends AppCompatActivity {
                 public void fill(Pokemon pokemon) {
                     // Set the reference to pokemon with details and call holder method
                     PokemonDetailActivity.this.pokemon = pokemon;
-                    Holder.this.afterDetails();
                     volleyEvolutionChain.getEvolutionChain(pokemon.getUrlEvolutionChain());
                 }
             };
@@ -181,18 +188,19 @@ public class PokemonDetailActivity extends AppCompatActivity {
             Resources res = getResources();
 
             //Fill text views with pokemon's details
-            tvHabitat.setText(String.format(Locale.getDefault(), "%s: %s",  res.getString(R.string.label_habitat), StringManager.capitalize(pokemon.getHabitat())));
-            tvHp.setText(String.format(Locale.getDefault(), "%s: %d",  res.getString(R.string.label_hp),  pokemon.getHp()));
-            tvAttack.setText(String.format(Locale.getDefault(), "%s: %d",  res.getString(R.string.label_attack),  pokemon.getAttack()));
-            tvDefense.setText(String.format(Locale.getDefault(), "%s: %d",  res.getString(R.string.label_defense),  pokemon.getDefense()));
-            tvSpecialAttack.setText(String.format(Locale.getDefault(), "%s: %d",  res.getString(R.string.label_special_attack),  pokemon.getSpecialAttack()));
-            tvSpecialDefense.setText(String.format(Locale.getDefault(), "%s: %d",  res.getString(R.string.label_special_defense),  pokemon.getSpecialDefense()));
-            tvSpeed.setText(String.format(Locale.getDefault(), "%s: %d",  res.getString(R.string.label_speed),  pokemon.getSpeed()));
+            tvHabitat.setText(String.format(Locale.getDefault(), "%s: %s", res.getString(R.string.label_habitat), StringManager.capitalize(pokemon.getHabitat())));
+            tvHp.setText(String.format(Locale.getDefault(), "%s: %d", res.getString(R.string.label_hp), pokemon.getHp()));
+            tvAttack.setText(String.format(Locale.getDefault(), "%s: %d", res.getString(R.string.label_attack), pokemon.getAttack()));
+            tvDefense.setText(String.format(Locale.getDefault(), "%s: %d", res.getString(R.string.label_defense), pokemon.getDefense()));
+            tvSpecialAttack.setText(String.format(Locale.getDefault(), "%s: %d", res.getString(R.string.label_special_attack), pokemon.getSpecialAttack()));
+            tvSpecialDefense.setText(String.format(Locale.getDefault(), "%s: %d", res.getString(R.string.label_special_defense), pokemon.getSpecialDefense()));
+            tvSpeed.setText(String.format(Locale.getDefault(), "%s: %d", res.getString(R.string.label_speed), pokemon.getSpeed()));
             tvFlavorText.setText(StringManager.format(pokemon.getFlavorText()));
+
+            fillAbilities(pokemon);
 
             // Start parsing moves from DB
             moves = pokemon.getMovesList();
-            fillAbilities(pokemon);
             DaoThread daoThread = new DaoThread();
 
             daoThread.getMoveDetails(PokemonDetailActivity.this, moves, handler, this::enableButton);
@@ -234,6 +242,43 @@ public class PokemonDetailActivity extends AppCompatActivity {
                 llAbilities.addView(card);
             }
         }
+
+        private void fillEvolution(EvolutionDetail firstEvolution) {
+            MaterialCardView card = (MaterialCardView) View.inflate(PokemonDetailActivity.this, R.layout.item_evolution, null);
+            TextView tvName = card.findViewById(R.id.tvName);
+
+            tvName.setText(firstEvolution.getName());
+
+            llEvolution1.addView(card);
+
+            List<EvolutionDetail> secondEvolutions = firstEvolution.getNextPokemon();
+
+            if (secondEvolutions != null) {
+                llEvolution2.setVisibility(View.VISIBLE);
+
+                for (EvolutionDetail secondEvolution : secondEvolutions) {
+                    card = (MaterialCardView) View.inflate(PokemonDetailActivity.this, R.layout.item_evolution, null);
+                    tvName = card.findViewById(R.id.tvName);
+                    tvName.setText(secondEvolution.getName());
+                    llEvolution2.addView(card);
+
+                    List<EvolutionDetail> thirdEvolutions = secondEvolution.getNextPokemon();
+
+                    if (thirdEvolutions != null) {
+                        llEvolution3.setVisibility(View.VISIBLE);
+
+                        for (EvolutionDetail thirdEvolution : thirdEvolutions) {
+                            card = (MaterialCardView) View.inflate(PokemonDetailActivity.this, R.layout.item_evolution, null);
+                            tvName = card.findViewById(R.id.tvName);
+                            tvName.setText(thirdEvolution.getName());
+                            llEvolution3.addView(card);
+                        }
+                    }
+                }
+
+            }
+        }
+
     }
 
 }

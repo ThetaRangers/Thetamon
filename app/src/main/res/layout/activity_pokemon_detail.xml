@@ -64,6 +64,8 @@
                 android:id="@+id/clBody"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/clSprite">
 
                 <LinearLayout
@@ -122,7 +124,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tvHp"
-                    tools:visibility="visible"/>
+                    tools:visibility="visible" />
 
 
                 <TextView
@@ -133,7 +135,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tvAttack"
-                    tools:visibility="visible"/>
+                    tools:visibility="visible" />
 
 
                 <TextView
@@ -144,7 +146,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tvDefense"
-                    tools:visibility="visible"/>
+                    tools:visibility="visible" />
 
 
                 <TextView
@@ -155,7 +157,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tvSpecialAttack"
-                    tools:visibility="visible"/>
+                    tools:visibility="visible" />
 
 
                 <TextView
@@ -214,7 +216,6 @@
                     android:id="@+id/btnMoves"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_large"
                     android:text="Moves"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -241,6 +242,51 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/btnMoves" />
+
+                <LinearLayout
+                    android:id="@+id/llEvolution1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/margin_medium"
+                    android:divider="@drawable/divider_empty"
+                    android:orientation="vertical"
+                    android:showDividers="middle"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/llEvolution2"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/llAbilities" />
+
+                <LinearLayout
+                    android:id="@+id/llEvolution2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_medium"
+                    android:layout_marginEnd="@dimen/margin_medium"
+                    android:divider="@drawable/divider_empty"
+                    android:orientation="vertical"
+                    android:showDividers="middle"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/llEvolution3"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/llEvolution1"
+                    app:layout_constraintTop_toBottomOf="@id/llAbilities" />
+
+                <LinearLayout
+                    android:id="@+id/llEvolution3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_medium"
+                    android:divider="@drawable/divider_empty"
+                    android:orientation="vertical"
+                    android:showDividers="middle"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/llEvolution2"
+                    app:layout_constraintTop_toBottomOf="@id/llAbilities" />
 
                 <TextView
                     android:id="@+id/tvFlavorText"
