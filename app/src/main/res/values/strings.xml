@@ -45,4 +45,6 @@
     <string name="label_special_defense">Special Defense</string>
     <string name="label_speed">Speed</string>
     <string name="label_ability_name">Ability</string>
+    <string name="placeholder_id" translatable="false">#123</string>
+    <string name="placeholder_name" translatable="false">Pikachu</string>
 </resources>

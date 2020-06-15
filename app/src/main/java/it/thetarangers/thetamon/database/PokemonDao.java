@@ -25,15 +25,20 @@ public abstract class PokemonDao {
     public abstract List<Pokemon> getPokemonFromId(int pokemonId);
 
     @Query("SELECT * FROM Pokemon WHERE name LIKE :name")
-    abstract List<Pokemon> getPokemonFromNameInterface(String name);
+    abstract List<Pokemon> getPokemonsFromNameInterface(String name);
 
-    public List<Pokemon> getPokemonsFromName(String name){
-        return getPokemonFromNameInterface(StringManager.decapitalize(name) + "%");
+    public List<Pokemon> getPokemonsFromName(String name) {
+        return getPokemonsFromNameInterface(StringManager.decapitalize(name) + "%");
     }
 
     @Query("SELECT * FROM Pokemon ORDER BY RANDOM() LIMIT 1;")
     public abstract Pokemon getRandomPokemon();
 
-    @Query("SELECT * FROM Pokemon WHERE name = :name")
-    public abstract Pokemon getPokemonFromName(String name);
+    @Query("SELECT * FROM Pokemon WHERE name LIKE :name LIMIT 1;")
+    public abstract Pokemon getPokemonFromNameInterface(String name);
+
+    public Pokemon getPokemonFromName(String name) {
+        return getPokemonFromNameInterface(name + "%");
+    }
+
 }

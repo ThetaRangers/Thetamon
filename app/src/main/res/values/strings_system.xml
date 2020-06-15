@@ -19,6 +19,5 @@
     <string name="url_move_detail" translatable="false">https://pokeapi.co/api/v2/move/</string>
     <string name="url_ability_detail" translatable="false">https://pokeapi.co/api/v2/ability/</string>
     <string name="url_damage_classes" translatable="false">https://pokeapi.co/api/v2/move-damage-class/%d</string>
-    <string name="placeholder_id">#123</string>
-    <string name="placeholder_name">Pikachu</string>
+    <string name="db_name" translatable="false">pokemonDb</string>
 </resources>

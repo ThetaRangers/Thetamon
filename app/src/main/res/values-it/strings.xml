@@ -35,4 +35,5 @@
     <string name="label_special_attack">Attacco Speciale</string>
     <string name="label_special_defense">Difesa Speciale</string>
     <string name="label_speed">Velocità</string>
+    <string name="label_ability_name">Abilità</string>
 </resources>
