@@ -36,4 +36,6 @@
     <string name="label_special_defense">Difesa Speciale</string>
     <string name="label_speed">Velocità</string>
     <string name="label_ability_name">Abilità</string>
+    <string name="game_correct">Giusto!</string>
+    <string name="game_error">Ops, hai sbagliato!</string>
 </resources>

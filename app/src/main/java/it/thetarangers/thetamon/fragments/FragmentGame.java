@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,8 +34,6 @@ import it.thetarangers.thetamon.utilities.StringManager;
 public class FragmentGame extends Fragment {
 
     private static String POKEMON = "poke";
-    private static String BITMAP_NORMAL = "bitmap_n";
-    private static String BITMAP_OBSCURE = "bitmap_o";
     private static String IS_CORRECT = "is_correct";
 
     Pokemon pokemon;
@@ -59,59 +56,52 @@ public class FragmentGame extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         holder = new Holder(view);
+        mp = MediaPlayer.create(getContext(), R.raw.game);
+        mp.setVolume((float) 1.5, (float) 1.5);
         if (savedInstanceState == null) {
-            mp = MediaPlayer.create(getContext(), R.raw.game);
-            mp.setVolume((float) 1.5, (float) 1.5);
             startGame();
         } else {
             pokemon = savedInstanceState.getParcelable(POKEMON);
-            bitmapNormal = savedInstanceState.getParcelable(BITMAP_NORMAL);
-            bitmapObscure = savedInstanceState.getParcelable(BITMAP_OBSCURE);
-            if (isCorrect = savedInstanceState.getBoolean(IS_CORRECT))
-                holder.win();
-            else
-                holder.ivPokemon.setImageBitmap(bitmapObscure);
+            isCorrect = savedInstanceState.getBoolean(IS_CORRECT);
+            loadImages(false);
         }
     }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         outState.putParcelable(POKEMON, pokemon);
-        outState.putParcelable(BITMAP_NORMAL, bitmapNormal);
-        outState.putParcelable(BITMAP_OBSCURE, bitmapObscure);
         outState.putBoolean(IS_CORRECT, isCorrect);
         super.onSaveInstanceState(outState);
     }
 
     private void tryName(String name) {
-
-        Log.d("POKE", "searched " + holder.tilPokemonName.getEditText().getText());
         if (pokemon.getName().equals(StringManager.decapitalize(name))) {
-            Log.d("POKE", "correct");
             holder.win();
             isCorrect = true;
-            Toast.makeText(getContext(), "It' s correct", Toast.LENGTH_LONG).show();
-
-        }else{
-            Log.d("POKE", "you're wrong");
-            holder.tilPokemonName.setError("OPS you' re wrong");
+            Toast.makeText(getContext(), getString(R.string.game_correct), Toast.LENGTH_LONG).show();
+        } else {
+            holder.tilPokemonName.setError(getString(R.string.game_error));
         }
-
 
     }
 
-
-    private void startGame() {
-        isCorrect = false;
-        mp.start();
-        Objects.requireNonNull(holder.tilPokemonName.getEditText()).clearFocus();
-        Objects.requireNonNull(holder.tilPokemonName.getEditText()).getText().clear();
+    private void loadImages(Boolean newPokemon) {
         Handler handler = new Handler();
-        Runnable runnable = () -> holder.ivPokemon.setImageBitmap(bitmapObscure);
+        Runnable runnable = () -> {
+            if (isCorrect) {
+                holder.win();
+            } else {
+                holder.ivPokemon.setImageBitmap(bitmapObscure);
+            }
+        };
+
         Thread thread = new Thread(() -> {
-            PokemonDao dao = PokemonDb.getInstance(getContext()).pokemonDao();
-            pokemon = dao.getRandomPokemon();
-            Log.d("POKE", "poke :" + pokemon.getName());
+
+            if (newPokemon) {
+                PokemonDao dao = PokemonDb.getInstance(getContext()).pokemonDao();
+                pokemon = dao.getRandomPokemon();
+            }
+
             bitmapNormal = imageManager.loadFromDisk(
                     requireContext().getFilesDir() +
                             requireContext().getString(R.string.sprites_front),
@@ -122,6 +112,14 @@ public class FragmentGame extends Fragment {
         });
 
         thread.start();
+    }
+
+    private void startGame() {
+        isCorrect = false;
+        mp.start();
+        loadImages(true);
+        Objects.requireNonNull(holder.tilPokemonName.getEditText()).clearFocus();
+        Objects.requireNonNull(holder.tilPokemonName.getEditText()).getText().clear();
     }
 
 
