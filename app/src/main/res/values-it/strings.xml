@@ -38,4 +38,6 @@
     <string name="label_ability_name">Abilità</string>
     <string name="game_correct">Giusto!</string>
     <string name="game_error">Ops, hai sbagliato!</string>
+    <string name="label_power">Potenza</string>
+    <string name="label_accuracy">Accuratezza</string>
 </resources>

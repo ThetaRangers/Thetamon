@@ -75,10 +75,14 @@ public abstract class VolleyMove implements Response.ErrorListener, Response.Lis
             if(!jsonObject.isNull("effect_chance")) {
                 int effect_chance = jsonObject.getInt("effect_chance");
 
-                String[] tmp1 = effect.split("\\$");
-                String[] tmp2 = tmp1[1].split("%");
+                if(effect.contains("%")) {
+                    String[] tmp1 = effect.split("\\$");
+                    String[] tmp2 = tmp1[1].split("%");
 
-                move.setEffect(tmp1[0].concat(effect_chance + tmp2[1]));
+                    move.setEffect(tmp1[0].concat(effect_chance + "%" + tmp2[1]));
+                } else {
+                    move.setEffect(effect);
+                }
             }
 
             JSONArray flavorTexts = jsonObject.getJSONArray("flavor_text_entries");

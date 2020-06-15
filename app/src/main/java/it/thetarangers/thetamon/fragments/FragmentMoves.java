@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,6 +29,7 @@ import it.thetarangers.thetamon.model.Move;
 import it.thetarangers.thetamon.model.MoveDamageClass;
 import it.thetarangers.thetamon.utilities.StringManager;
 import it.thetarangers.thetamon.utilities.TypeTextViewManager;
+import it.thetarangers.thetamon.utilities.VolleyMove;
 
 public class FragmentMoves extends BottomSheetDialogFragment {
 
@@ -35,6 +37,7 @@ public class FragmentMoves extends BottomSheetDialogFragment {
     public static String MOVES = "moves";
     Holder holder;
     private List<Move> moveList;
+    private Boolean[] isSearched;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -48,6 +51,13 @@ public class FragmentMoves extends BottomSheetDialogFragment {
         super.onViewCreated(view, savedInstanceState);
         assert getArguments() != null;
         this.moveList = getArguments().getParcelableArrayList(MOVES);
+        assert moveList != null;
+        isSearched = new Boolean[moveList.size()];
+
+        for (int i = 0; i < moveList.size(); i++) {
+            isSearched[i] = false;
+        }
+
         holder = new Holder(view);
 
         BottomSheetDialog dialog = (BottomSheetDialog) this.getDialog();
@@ -57,34 +67,10 @@ public class FragmentMoves extends BottomSheetDialogFragment {
         behavior.setSkipCollapsed(true);
     }
 
-    static class MoveHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView tvMove;
-        TextView tvMoveType;
-        TextView tvLearnMethod;
-        TextView tvLevel;
-        ImageView ivDamageClass;
 
-        public MoveHolder(@NonNull View itemView) {
-            super(itemView);
+    class MovesAdapter extends RecyclerView.Adapter<MovesAdapter.MoveHolder> {
 
-            tvMove = itemView.findViewById(R.id.tvMove);
-            tvMoveType = itemView.findViewById(R.id.tvMoveType);
-            tvLevel = itemView.findViewById(R.id.tvLevel);
-            tvLearnMethod = itemView.findViewById(R.id.tvLearnMethod);
-            ivDamageClass = itemView.findViewById(R.id.ivDamageClass);
-            itemView.setOnClickListener(this);
-        }
-
-
-        @Override
-        public void onClick(View v) {
-            // TODO
-        }
-
-    }
-
-    class MovesAdapter extends RecyclerView.Adapter<MoveHolder> {
-
+        public int mExpandedPosition = -1;
         private List<Move> moveList;
 
         MovesAdapter(List<Move> moveList) {
@@ -105,7 +91,35 @@ public class FragmentMoves extends BottomSheetDialogFragment {
 
         @Override
         public void onBindViewHolder(@NonNull MoveHolder holder, int position) {
+            final boolean isExpanded = position == mExpandedPosition;
+            holder.clHidden.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
+
+            if (isExpanded && !isSearched[position]) {
+                VolleyMove vm = new VolleyMove(getContext()) {
+                    @Override
+                    public void fill(Move move) {
+                        isSearched[position] = true;
+
+                        Move tmp = moveList.get(position);
+                        tmp.setEffect(move.getEffect());
+                        tmp.setAccuracy(move.getAccuracy());
+                        tmp.setFlavorText(move.getFlavorText());
+                        tmp.setPower(move.getPower());
+                        tmp.setPp(move.getPp());
+
+                        fillMoveDetails(holder, move);
+                    }
+                };
+
+                vm.getMoveDetail(moveList.get(position));
+            }
+
             Move move = moveList.get(position);
+
+
+            if(isSearched[position]) {
+                fillMoveDetails(holder, move);
+            }
 
             holder.tvMove.setText(StringManager.capitalize(move.getName()));
             holder.tvLearnMethod.setText(String.format(Locale.getDefault(),
@@ -147,17 +161,87 @@ public class FragmentMoves extends BottomSheetDialogFragment {
         public int getItemCount() {
             return moveList.size();
         }
+
+        private void fillMoveDetails(MoveHolder holder, Move move) {
+            if (move.getPower() == null) {
+                holder.tvPower.setText(String.format("%s: -", getResources().getString(R.string.label_power)));
+            } else {
+                holder.tvPower.setText(StringManager.formatFromR(requireContext(), R.string.label_power, move.getPower()));
+            }
+
+            if (move.getAccuracy() == null) {
+                holder.tvAccuracy.setText(String.format("%s: —", getResources().getString(R.string.label_accuracy)));
+            } else {
+                holder.tvAccuracy.setText(StringManager.formatFromR(requireContext(), R.string.label_accuracy, move.getAccuracy()));
+            }
+
+            holder.tvPP.setText(StringManager.formatFromR(requireContext(), R.string.label_pp, move.getPp()));
+            holder.tvFlavor.setText(move.getFlavorText());
+
+            String effect = move.getEffect();
+            if (effect == null) {
+                holder.tvEffect.setVisibility(View.GONE);
+            } else {
+                holder.tvEffect.setText(effect);
+            }
+        }
+
+        class MoveHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+            TextView tvMove;
+            TextView tvMoveType;
+            TextView tvLearnMethod;
+            TextView tvLevel;
+            TextView tvPower;
+            TextView tvPP;
+            TextView tvAccuracy;
+            TextView tvEffect;
+            TextView tvFlavor;
+            ImageView ivDamageClass;
+            ConstraintLayout clHidden;
+
+            public MoveHolder(@NonNull View itemView) {
+                super(itemView);
+
+                clHidden = itemView.findViewById(R.id.clHidden);
+                tvMove = itemView.findViewById(R.id.tvMove);
+                tvMoveType = itemView.findViewById(R.id.tvMoveType);
+                tvLevel = itemView.findViewById(R.id.tvLevel);
+                tvLearnMethod = itemView.findViewById(R.id.tvLearnMethod);
+                ivDamageClass = itemView.findViewById(R.id.ivDamageClass);
+                tvPower = itemView.findViewById(R.id.tvPower);
+                tvPP = itemView.findViewById(R.id.tvPP);
+                tvAccuracy = itemView.findViewById(R.id.tvAccuracy);
+                tvEffect = itemView.findViewById(R.id.tvEffect);
+                tvFlavor = itemView.findViewById(R.id.tvFlavor);
+
+                itemView.setOnClickListener(this);
+            }
+
+
+            @Override
+            public void onClick(View v) {
+                int position = getAbsoluteAdapterPosition();
+                boolean isExpanded = position == mExpandedPosition;
+                mExpandedPosition = isExpanded ? -1 : position;
+                notifyDataSetChanged();
+            }
+        }
     }
 
     class Holder {
+        final RecyclerView rvMoves;
+        final ConstraintLayout clHidden;
 
         Holder(View fm) {
+            clHidden = fm.findViewById(R.id.clHidden);
+
             DisplayMetrics displayMetrics = new DisplayMetrics();
+
             requireActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
             int height = (int) (displayMetrics.heightPixels * 0.60);
 
             // Init RecyclerView
-            RecyclerView rvMoves = fm.findViewById(R.id.rvMoves);
+            rvMoves = fm.findViewById(R.id.rvMoves);
             rvMoves.setLayoutManager(new LinearLayoutManager(requireContext()));
             MovesAdapter movesAdapter = new MovesAdapter(moveList);
             rvMoves.setAdapter(movesAdapter);

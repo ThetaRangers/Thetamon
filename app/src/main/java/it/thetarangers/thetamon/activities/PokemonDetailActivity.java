@@ -312,6 +312,7 @@ public class PokemonDetailActivity extends AppCompatActivity {
 
             TextView tvName = card.findViewById(R.id.tvName);
             ImageView ivPokemon = card.findViewById(R.id.ivPokemon);
+            Log.d("POKE", "AAAAAAAAAAAAAAAAAAAA" + pokemon.getName());
 
             Runnable runnable = () -> {
                 ivPokemon.setImageBitmap(imageManager.loadFromDisk(
