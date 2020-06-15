@@ -178,9 +178,10 @@ public class PokemonDetailActivity extends AppCompatActivity {
             tvLoading.setVisibility(View.INVISIBLE);
             tvLoading.setText("");
 
-            //Fill text views with pokemon's details
-            tvHabitat.setText(StringManager.capitalize(pokemon.getHabitat()));
             Resources res = getResources();
+
+            //Fill text views with pokemon's details
+            tvHabitat.setText(String.format(Locale.getDefault(), "%s: %s",  res.getString(R.string.label_habitat), StringManager.capitalize(pokemon.getHabitat())));
             tvHp.setText(String.format(Locale.getDefault(), "%s: %d",  res.getString(R.string.label_hp),  pokemon.getHp()));
             tvAttack.setText(String.format(Locale.getDefault(), "%s: %d",  res.getString(R.string.label_attack),  pokemon.getAttack()));
             tvDefense.setText(String.format(Locale.getDefault(), "%s: %d",  res.getString(R.string.label_defense),  pokemon.getDefense()));

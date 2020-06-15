@@ -27,7 +27,7 @@
     <string name="reset_data_exit">EXIT</string>
     <string name="reset_data_dialog">By clicking on \"RESET\" you will lose all of your favorite Pokémons!</string>
     <string name="warning">Warning!</string>
-    <string name="habitat_name" translatable="false">Habitat</string>
+    <string name="label_habitat" translatable="false">Habitat</string>
     <string name="stat_hp" translatable="false">Hp</string>
     <string name="no_habitat">Unknown</string>
     <string name="fetchingResult">Fetching result from API, please wait…</string>
