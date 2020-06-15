@@ -116,6 +116,10 @@ public class Pokemon implements Parcelable {
         }
     };
 
+    public Pokemon() {
+
+    }
+
     public int setIdFromUrl() {
         //Parse URL to get id
         String temp = this.url;

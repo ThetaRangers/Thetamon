@@ -115,4 +115,26 @@ public class DaoThread {
 
         new Thread(runnable).start();
     }
+
+    public void getPokemonFromName(final Context context, final Pokemon pokemon, Handler handler, Runnable update) {
+
+        Runnable runnable = () -> {
+            PokemonDb db = PokemonDb.getInstance(context);
+            PokemonDao dao = db.pokemonDao();
+
+            Pokemon tmp = dao.getPokemonFromName(pokemon.getName());
+
+            pokemon.setAverageColor(tmp.getAverageColor());
+            pokemon.setId(tmp.getId());
+            pokemon.setUrl(tmp.getUrl());
+            pokemon.setType1(tmp.getType1());
+            pokemon.setType2(tmp.getType2());
+
+            if (handler != null) {
+                handler.post(update);
+            }
+        };
+
+        new Thread(runnable).start();
+    }
 }

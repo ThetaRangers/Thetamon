@@ -186,7 +186,6 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHold
                         Intent data = new Intent(context, PokemonDetailActivity.class);
                         data.putExtra("pokemon", pokemonList.get(i));
 
-                        // TODO: make it work with tvId and tvName
                         ActivityOptions options = ActivityOptions
                                 .makeSceneTransitionAnimation(context,
                                         Pair.create(imageView, "cardExpansion"),
