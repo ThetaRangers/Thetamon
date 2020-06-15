@@ -10,9 +10,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.imageview.ShapeableImageView;
@@ -76,6 +78,10 @@ public class PokemonDetailActivity extends AppCompatActivity {
 
         final Button btnMoves;
 
+        final ProgressBar progressBar;
+
+        final ConstraintLayout clBody, clLoading;
+
         ImageManager imageManager;
 
         Holder() {
@@ -107,6 +113,13 @@ public class PokemonDetailActivity extends AppCompatActivity {
             llEvolution1 = findViewById(R.id.llEvolution1);
             llEvolution2 = findViewById(R.id.llEvolution2);
             llEvolution3 = findViewById(R.id.llEvolution3);
+
+            progressBar = findViewById(R.id.progressBar);
+
+            clBody = findViewById(R.id.clBody);
+            clLoading = findViewById(R.id.clLoading);
+
+
 
             imageManager = new ImageManager();
 
@@ -172,8 +185,10 @@ public class PokemonDetailActivity extends AppCompatActivity {
                     .build());
 
 
-            //set the loading textView to visible
-            tvLoading.setVisibility(View.VISIBLE);
+            //set the loading views to visible
+            clLoading.setVisibility(View.VISIBLE);
+            clBody.setVisibility(View.INVISIBLE);
+
         }
 
         void enableButton() {
@@ -183,8 +198,10 @@ public class PokemonDetailActivity extends AppCompatActivity {
         void afterDetails() {
 
             // set the loading textView to invisible
-            tvLoading.setVisibility(View.INVISIBLE);
-            tvLoading.setText("");
+            runOnUiThread(() -> {
+                clBody.setVisibility(View.VISIBLE);
+                clLoading.setVisibility(View.INVISIBLE);
+            });
 
             Resources res = getResources();
 
@@ -216,7 +233,8 @@ public class PokemonDetailActivity extends AppCompatActivity {
                 args.putParcelableArrayList(FragmentMoves.MOVES, (ArrayList<? extends Parcelable>) moves);
                 fragmentMoves.setArguments(args);
                 fragmentMoves.show(getSupportFragmentManager(), FragmentMoves.TAG);
-            } if(v.getId() == R.id.cvAbility) {
+            }
+            if (v.getId() == R.id.cvAbility) {
                 FragmentAbility fragmentAbility = new FragmentAbility();
 
                 TextView tv = v.findViewById(R.id.tvAbility);
@@ -231,7 +249,7 @@ public class PokemonDetailActivity extends AppCompatActivity {
         private void fillAbilities(Pokemon pokemon) {
             List<Ability> abilityList = pokemon.getAbilityList();
 
-            for(int i = 0; i < abilityList.size(); i++) {
+            for (int i = 0; i < abilityList.size(); i++) {
 
                 MaterialCardView card = (MaterialCardView) View.inflate(PokemonDetailActivity.this, R.layout.item_ability, null);
                 TextView tvAbility = card.findViewById(R.id.tvAbility);
@@ -242,6 +260,8 @@ public class PokemonDetailActivity extends AppCompatActivity {
 
                 llAbilities.addView(card);
             }
+
+
         }
 
         private void fillEvolution(EvolutionDetail firstEvolution) {
@@ -292,17 +312,17 @@ public class PokemonDetailActivity extends AppCompatActivity {
             ImageView ivPokemon = card.findViewById(R.id.ivPokemon);
 
             Runnable runnable = () -> {
-                    ivPokemon.setImageBitmap(imageManager.loadFromDisk(
-                            PokemonDetailActivity.this.getFilesDir() + PokemonDetailActivity.this.getString(R.string.sprites_front),
-                            pokemon.getId() + PokemonDetailActivity.this.getString(R.string.extension)));
-                    card.setCardBackgroundColor(Color.parseColor(pokemon.getAverageColor()));
+                ivPokemon.setImageBitmap(imageManager.loadFromDisk(
+                        PokemonDetailActivity.this.getFilesDir() + PokemonDetailActivity.this.getString(R.string.sprites_front),
+                        pokemon.getId() + PokemonDetailActivity.this.getString(R.string.extension)));
+                card.setCardBackgroundColor(Color.parseColor(pokemon.getAverageColor()));
 
-                    card.setOnClickListener(v -> {
-                        Intent data = new Intent(PokemonDetailActivity.this, PokemonDetailActivity.class);
-                        data.putExtra("pokemon", pokemon);
+                card.setOnClickListener(v -> {
+                    Intent data = new Intent(PokemonDetailActivity.this, PokemonDetailActivity.class);
+                    data.putExtra("pokemon", pokemon);
 
-                        startActivity(data);
-                    });
+                    startActivity(data);
+                });
             };
 
             tvName.setText(StringManager.capitalize(pokemon.getName()));
