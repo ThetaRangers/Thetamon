@@ -304,8 +304,11 @@ public class PokemonDetailActivity extends AppCompatActivity {
             pokemon.setName(evolutionDetail.getName());
 
             Log.d("Tokyo", "Pokemon: " + pokemon.getName() +
-                    ", trigger: " + evolutionDetail.getEvolutionMethod(PokemonDetailActivity.this)
-                    + ", info: " + evolutionDetail.toString());
+                    ", trigger: " + evolutionDetail.getEvolutionMethod(PokemonDetailActivity.this));
+
+            Log.d("Japan", "Pokemon: " + pokemon.getName() +
+                    ", trigger: " + evolutionDetail.getEvolutionMethod(PokemonDetailActivity.this) +
+                    ", info: " + evolutionDetail.toString());
 
             DaoThread daoThread = new DaoThread();
             Handler handler = new Handler();

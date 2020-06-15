@@ -50,10 +50,29 @@
     <string name="game_error">Whoops, you are wrong!</string>
     <string name="game_correct">It\'s correct!</string>
     <string name="trigger_level_up">Level up</string>
+    <string name="trigger_trade">Trade</string>
+    <string name="trigger_item">Use item</string>
+    <string name="trigger_shed">Level up, at level: 20, with a free space in the party</string>
     <string name="evo_level_up">at level</string>
     <string name="evo_happiness">at happiness</string>
     <string name="evo_beauty">at beauty</string>
     <string name="evo_affection">at affection</string>
+    <string name="evo_held_item">helding item</string>
+    <string name="evo_item">item</string>
+    <string name="evo_time_of_day">time of day</string>
+    <string name="evo_known_type_move">knows a move of type</string>
+    <string name="evo_location">needs a special locations</string>
+    <string name="evo_gender">gender is</string>
+    <string name="evo_party_type">a pokemon in the party is type</string>
+    <string name="evo_knwon_move">knows the move</string>
+    <string name="evo_party_specie">a %s is in the party</string>
+    <string name="evo_relative_1">attack is higher than defense</string>
+    <string name="evo_relative_minus1">defense is higher than attack</string>
+    <string name="evo_relative_0">attack is equal to defense</string>
+    <string name="evo_trade_specie">traded with</string>
+    <string name="evo_upside_down">while console is upside down</string>
+    <string name="evo_overworld_rain">while it\'s raining</string>
+
     <string name="label_power">Power</string>
     <string name="label_accuracy">Accuracy</string>
     <string name="label_pp" translatable="false">PP</string>

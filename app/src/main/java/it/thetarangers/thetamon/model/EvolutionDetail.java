@@ -205,9 +205,19 @@ public class EvolutionDetail {
         String result = "";
         switch (this.getTrigger()) {
             case "level-up":
-                result += context.getResources().getString(R.string.trigger_level_up);
+                result = context.getResources().getString(R.string.trigger_level_up);
+                break;
+            case "trade":
+                result = context.getResources().getString(R.string.trigger_trade);
+                break;
+            case "use-item":
+                result = context.getResources().getString(R.string.trigger_item);
+                break;
+            case "shed":
+                result = context.getResources().getString(R.string.trigger_shed);
                 break;
             default:
+                result = this.getTrigger();
                 break;
         }
         return result;

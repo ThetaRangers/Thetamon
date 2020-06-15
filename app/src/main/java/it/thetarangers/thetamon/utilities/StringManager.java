@@ -31,4 +31,8 @@ public class StringManager {
     public static String formatFromR(Context context, int id, int value) {
         return String.format("%s: %d", context.getResources().getString(id), value);
     }
+
+    public static String formatFromR(Context context, int id, String value) {
+        return String.format("%s: %s", context.getResources().getString(id), value);
+    }
 }

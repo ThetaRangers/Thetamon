@@ -111,29 +111,55 @@ public abstract class VolleyEvolutionChain implements Response.ErrorListener, Re
 
         EvolutionDetail ev = new EvolutionDetail();
 
+        // needs a special location
         if (!tmp.isNull("location")) {
             ev.setLocationName(context.getResources().getString(R.string.special_location));
-            ev.addCondition(context.getResources().getString(R.string.special_location));
+            ev.addCondition(context.getResources().getString(R.string.evo_location));
         }
 
+        // knowing a move of type XX
         if (!tmp.isNull("known_move_type")) {
-            ev.setKnown_move_type(tmp.getJSONObject("known_move_type").getString("name"));
+            String knownMoveType = tmp.getJSONObject("known_move_type").getString("name");
+            ev.setKnown_move_type(knownMoveType);
+            ev.addCondition(StringManager.formatFromR(context, R.string.evo_known_type_move, knownMoveType));
         }
 
+        // gender is XX
         if (!tmp.isNull("gender")) {
-            ev.setGender(tmp.getInt("gender"));
+            Integer gender = tmp.getInt("gender");
+            ev.setGender(gender);
+            String genderFormat = "";
+            switch (gender){
+                case 1:
+                    genderFormat = "female";
+                    break;
+                case 2:
+                    genderFormat = "male";
+                    break;
+            }
+            ev.addCondition(StringManager.formatFromR(context, R.string.evo_gender, genderFormat));
+
         }
 
+        // helding item XX
         if (!tmp.isNull("held_item")) {
-            ev.setHeld_item(tmp.getJSONObject("held_item").getString("name"));
+            String heldItem = tmp.getJSONObject("held_item").getString("name");
+            ev.setHeld_item(heldItem);
+            ev.addCondition(StringManager.formatFromR(context, R.string.evo_held_item, heldItem));
         }
 
+        // item XX
         if (!tmp.isNull("item")) {
-            ev.setItem(tmp.getJSONObject("item").getString("name"));
+            String item = tmp.getJSONObject("item").getString("name");
+            ev.setItem(item);
+            ev.addCondition(StringManager.formatFromR(context, R.string.evo_item, item));
         }
 
+        // knowing the move XX
         if (!tmp.isNull("known_move")) {
-            ev.setKnown_move(tmp.getJSONObject("known_move").getString("name"));
+            String knownMove = tmp.getJSONObject("known_move").getString("name");
+            ev.setKnown_move(knownMove);
+            ev.addCondition(StringManager.formatFromR(context, R.string.evo_knwon_move, knownMove));
         }
 
         // at affection XX
@@ -152,7 +178,7 @@ public abstract class VolleyEvolutionChain implements Response.ErrorListener, Re
 
         // at happiness XX
         if (!tmp.isNull("min_happiness")) {
-            Integer minHappiness = tmp.getInt("min_happinness");
+            Integer minHappiness = tmp.getInt("min_happiness");
             ev.setMin_happiness(minHappiness);
             ev.addCondition(StringManager.formatFromR(context, R.string.evo_happiness, minHappiness));
         }
@@ -164,35 +190,71 @@ public abstract class VolleyEvolutionChain implements Response.ErrorListener, Re
             ev.addCondition(StringManager.formatFromR(context, R.string.evo_level_up, minLevel));
         }
 
+        // a XX is in the party
         if (!tmp.isNull("party_species")) {
-            ev.setParty_species(tmp.getJSONObject("party_species").getString("party_species"));
+            String partySpecies = tmp.getJSONObject("party_species").getString("name");
+            ev.setParty_species(partySpecies);
+            ev.addCondition(String.format(context.getResources().getString(R.string.evo_party_specie), partySpecies));
         }
 
+        // a pokemon in the party is type XX
         if (!tmp.isNull("party_type")) {
-            ev.setParty_type(tmp.getJSONObject("party_type").getString("party_type"));
+            String partyType = tmp.getJSONObject("party_type").getString("name");
+            ev.setParty_type(partyType);
+            ev.addCondition(StringManager.formatFromR(context, R.string.evo_party_type, partyType));
         }
 
+        // attack is higher than defense
         if (!tmp.isNull("relative_physical_stats")) {
-            ev.setRelative_physical_stats(tmp.getInt("relative_physical_stats"));
+            Integer relative = tmp.getInt("relative_physical_stats");
+            ev.setRelative_physical_stats(relative);
+            switch (relative){
+                case 1:
+                    ev.addCondition(context.getResources().getString(R.string.evo_relative_1));
+                    break;
+                    case -1:
+                    ev.addCondition(context.getResources().getString(R.string.evo_relative_minus1));
+                    break;
+                    case 0:
+                    ev.addCondition(context.getResources().getString(R.string.evo_relative_0));
+                    break;
+            }
         }
 
+        // time of day XX
         String timeOfDay = tmp.getString("time_of_day");
         if (!timeOfDay.equals("")) {
             ev.setTime_of_day(timeOfDay);
+            ev.addCondition(StringManager.formatFromR(context, R.string.evo_time_of_day, timeOfDay));
+
         }
 
+        // traded with XX
         if (!tmp.isNull("trade_species")) {
-            ev.setTrade_species(tmp.getJSONObject("trade_species").getString("name"));
+            String tradeSpecie = tmp.getJSONObject("trade_species").getString("name");
+            ev.setTrade_species(tradeSpecie);
+            ev.addCondition(StringManager.formatFromR(context, R.string.evo_trade_specie, tradeSpecie));
         }
 
+        // don't care
         if (!tmp.isNull("trigger")) {
             ev.setTrigger(tmp.getJSONObject("trigger").getString("name"));
         }
 
-        Log.d("POKE", tmp.getJSONObject("trigger").getString("name"));
+        // while console is upside down
+        Boolean turnUpsideDown = tmp.getBoolean("turn_upside_down");
+        ev.setTurn_upside_down(turnUpsideDown);
+        if(turnUpsideDown){
+            ev.addCondition(context.getResources().getString(R.string.evo_upside_down));
+        }
 
-        ev.setTurn_upside_down(tmp.getBoolean("turn_upside_down"));
-        ev.setNeeds_overworld_rain(tmp.getBoolean("needs_overworld_rain"));
+        // while it's raining
+        Boolean overworldRain = tmp.getBoolean("needs_overworld_rain");
+        ev.setNeeds_overworld_rain(overworldRain);
+        if(overworldRain){
+            ev.addCondition(context.getResources().getString(R.string.evo_overworld_rain));
+        }
+
         ev.setName(obj.getJSONObject("species").getString("name"));
 
         return ev;
