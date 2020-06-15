@@ -1,16 +1,17 @@
 package it.thetarangers.thetamon.fragments;
 
-import android.content.Intent;
+import android.app.ActivityManager;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.preference.Preference;
 import androidx.preference.PreferenceDialogFragmentCompat;
 import androidx.preference.PreferenceFragmentCompat;
 
+import java.util.Objects;
+
 import it.thetarangers.thetamon.R;
-import it.thetarangers.thetamon.activities.MainActivity;
 import it.thetarangers.thetamon.activities.PokedexActivity;
-import it.thetarangers.thetamon.utilities.PreferencesHandler;
 
 public class FragmentSettings extends PreferenceFragmentCompat implements Preference.OnPreferenceChangeListener {
 
@@ -55,10 +56,8 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Prefer
         @Override
         public void onDialogClosed(boolean positiveResult) {
             if (positiveResult) {
-                PreferencesHandler.setIsFirstUse(requireContext(), true);
-                Intent intent = new Intent(requireContext(), MainActivity.class);
-                startActivity(intent);
-                requireActivity().finish();
+                ((ActivityManager) Objects.requireNonNull(requireContext()
+                        .getSystemService(Context.ACTIVITY_SERVICE))).clearApplicationUserData();
             }
         }
 

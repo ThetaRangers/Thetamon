@@ -130,14 +130,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void cleanUpInternal() {
-        try {
-            FileUtils.forceDelete(getFilesDir());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     private void avgColor(List<Pokemon> pokemons) {
         ImageManager imageManager = new ImageManager();
 
@@ -200,9 +192,6 @@ public class MainActivity extends AppCompatActivity {
     class MainActivityRunnable implements Runnable {
         @Override
         public void run() {
-
-            // Remove resources already in internal memory
-            cleanUpInternal();
 
             // Remove files in external memory
             cleanUpExternal();
