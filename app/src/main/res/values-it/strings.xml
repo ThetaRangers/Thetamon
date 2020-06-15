@@ -30,4 +30,9 @@
     <string name="label_ability">Abilità</string>
     <string name="level_learned">Appresa al livello:</string>
     <string name="learn_method">Appresa tramite:</string>
+    <string name="label_attack">Attacco</string>
+    <string name="label_defense">Difesa</string>
+    <string name="label_special_attack">Attacco Speciale</string>
+    <string name="label_special_defense">Difesa Speciale</string>
+    <string name="label_speed">Velocità</string>
 </resources>

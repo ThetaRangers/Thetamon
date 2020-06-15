@@ -38,4 +38,10 @@
     <string name="label_ability">Abilities</string>
     <string name="learn_method">Learn method:</string>
     <string name="level_learned">Learned at level:</string>
+    <string name="label_hp" translatable="false">Hp</string>
+    <string name="label_attack">Attack</string>
+    <string name="label_defense">Defense</string>
+    <string name="label_special_attack">Special Attack</string>
+    <string name="label_special_defense">Special Defense</string>
+    <string name="label_speed">Speed</string>
 </resources>

@@ -1,5 +1,6 @@
 package it.thetarangers.thetamon.activities;
 
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,6 +20,7 @@ import com.google.android.material.shape.CornerFamily;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import it.thetarangers.thetamon.R;
 import it.thetarangers.thetamon.database.DaoThread;
@@ -58,6 +60,12 @@ public class PokemonDetailActivity extends AppCompatActivity {
         final TextView tvID;
         final TextView tvHabitat;
         final TextView tvHp;
+        final TextView tvAttack;
+        final TextView tvDefense;
+        final TextView tvSpecialAttack;
+        final TextView tvSpecialDefense;
+        final TextView tvSpeed;
+        final TextView tvFlavorText;
         final LinearLayout llAbilities;
 
         final TextView tvLoading, tvType1, tvType2;
@@ -74,6 +82,13 @@ public class PokemonDetailActivity extends AppCompatActivity {
             ivSprite = findViewById(R.id.ivSprite);
             ivOverlay = findViewById(R.id.ivOverlay);
             tvHp = findViewById(R.id.tvHp);
+            tvAttack = findViewById(R.id.tvAttack);
+            tvDefense = findViewById(R.id.tvDefense);
+            tvSpecialAttack = findViewById(R.id.tvSpecialAttack);
+            tvSpecialDefense = findViewById(R.id.tvSpecialDefense);
+            tvSpeed = findViewById(R.id.tvSpeed);
+
+            tvFlavorText = findViewById(R.id.tvFlavorText);
 
             tvLoading = findViewById(R.id.tvLoading);
             tvType1 = findViewById(R.id.tvType1);
@@ -165,7 +180,14 @@ public class PokemonDetailActivity extends AppCompatActivity {
 
             //Fill text views with pokemon's details
             tvHabitat.setText(StringManager.capitalize(pokemon.getHabitat()));
-            tvHp.setText("Base HP: " + pokemon.getHp());
+            Resources res = getResources();
+            tvHp.setText(String.format(Locale.getDefault(), "%s: %d",  res.getString(R.string.label_hp),  pokemon.getHp()));
+            tvAttack.setText(String.format(Locale.getDefault(), "%s: %d",  res.getString(R.string.label_attack),  pokemon.getAttack()));
+            tvDefense.setText(String.format(Locale.getDefault(), "%s: %d",  res.getString(R.string.label_defense),  pokemon.getDefense()));
+            tvSpecialAttack.setText(String.format(Locale.getDefault(), "%s: %d",  res.getString(R.string.label_special_attack),  pokemon.getSpecialAttack()));
+            tvSpecialDefense.setText(String.format(Locale.getDefault(), "%s: %d",  res.getString(R.string.label_special_defense),  pokemon.getSpecialDefense()));
+            tvSpeed.setText(String.format(Locale.getDefault(), "%s: %d",  res.getString(R.string.label_speed),  pokemon.getSpeed()));
+            tvFlavorText.setText(StringManager.format(pokemon.getFlavorText()));
 
             // Start parsing moves from DB
             moves = pokemon.getMovesList();
