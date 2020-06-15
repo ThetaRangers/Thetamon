@@ -44,4 +44,5 @@
     <string name="label_special_attack">Special Attack</string>
     <string name="label_special_defense">Special Defense</string>
     <string name="label_speed">Speed</string>
+    <string name="label_ability_name">Ability</string>
 </resources>
