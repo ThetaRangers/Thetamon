@@ -117,6 +117,8 @@ public class FragmentMoves extends BottomSheetDialogFragment {
                         "%s %d", getString(R.string.level_learned),
                         move.getLevel()));
                 holder.tvLevel.setVisibility(View.VISIBLE);
+            } else {
+                holder.tvLevel.setVisibility(View.GONE);
             }
 
             String damageClass = move.getDamageClass();
