@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -118,6 +119,7 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHold
         holder.cvPokemon.setCardBackgroundColor(Color.parseColor(pokemon.getAverageColor()));
         holder.tvId.setText(String.format(Locale.getDefault(), "#%d", pokemon.getId()));
         holder.tvName.setText(StringManager.capitalize(pokemon.getName()));
+        holder.tbFavorite.setChecked(pokemon.getFavorite());
 
         if (context == null)
             return;
@@ -154,6 +156,7 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHold
         TextView tvType1;
         TextView tvType2;
         MaterialCardView cvPokemon;
+        ToggleButton tbFavorite;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -169,6 +172,7 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHold
             tvId = itemView.findViewById(R.id.tvId);
             tvType1 = itemView.findViewById(R.id.tvType1);
             tvType2 = itemView.findViewById(R.id.tvType2);
+            tbFavorite = itemView.findViewById(R.id.tbFavorite);
         }
 
         @Override

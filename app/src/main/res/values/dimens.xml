@@ -16,4 +16,5 @@
     <dimen name="margin_medium">8dp</dimen>
     <dimen name="margin_large">16dp</dimen>
     <dimen name="detail_sprite_padding">8dp</dimen>
+    <dimen name="icon_size">32dp</dimen>
 </resources>

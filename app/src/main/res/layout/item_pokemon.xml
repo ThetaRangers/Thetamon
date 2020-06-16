@@ -108,6 +108,18 @@
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.38" />
 
+        <ToggleButton
+            android:id="@+id/tbFavorite"
+            android:layout_width="@dimen/icon_size"
+            android:layout_height="@dimen/icon_size"
+            android:layout_marginTop="@dimen/margin_small"
+            android:layout_marginEnd="@dimen/margin_small"
+            android:background="@drawable/item_selector_star"
+            android:textOff=""
+            android:textOn=""
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </com.google.android.material.card.MaterialCardView>

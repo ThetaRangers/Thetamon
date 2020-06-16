@@ -8,11 +8,6 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-import com.google.gson.Gson;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 @Entity(tableName = "Move")
 public class Move implements Parcelable, Comparable<Move> {
     public static final Creator<Move> CREATOR = new Creator<Move>() {
