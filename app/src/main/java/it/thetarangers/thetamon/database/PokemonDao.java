@@ -4,6 +4,7 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Transaction;
 
 import java.util.List;
 
@@ -17,7 +18,16 @@ public abstract class PokemonDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     public abstract void insertPokemon(Pokemon pokemon);
+/*
+    @Insert
+    public abstract void insertPokemonWithMoves(Pokemon.PokemonWithMoves pokemonWithMoves);
 
+    @Transaction
+    @Query("SELECT * FROM Pokemon WHERE id = :id ")
+    public abstract Pokemon.PokemonWithMoves getPokemonWithMoves(int id);
+
+    public
+*/
     @Query("DELETE FROM Pokemon")
     public abstract void deleteAll();
 

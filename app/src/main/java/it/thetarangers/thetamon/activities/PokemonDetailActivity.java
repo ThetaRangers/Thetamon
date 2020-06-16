@@ -21,13 +21,21 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.shape.CornerFamily;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import it.thetarangers.thetamon.R;
 import it.thetarangers.thetamon.database.DaoThread;
+import it.thetarangers.thetamon.database.PokemonDao;
+import it.thetarangers.thetamon.database.PokemonDb;
 import it.thetarangers.thetamon.fragments.FragmentAbility;
 import it.thetarangers.thetamon.fragments.FragmentMoves;
 import it.thetarangers.thetamon.model.Ability;
@@ -131,6 +139,8 @@ public class PokemonDetailActivity extends AppCompatActivity {
                 @Override
                 public void fill(EvolutionDetail evolutionDetail) {
                     fillEvolution(evolutionDetail);
+
+                    // Fill the view with details when all information are available
                     Holder.this.afterDetails();
                 }
             };
@@ -140,12 +150,32 @@ public class PokemonDetailActivity extends AppCompatActivity {
                 public void fill(Pokemon pokemon) {
                     // Set the reference to pokemon with details and call holder method
                     PokemonDetailActivity.this.pokemon = pokemon;
+
+                    pokemon.encode();
+                    DaoThread thread = new DaoThread();
+
+                    // Save pokemon when the API is called
+                    thread.savePokemon(PokemonDetailActivity.this, pokemon);
+
                     volleyEvolutionChain.getEvolutionChain(pokemon.getUrlEvolutionChain());
                 }
             };
 
-            // Get the detail of the pokemon
-            volley.getPokemonDetail();
+            Thread thread = new Thread(() -> {
+                PokemonDao dao = PokemonDb.getInstance(PokemonDetailActivity.this).pokemonDao();
+                Pokemon tmp = dao.getPokemonFromId(pokemon.getId()).get(0);
+
+                //Call the API only if the pokemon is not in the DB
+                if(tmp.getMovesList() == null) {
+                    // Get the detail of the pokemon
+                    volley.getPokemonDetail();
+                } else {
+                    pokemon = tmp;
+                    volleyEvolutionChain.getEvolutionChain(pokemon.getUrlEvolutionChain());
+                }
+            });
+
+            thread.start();
         }
 
         private void beforeDetails() {

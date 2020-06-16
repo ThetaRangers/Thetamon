@@ -36,6 +36,17 @@ public class DaoThread {
         new Thread(runnable).start();
     }
 
+    public void savePokemon(final Context context, final Pokemon pokemon) {
+        Runnable runnable = () -> {
+            PokemonDb db = PokemonDb.getInstance(context);
+            final PokemonDao dao = db.pokemonDao();
+
+            dao.insertPokemon(pokemon);
+
+        };
+        new Thread(runnable).start();
+    }
+
     public void fillMoves(final Context context, final List<Move> moves,
                           Handler handler, Runnable update) {
         Runnable runnable = () -> {
@@ -125,6 +136,7 @@ public class DaoThread {
             Pokemon tmp = dao.getPokemonFromName(pokemon.getName());
 
             pokemon.setAverageColor(tmp.getAverageColor());
+            pokemon.setName(tmp.getName());
             pokemon.setId(tmp.getId());
             pokemon.setUrl(tmp.getUrl());
             pokemon.setType1(tmp.getType1());
