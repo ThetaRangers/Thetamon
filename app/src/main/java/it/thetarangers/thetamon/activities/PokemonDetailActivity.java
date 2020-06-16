@@ -10,10 +10,12 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -30,6 +32,7 @@ import it.thetarangers.thetamon.R;
 import it.thetarangers.thetamon.database.DaoThread;
 import it.thetarangers.thetamon.database.PokemonDao;
 import it.thetarangers.thetamon.database.PokemonDb;
+import it.thetarangers.thetamon.favorites.FavoritesManager;
 import it.thetarangers.thetamon.fragments.FragmentAbility;
 import it.thetarangers.thetamon.fragments.FragmentMoves;
 import it.thetarangers.thetamon.model.Ability;
@@ -46,19 +49,23 @@ public class PokemonDetailActivity extends AppCompatActivity {
     Pokemon pokemon;
     Handler handler;
     List<Move> moves;
+    FavoritesManager favoritesManager = new FavoritesManager(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pokemon_detail);
 
+        // built from parcelable
         pokemon = getIntent().getParcelableExtra("pokemon");
+
+        Log.d("Tokyo", "Sono della detail e il fav è " + pokemon.getFavorite());
 
         handler = new Handler();
         new Holder();
     }
 
-    class Holder implements View.OnClickListener {
+    class Holder implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
         final ImageView ivSprite;
         final ShapeableImageView ivOverlay;
         final ShapeableImageView ivBackground;
@@ -82,9 +89,9 @@ public class PokemonDetailActivity extends AppCompatActivity {
 
         final Button btnMoves;
 
-        final ProgressBar progressBar;
-
         final ConstraintLayout clBody, clLoading;
+
+        final ToggleButton tbFavorite;
 
         ImageManager imageManager;
 
@@ -118,11 +125,11 @@ public class PokemonDetailActivity extends AppCompatActivity {
             llEvolution2 = findViewById(R.id.llEvolution2);
             llEvolution3 = findViewById(R.id.llEvolution3);
 
-            progressBar = findViewById(R.id.progressBar);
-
             clBody = findViewById(R.id.clBody);
             clLoading = findViewById(R.id.clLoading);
 
+            tbFavorite = findViewById(R.id.tbFavorite);
+            tbFavorite.setOnCheckedChangeListener(this);
 
             imageManager = new ImageManager();
 
@@ -159,6 +166,8 @@ public class PokemonDetailActivity extends AppCompatActivity {
                 PokemonDao dao = PokemonDb.getInstance(PokemonDetailActivity.this).pokemonDao();
                 Pokemon tmp = dao.getPokemonFromId(pokemon.getId()).get(0);
 
+                Log.d("Tokyo", "Sono il pokemon del DB e sono un favorito: " + )
+
                 //Call the API only if the pokemon is not in the DB
                 if (tmp.getMovesList() == null) {
                     // Get the detail of the pokemon
@@ -181,7 +190,6 @@ public class PokemonDetailActivity extends AppCompatActivity {
             //set the type textViews
             TypeTextViewManager typeTextViewManager = new TypeTextViewManager(pokemon, tvType1, tvType2);
             typeTextViewManager.setup();
-
 
             //set the sprite part
             ivBackground.setBackgroundColor(Color.parseColor(pokemon.getAverageColor()));
@@ -209,6 +217,11 @@ public class PokemonDetailActivity extends AppCompatActivity {
                     .setBottomRightCorner(CornerFamily.ROUNDED, radius)
                     .build());
 
+            //set the favorite star
+            if (pokemon.getFavorite())
+                tbFavorite.setChecked(true);
+            else
+                tbFavorite.setChecked(false);
 
             //set the loading views to visible
             clLoading.setVisibility(View.VISIBLE);
@@ -376,19 +389,11 @@ public class PokemonDetailActivity extends AppCompatActivity {
             Pokemon pokemon = new Pokemon();
             pokemon.setName(evolutionDetail.getName());
 
-            Log.d("Tokyo", "Pokemon: " + pokemon.getName() +
-                    ", trigger: " + evolutionDetail.getEvolutionMethod(PokemonDetailActivity.this));
-
-            Log.d("Japan", "Pokemon: " + pokemon.getName() +
-                    ", trigger: " + evolutionDetail.getEvolutionMethod(PokemonDetailActivity.this) +
-                    ", info: " + evolutionDetail.toString());
-
             DaoThread daoThread = new DaoThread();
             Handler handler = new Handler();
 
             TextView tvName = card.findViewById(R.id.tvName);
             ImageView ivPokemon = card.findViewById(R.id.ivPokemon);
-            Log.d("POKE", "AAAAAAAAAAAAAAAAAAAA" + pokemon.getName());
 
             Runnable runnable = () -> {
                 ivPokemon.setImageBitmap(imageManager.loadFromDisk(
@@ -407,6 +412,20 @@ public class PokemonDetailActivity extends AppCompatActivity {
             tvName.setText(StringManager.capitalize(pokemon.getName()));
 
             daoThread.getPokemonFromName(PokemonDetailActivity.this, pokemon, handler, runnable);
+        }
+
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            // if tap on favorite star
+            if (buttonView.getId() == R.id.tbFavorite) {
+                // if pokemon is already in fav
+                if (pokemon.getFavorite()) {
+                    favoritesManager.removePokemonFromFav(pokemon);
+                    tbFavorite.setChecked(false);
+                } else {
+
+                }
+            }
         }
     }
 }

@@ -51,4 +51,7 @@ public abstract class PokemonDao {
         return getPokemonFromNameInterface(name + "%");
     }
 
+    @Query("UPDATE Pokemon SET isFavorite = :fav WHERE id = :pid;")
+    public abstract void setPokemonFav(int pid, boolean fav);
+
 }

@@ -28,6 +28,7 @@ import it.thetarangers.thetamon.R;
 import it.thetarangers.thetamon.activities.PokedexActivity;
 import it.thetarangers.thetamon.adapters.PokedexAdapter;
 import it.thetarangers.thetamon.database.DaoThread;
+import it.thetarangers.thetamon.favorites.FavoritesManager;
 import it.thetarangers.thetamon.listener.SelectorCallback;
 import it.thetarangers.thetamon.model.Pokemon;
 import it.thetarangers.thetamon.viewmodel.PokemonListViewModel;
@@ -132,6 +133,10 @@ public class FragmentPokedex extends Fragment implements SelectorCallback, Poked
     }
 
     class Callback implements android.view.ActionMode.Callback {
+
+        FavoritesManager favoritesManager = new FavoritesManager(requireContext());
+        ;
+
         @Override
         public boolean onCreateActionMode(android.view.ActionMode mode, Menu menu) {
             mode.getMenuInflater().inflate(R.menu.menu_action_mode, menu);
@@ -149,22 +154,22 @@ public class FragmentPokedex extends Fragment implements SelectorCallback, Poked
 
         @Override
         public boolean onActionItemClicked(android.view.ActionMode mode, MenuItem item) {
+            List<Pokemon> sel = holder.adapter.getSelected();
             switch (item.getItemId()) {
+                // deselect all
                 case R.id.item_deselect:
                     mode.finish();
                     break;
+
                 case R.id.item_addAll:
-                    List<Pokemon> sel = holder.adapter.getSelected();
-                    Log.d("POKE", "in fragment");
-                    for (int i = 0; i < sel.size(); i++) {
-                        Pokemon temp = sel.get(i);
-                        Log.d("POKE", "pokemon ID " + temp.getId() + "pokemon name " + temp.getName());
-                    }
-                    Toast.makeText(getActivity().getApplicationContext(), "add elements to fav", Toast.LENGTH_SHORT).show();
+                    favoritesManager.addPokemonToFav(sel);
+                    Log.d("Tokyo", "Lista: " + sel.toString() + " e 0 è: " + sel.get(0).getFavorite());
                     break;
+
                 case R.id.item_removeAll:
-                    Toast.makeText(getActivity().getApplicationContext(), "remove elements from fav", Toast.LENGTH_SHORT).show();
+                    favoritesManager.removePokemonFromFav(sel);
                     break;
+
                 default:
                     break;
             }

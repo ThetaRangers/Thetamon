@@ -149,4 +149,16 @@ public class DaoThread {
 
         new Thread(runnable).start();
     }
+
+    public void setPokemonFav(final Context context, final Pokemon pokemon, final boolean fav) {
+
+        Runnable runnable = () -> {
+            PokemonDb db = PokemonDb.getInstance(context);
+            PokemonDao dao = db.pokemonDao();
+
+            dao.setPokemonFav(pokemon.getId(), fav);
+        };
+
+        new Thread(runnable).start();
+    }
 }

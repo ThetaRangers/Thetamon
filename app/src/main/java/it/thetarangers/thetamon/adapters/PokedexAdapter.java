@@ -116,6 +116,8 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHold
     public void onBindViewHolder(@NonNull PokedexAdapter.ViewHolder holder, int position) {
         Pokemon pokemon = pokemonList.get(position);
 
+        holder.actualPokemon = pokemon;
+
         holder.cvPokemon.setCardBackgroundColor(Color.parseColor(pokemon.getAverageColor()));
         holder.tvId.setText(String.format(Locale.getDefault(), "#%d", pokemon.getId()));
         holder.tvName.setText(StringManager.capitalize(pokemon.getName()));
@@ -158,6 +160,8 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHold
         MaterialCardView cvPokemon;
         ToggleButton tbFavorite;
 
+        Pokemon actualPokemon;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -183,27 +187,20 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHold
             if (selectList.selectedSize() > 0)
                 selectList.onLongClick(v);
             else {
-                String id = tvId.getText().toString().substring(1);
+                Intent data = new Intent(context, PokemonDetailActivity.class);
+                data.putExtra("pokemon", actualPokemon);
 
-                for (int i = 0; i < pokemonList.size(); i++) {
-                    if (id.equals(pokemonList.get(i).getId() + "")) {
-                        Intent data = new Intent(context, PokemonDetailActivity.class);
-                        data.putExtra("pokemon", pokemonList.get(i));
+                ActivityOptions options = ActivityOptions
+                        .makeSceneTransitionAnimation(context,
+                                Pair.create(imageView, "cardExpansion"),
+                                Pair.create(ivSprite, "imageExpansion"),
+                                Pair.create(tvId, "transId"),
+                                Pair.create(tvName, "transName"));
 
-                        ActivityOptions options = ActivityOptions
-                                .makeSceneTransitionAnimation(context,
-                                        Pair.create(imageView, "cardExpansion"),
-                                        Pair.create(ivSprite, "imageExpansion"),
-                                        Pair.create(tvId, "transId"),
-                                        Pair.create(tvName, "transName"));
-
-                        setClickable(false);
-                        context.startActivityForResult(data, REQ_CODE, options.toBundle());
-                    }
-                }
+                setClickable(false);
+                context.startActivityForResult(data, REQ_CODE, options.toBundle());
             }
         }
-
-
     }
 }
+

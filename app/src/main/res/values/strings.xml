@@ -76,4 +76,7 @@
     <string name="label_power">Power</string>
     <string name="label_accuracy">Accuracy</string>
     <string name="label_pp" translatable="false">PP</string>
+    <string name="deselect_all">Deselect all</string>
+    <string name="remove_all_from_favourites">Remove all from favourites</string>
+    <string name="add_all_to_favourites">Add all to favourites</string>
 </resources>

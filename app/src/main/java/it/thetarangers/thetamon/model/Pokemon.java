@@ -113,6 +113,7 @@ public class Pokemon implements Parcelable {
         urlEvolutionChain = in.readString();
         movesList = in.createTypedArrayList(Move.CREATOR);
         abilityList = in.createTypedArrayList(Ability.CREATOR);
+        isFavorite = in.readInt() != 0;
     }
 
     public static final Creator<Pokemon> CREATOR = new Creator<Pokemon>() {
@@ -188,7 +189,7 @@ public class Pokemon implements Parcelable {
         }
     }
 
-    public Boolean getFavorite() {
+    public boolean getFavorite() {
         return isFavorite;
     }
 
@@ -464,6 +465,7 @@ public class Pokemon implements Parcelable {
         dest.writeString(urlEvolutionChain);
         dest.writeTypedList(movesList);
         dest.writeTypedList(abilityList);
+        dest.writeInt(isFavorite ? 1 : 0);
     }
 
     /*
