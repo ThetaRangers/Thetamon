@@ -26,7 +26,6 @@ import java.util.List;
 @Entity(tableName = "Pokemon")
 public class Pokemon implements Parcelable {
 
-
     @PrimaryKey
     private int id;
     @ColumnInfo(name = "name")
@@ -67,16 +66,17 @@ public class Pokemon implements Parcelable {
     private String moveArray;
     private String abilityArray;
 
+    @ColumnInfo(defaultValue = "false")
+    private boolean isFavorite;
+
     private String urlEvolutionChain;
 
     @Ignore
     private List<Move> movesList;
 
-    //TODO foreign key
     @Ignore
     private List<Ability> abilityList;
 
-    //TODO how to save?
     @Ignore
     private HashMap<String, String> sprites;
 
@@ -186,6 +186,14 @@ public class Pokemon implements Parcelable {
         } else {
             this.type2 = type;
         }
+    }
+
+    public Boolean getFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(Boolean favorite) {
+        isFavorite = favorite;
     }
 
     public int getId() {
