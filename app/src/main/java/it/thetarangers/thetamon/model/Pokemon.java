@@ -2,12 +2,23 @@ package it.thetarangers.thetamon.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import androidx.room.ColumnInfo;
+import androidx.room.Embedded;
 import androidx.room.Entity;
 import androidx.room.Ignore;
+import androidx.room.Junction;
 import androidx.room.PrimaryKey;
+import androidx.room.Relation;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -53,11 +64,11 @@ public class Pokemon implements Parcelable {
     private int speed;
     @ColumnInfo(name = "habitat")
     private String habitat;
+    private String moveArray;
+    private String abilityArray;
 
-    @Ignore
     private String urlEvolutionChain;
 
-    //TODO foreign key
     @Ignore
     private List<Move> movesList;
 
@@ -118,6 +129,45 @@ public class Pokemon implements Parcelable {
 
     public Pokemon() {
 
+    }
+
+    private void encodeMoves() {
+        List<JSONObject> moveArray = new ArrayList<>();
+
+        Gson gson = new Gson();
+        for(int i = 0; i < this.movesList.size(); i++) {
+            String move = gson.toJson(this.movesList.get(i));
+            try {
+                moveArray.add(new JSONObject(move));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        JSONArray array = new JSONArray(moveArray);
+        this.moveArray = array.toString();
+    }
+
+    private void encodeAbilities() {
+        List<JSONObject> abilityArray = new ArrayList<>();
+        Gson gson = new Gson();
+
+        for(int i = 0; i < this.abilityList.size(); i++) {
+            String move = gson.toJson(this.abilityList.get(i));
+            try {
+                abilityArray.add(new JSONObject(move));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        JSONArray array = new JSONArray(abilityArray);
+        this.abilityArray = array.toString();
+    }
+
+    public void encode() {
+        this.encodeAbilities();
+        this.encodeMoves();
     }
 
     public int setIdFromUrl() {
@@ -218,7 +268,23 @@ public class Pokemon implements Parcelable {
         this.growthRate = growthRate;
     }
 
+    public String getAbilityArray() {
+        return abilityArray;
+    }
+
+    public void setAbilityArray(String abilityArray) {
+        this.abilityArray = abilityArray;
+    }
+
     public List<Move> getMovesList() {
+        Gson gson = new Gson();
+        if(movesList == null) {
+            Type listType = new TypeToken<List<Move>>() {
+            }.getType();    //Setting up the type for the conversion
+
+            movesList = gson.fromJson(moveArray, listType);
+        }
+
         return movesList;
     }
 
@@ -243,6 +309,15 @@ public class Pokemon implements Parcelable {
     }
 
     public List<Ability> getAbilityList() {
+        Gson gson = new Gson();
+        if(abilityList == null) {
+            Log.d("HALO", "STO RECUPERANDO " + abilityArray);
+            Type listType = new TypeToken<List<Ability>>() {
+            }.getType();    //Setting up the type for the conversion
+
+            abilityList = gson.fromJson(abilityArray, listType);
+        }
+
         return abilityList;
     }
 
@@ -344,6 +419,14 @@ public class Pokemon implements Parcelable {
         this.urlEvolutionChain = urlEvolutionChain;
     }
 
+    public String getMoveArray() {
+        return moveArray;
+    }
+
+    public void setMoveArray(String moveArray) {
+        this.moveArray = moveArray;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -374,4 +457,22 @@ public class Pokemon implements Parcelable {
         dest.writeTypedList(movesList);
         dest.writeTypedList(abilityList);
     }
+
+    /*
+    @Entity(primaryKeys = {"pokemonId", "moveId"})
+    class PokemonCrossMoves {
+        public int pokemonId;
+        public int moveId;
+    }
+
+    public class PokemonWithMoves {
+        @Embedded public Pokemon pokemon;
+        @Relation(
+                parentColumn = "pokemonId",
+                entityColumn = "moveId",
+                associateBy = @Junction(PokemonCrossMoves.class)
+        )
+        public List<Move> moves;
+    }
+     */
 }

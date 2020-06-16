@@ -8,6 +8,11 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import com.google.gson.Gson;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 @Entity(tableName = "Move")
 public class Move implements Parcelable, Comparable<Move> {
     public static final Creator<Move> CREATOR = new Creator<Move>() {
@@ -27,7 +32,7 @@ public class Move implements Parcelable, Comparable<Move> {
     private String name;
     @ColumnInfo(name = "url")
     private String url;
-    @ColumnInfo(name = "Type")
+    @ColumnInfo(name = "type")
     private transient String type;
     private Integer accuracy;
     private Integer power;
@@ -38,6 +43,7 @@ public class Move implements Parcelable, Comparable<Move> {
     @ColumnInfo(name = "damage_class")
     private String damageClass;
     private String effect;
+
     @Ignore
     private int level;
     @Ignore

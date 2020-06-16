@@ -22,10 +22,10 @@ public abstract class MoveDao {
     @Query("SELECT * FROM MOVE WHERE name LIKE :name")
     abstract List<Move> getMovesByNameInterface(String name);
 
-    @Query("SELECT Type FROM MOVE WHERE name == :moveName")
+    @Query("SELECT type FROM MOVE WHERE name == :moveName")
     public abstract String getMoveType(String moveName);
 
-    @Query("SELECT id, Type, damage_class FROM Move WHERE name == :moveName")
+    @Query("SELECT id, type, damage_class FROM Move WHERE name == :moveName")
     public abstract Move getMoveDetails(String moveName);
 
     public List<Move> getMoveByName(String name) {
