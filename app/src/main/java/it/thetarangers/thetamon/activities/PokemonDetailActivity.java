@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -150,7 +151,7 @@ public class PokemonDetailActivity extends AppCompatActivity {
         private void beforeDetails() {
 
             //set textViews
-            tvID.setText(String.format("#%d", pokemon.getId()));
+            tvID.setText(String.format(Locale.getDefault(), "#%d", pokemon.getId()));
             tvName.setText(StringManager.capitalize(pokemon.getName()));
 
             //set the type textViews
@@ -261,10 +262,10 @@ public class PokemonDetailActivity extends AppCompatActivity {
                 llAbilities.addView(card);
             }
 
-
         }
 
         private void fillEvolution(EvolutionDetail firstEvolution) {
+            // Add card corresponding to first pokemon in EvolutionDetail
             MaterialCardView card = (MaterialCardView) View.inflate(PokemonDetailActivity.this, R.layout.item_evolution, null);
             fillCard(card, firstEvolution);
 
@@ -273,25 +274,74 @@ public class PokemonDetailActivity extends AppCompatActivity {
 
             if (secondEvolutions != null) {
                 llEvolution2.setVisibility(View.VISIBLE);
+                int secondEvoNumber = 0;
 
                 for (EvolutionDetail secondEvolution : secondEvolutions) {
-                    card = (MaterialCardView) View.inflate(PokemonDetailActivity.this, R.layout.item_evolution, null);
+                    secondEvoNumber++; // Increase the counter of second evolutions
+                    // Add card corresponding to second evolution
+                    card = (MaterialCardView) View.inflate(PokemonDetailActivity.this,
+                            R.layout.item_evolution, null);
 
                     fillCard(card, secondEvolution);
                     llEvolution2.addView(card);
+
+                    // Add TextView with evolution method
+                    TextView tvEvolutionMethod2 = new TextView(PokemonDetailActivity.this);
+                    tvEvolutionMethod2.setText(secondEvolution
+                            .getEvolutionMethod(PokemonDetailActivity.this));
+                    tvEvolutionMethod2.setGravity(Gravity.CENTER);
+                    llEvolution2.addView(tvEvolutionMethod2);
+                    LinearLayout.LayoutParams llParams2 = (LinearLayout.LayoutParams)
+                            tvEvolutionMethod2.getLayoutParams();
+                    llParams2.bottomMargin = (int) getResources().getDimension(R.dimen.margin_large);
+                    llParams2.topMargin = (int) getResources().getDimension(R.dimen.margin_small);
 
                     List<EvolutionDetail> thirdEvolutions = secondEvolution.getNextPokemon();
 
                     if (thirdEvolutions != null) {
                         llEvolution3.setVisibility(View.VISIBLE);
+                        int thirdEvoNumber = 0;
 
                         for (EvolutionDetail thirdEvolution : thirdEvolutions) {
-                            card = (MaterialCardView) View.inflate(PokemonDetailActivity.this, R.layout.item_evolution, null);
+                            thirdEvoNumber++; // Increase the counter of third evolutions
+                            // Add card corresponding to third evolution
+                            card = (MaterialCardView) View
+                                    .inflate(PokemonDetailActivity.this,
+                                            R.layout.item_evolution, null);
 
                             fillCard(card, thirdEvolution);
                             llEvolution3.addView(card);
+
+                            // Add TextView with evolution method
+                            TextView tvEvolutionMethod3 = new TextView(PokemonDetailActivity.this);
+                            tvEvolutionMethod3.setText(thirdEvolution
+                                    .getEvolutionMethod(PokemonDetailActivity.this));
+                            tvEvolutionMethod3.setGravity(Gravity.CENTER);
+                            llEvolution3.addView(tvEvolutionMethod3);
+                            LinearLayout.LayoutParams llParams3 = (LinearLayout.LayoutParams)
+                                    tvEvolutionMethod3.getLayoutParams();
+                            llParams3.bottomMargin = (int) getResources().getDimension(R.dimen.margin_large);
+                            llParams3.topMargin = (int) getResources().getDimension(R.dimen.margin_small);
+                        }
+                        if (thirdEvoNumber > secondEvoNumber) {
+                            // Center vertically other LinearLayouts
+                            ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams)
+                                    llEvolution2.getLayoutParams();
+                            params.topToTop = R.id.llEvolution1;
+                            params.bottomToBottom = 0;
+                            params.topMargin = 0;
+
+                            ConstraintLayout.LayoutParams params2 = (ConstraintLayout.LayoutParams)
+                                    llEvolution1.getLayoutParams();
+                            params2.verticalBias = 0.5f;
                         }
                     }
+                }
+
+                if (secondEvoNumber > 1) {
+                    ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams)
+                            llEvolution1.getLayoutParams();
+                    params.verticalBias = 0.5f;
                 }
 
             }
