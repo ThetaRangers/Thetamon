@@ -287,7 +287,6 @@ public class PokemonDetailActivity extends AppCompatActivity {
 
                         for (EvolutionDetail thirdEvolution : thirdEvolutions) {
                             card = (MaterialCardView) View.inflate(PokemonDetailActivity.this, R.layout.item_evolution, null);
-                            Pokemon pokemonThird = new Pokemon();
 
                             fillCard(card, thirdEvolution);
                             llEvolution3.addView(card);

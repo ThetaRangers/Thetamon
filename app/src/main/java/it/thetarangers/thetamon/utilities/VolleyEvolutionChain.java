@@ -1,7 +1,6 @@
 package it.thetarangers.thetamon.utilities;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -13,7 +12,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 
-import org.apache.commons.io.output.ThresholdingOutputStream;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,7 +21,6 @@ import java.util.List;
 
 import it.thetarangers.thetamon.R;
 import it.thetarangers.thetamon.model.EvolutionDetail;
-import it.thetarangers.thetamon.model.Pokemon;
 
 public abstract class VolleyEvolutionChain implements Response.ErrorListener, Response.Listener<String> {
     Context context;
@@ -70,34 +67,35 @@ public abstract class VolleyEvolutionChain implements Response.ErrorListener, Re
 
             //Second evolution
             JSONArray secondEvolvesTo = chain.getJSONArray("evolves_to");
+            if (secondEvolvesTo.length() != 0) {
+                List<EvolutionDetail> secondEvolutions = new ArrayList<>();
 
-            List<EvolutionDetail> secondEvolutions = new ArrayList<>();
+                for (int i = 0; i < secondEvolvesTo.length(); i++) {
+                    JSONObject obj = secondEvolvesTo.getJSONObject(i);
 
-            for (int i = 0; i < secondEvolvesTo.length(); i++) {
-                JSONObject obj = secondEvolvesTo.getJSONObject(i);
+                    EvolutionDetail ev = parseEvolutionDetail(obj);
 
-                EvolutionDetail ev = parseEvolutionDetail(obj);
+                    //Third evolutions
+                    JSONArray thirdEvolutionJson = obj.getJSONArray("evolves_to");
+                    if (thirdEvolutionJson.length() != 0) {
+                        List<EvolutionDetail> thirdEvolutions = new ArrayList<>();
 
-                //Third evolutions
-                JSONArray thirdEvolutionJson = obj.getJSONArray("evolves_to");
-                if (thirdEvolutionJson.length() != 0) {
-                    List<EvolutionDetail> thirdEvolutions = new ArrayList<>();
+                        for (int j = 0; j < thirdEvolutionJson.length(); j++) {
+                            JSONObject object = thirdEvolutionJson.getJSONObject(j);
 
-                    for (int j = 0; j < thirdEvolutionJson.length(); j++) {
-                        JSONObject object = thirdEvolutionJson.getJSONObject(j);
+                            EvolutionDetail evolutionDetail = parseEvolutionDetail(object);
 
-                        EvolutionDetail evolutionDetail = parseEvolutionDetail(object);
+                            thirdEvolutions.add(evolutionDetail);
+                        }
 
-                        thirdEvolutions.add(evolutionDetail);
+                        ev.setNextPokemon(thirdEvolutions);
                     }
 
-                    ev.setNextPokemon(thirdEvolutions);
+                    secondEvolutions.add(ev);
                 }
 
-                secondEvolutions.add(ev);
+                firstEvolution.setNextPokemon(secondEvolutions);
             }
-
-            firstEvolution.setNextPokemon(secondEvolutions);
 
             fill(firstEvolution);
         } catch (JSONException exception) {
@@ -129,7 +127,7 @@ public abstract class VolleyEvolutionChain implements Response.ErrorListener, Re
             Integer gender = tmp.getInt("gender");
             ev.setGender(gender);
             String genderFormat = "";
-            switch (gender){
+            switch (gender) {
                 case 1:
                     genderFormat = "female";
                     break;
@@ -208,14 +206,14 @@ public abstract class VolleyEvolutionChain implements Response.ErrorListener, Re
         if (!tmp.isNull("relative_physical_stats")) {
             Integer relative = tmp.getInt("relative_physical_stats");
             ev.setRelative_physical_stats(relative);
-            switch (relative){
+            switch (relative) {
                 case 1:
                     ev.addCondition(context.getResources().getString(R.string.evo_relative_1));
                     break;
-                    case -1:
+                case -1:
                     ev.addCondition(context.getResources().getString(R.string.evo_relative_minus1));
                     break;
-                    case 0:
+                case 0:
                     ev.addCondition(context.getResources().getString(R.string.evo_relative_0));
                     break;
             }
@@ -244,14 +242,14 @@ public abstract class VolleyEvolutionChain implements Response.ErrorListener, Re
         // while console is upside down
         Boolean turnUpsideDown = tmp.getBoolean("turn_upside_down");
         ev.setTurn_upside_down(turnUpsideDown);
-        if(turnUpsideDown){
+        if (turnUpsideDown) {
             ev.addCondition(context.getResources().getString(R.string.evo_upside_down));
         }
 
         // while it's raining
         Boolean overworldRain = tmp.getBoolean("needs_overworld_rain");
         ev.setNeeds_overworld_rain(overworldRain);
-        if(overworldRain){
+        if (overworldRain) {
             ev.addCondition(context.getResources().getString(R.string.evo_overworld_rain));
         }
 
