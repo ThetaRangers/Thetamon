@@ -60,11 +60,11 @@
     <string name="evo_held_item">helding item</string>
     <string name="evo_item">item</string>
     <string name="evo_time_of_day">time of day</string>
-    <string name="evo_known_type_move">knows a move of type</string>
+    <string name="evo_known_type_move">knowing a move of type</string>
     <string name="evo_location">needs a special locations</string>
     <string name="evo_gender">gender is</string>
-    <string name="evo_party_type">a pokemon in the party is type</string>
-    <string name="evo_knwon_move">knows the move</string>
+    <string name="evo_party_type">a Pokémon in the party is type</string>
+    <string name="evo_knwon_move">knowing the move</string>
     <string name="evo_party_specie">a %s is in the party</string>
     <string name="evo_relative_1">attack is higher than defense</string>
     <string name="evo_relative_minus1">defense is higher than attack</string>

@@ -40,4 +40,27 @@
     <string name="game_error">Ops, hai sbagliato!</string>
     <string name="label_power">Potenza</string>
     <string name="label_accuracy">Precisione</string>
+    <string name="trigger_level_up">Aumento di livello</string>
+    <string name="trigger_trade">Scambio</string>
+    <string name="trigger_item">Utilizzo di strumento</string>
+    <string name="trigger_shed">Aumento di livello, al livello: 20, con uno spazio libero nella squadra</string>
+    <string name="evo_level_up">al livello</string>
+    <string name="evo_happiness">con felicità</string>
+    <string name="evo_beauty">con bellezza</string>
+    <string name="evo_affection">con affetto</string>
+    <string name="evo_held_item">tenendo lo strumento</string>
+    <string name="evo_item">strumento</string>
+    <string name="evo_time_of_day">orario del giorno</string>
+    <string name="evo_known_type_move">conoscendo una mossa del tipo</string>
+    <string name="evo_location">necessita una località speciale</string>
+    <string name="evo_gender">genere</string>
+    <string name="evo_party_type">un Pokémon in sqadra è di tipo</string>
+    <string name="evo_knwon_move">conoscendo la mossa</string>
+    <string name="evo_party_specie">un %s è in squadra</string>
+    <string name="evo_relative_1">l\'attacco è più alto della difesa</string>
+    <string name="evo_relative_minus1">la difesa è più alta dell\'attacco</string>
+    <string name="evo_relative_0">l\'attacco è uguale alla difesa</string>
+    <string name="evo_trade_specie">scambiato con</string>
+    <string name="evo_upside_down">con la console capovolta</string>
+    <string name="evo_overworld_rain">mentre piove</string>
 </resources>

@@ -21,13 +21,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.shape.CornerFamily;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -166,7 +160,7 @@ public class PokemonDetailActivity extends AppCompatActivity {
                 Pokemon tmp = dao.getPokemonFromId(pokemon.getId()).get(0);
 
                 //Call the API only if the pokemon is not in the DB
-                if(tmp.getMovesList() == null) {
+                if (tmp.getMovesList() == null) {
                     // Get the detail of the pokemon
                     volley.getPokemonDetail();
                 } else {
