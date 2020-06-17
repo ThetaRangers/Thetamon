@@ -58,4 +58,8 @@
     <color name="colorSpecialAttack">#F000FF</color>
     <color name="colorSpecialDefense">#F00000</color>
     <color name="colorSpeed">#EEEE00</color>
+
+    <color name="colorStarStroke">#FFFFFF</color>
+    <color name="colorStarSelected">#FCE205</color>
+    <color name="colorStarUnselected">#555555</color>
 </resources>
