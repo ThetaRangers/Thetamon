@@ -8,7 +8,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -135,7 +134,6 @@ public class FragmentPokedex extends Fragment implements SelectorCallback, Poked
     class Callback implements android.view.ActionMode.Callback {
 
         FavoritesManager favoritesManager = new FavoritesManager(requireContext());
-        ;
 
         @Override
         public boolean onCreateActionMode(android.view.ActionMode mode, Menu menu) {
@@ -163,11 +161,12 @@ public class FragmentPokedex extends Fragment implements SelectorCallback, Poked
 
                 case R.id.item_addAll:
                     favoritesManager.addPokemonToFav(sel);
-                    Log.d("Tokyo", "Lista: " + sel.toString() + " e 0 è: " + sel.get(0).getFavorite());
+                    mode.finish();
                     break;
 
                 case R.id.item_removeAll:
                     favoritesManager.removePokemonFromFav(sel);
+                    mode.finish();
                     break;
 
                 default:

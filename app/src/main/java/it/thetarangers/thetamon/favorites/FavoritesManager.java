@@ -26,7 +26,7 @@ public class FavoritesManager {
         pokemon.setFavorite(true);
 
         // Download details if not already in db
-        if(pokemon.getMovesList() == null) {
+        if (pokemon.getMovesList() == null) {
 
             VolleyEvolutionChain volleyEvolutionChain = new VolleyEvolutionChain(context) {
                 @Override
