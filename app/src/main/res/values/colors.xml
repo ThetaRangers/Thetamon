@@ -51,4 +51,11 @@
 
     <color name="colorVascoRossi">#EEEEEE</color>
     <color name="colorCardBlack">#3D3D3D</color>
+
+    <color name="colorHp">#00FF00</color>
+    <color name="colorAttack">#00DDA0</color>
+    <color name="colorDefense">#013090</color>
+    <color name="colorSpecialAttack">#F000FF</color>
+    <color name="colorSpecialDefense">#F00000</color>
+    <color name="colorSpeed">#EEEE00</color>
 </resources>

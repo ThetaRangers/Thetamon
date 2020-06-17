@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -118,6 +119,13 @@ public class PokemonDetailActivity extends AppCompatActivity {
         final TextView tvSpeed;
         final TextView tvFlavorText;
         final LinearLayout llAbilities;
+        final ProgressBar pbHp;
+        final ProgressBar pbAttack;
+        final ProgressBar pbDefense;
+        final ProgressBar pbSpecialAttack;
+        final ProgressBar pbSpecialDefense;
+        final ProgressBar pbSpeed;
+
 
         final TextView tvLoading, tvType1, tvType2;
 
@@ -146,6 +154,13 @@ public class PokemonDetailActivity extends AppCompatActivity {
             tvSpecialAttack = findViewById(R.id.tvSpecialAttack);
             tvSpecialDefense = findViewById(R.id.tvSpecialDefense);
             tvSpeed = findViewById(R.id.tvSpeed);
+
+            pbHp = findViewById(R.id.pbHp);
+            pbAttack = findViewById(R.id.pbAttack);
+            pbDefense = findViewById(R.id.pbDefense);
+            pbSpecialAttack = findViewById(R.id.pbSpecialAttack);
+            pbSpecialDefense = findViewById(R.id.pbSpecialDefense);
+            pbSpeed = findViewById(R.id.pbSpeed);
 
             tvFlavorText = findViewById(R.id.tvFlavorText);
 
@@ -285,11 +300,18 @@ public class PokemonDetailActivity extends AppCompatActivity {
             //Fill text views with pokemon's details
             tvHabitat.setText(String.format(Locale.getDefault(), "%s: %s", res.getString(R.string.label_habitat), StringManager.capitalize(pokemon.getHabitat())));
             tvHp.setText(String.format(Locale.getDefault(), "%s: %d", res.getString(R.string.label_hp), pokemon.getHp()));
+            pbHp.setProgress(pokemon.getHp());
             tvAttack.setText(String.format(Locale.getDefault(), "%s: %d", res.getString(R.string.label_attack), pokemon.getAttack()));
+            pbAttack.setProgress(pokemon.getAttack());
             tvDefense.setText(String.format(Locale.getDefault(), "%s: %d", res.getString(R.string.label_defense), pokemon.getDefense()));
+            pbDefense.setProgress(pokemon.getDefense());
             tvSpecialAttack.setText(String.format(Locale.getDefault(), "%s: %d", res.getString(R.string.label_special_attack), pokemon.getSpecialAttack()));
+            pbSpecialAttack.setProgress(pokemon.getSpecialAttack());
             tvSpecialDefense.setText(String.format(Locale.getDefault(), "%s: %d", res.getString(R.string.label_special_defense), pokemon.getSpecialDefense()));
+            pbSpecialDefense.setProgress(pokemon.getSpecialDefense());
             tvSpeed.setText(String.format(Locale.getDefault(), "%s: %d", res.getString(R.string.label_speed), pokemon.getSpeed()));
+            pbSpeed.setProgress(pokemon.getSpeed());
+
             tvFlavorText.setText(StringManager.format(pokemon.getFlavorText()));
 
             fillAbilities(pokemon);
