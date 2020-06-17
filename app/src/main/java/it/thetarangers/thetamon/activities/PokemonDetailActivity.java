@@ -13,7 +13,6 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -23,7 +22,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.shape.CornerFamily;
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,8 +57,6 @@ public class PokemonDetailActivity extends AppCompatActivity {
 
         // built from parcelable
         pokemon = getIntent().getParcelableExtra("pokemon");
-
-        Log.d("Tokyo", "Sono della detail e il fav è " + pokemon.getFavorite());
 
         handler = new Handler();
         new Holder();
@@ -130,7 +126,6 @@ public class PokemonDetailActivity extends AppCompatActivity {
             clLoading = findViewById(R.id.clLoading);
 
             tbFavorite = findViewById(R.id.tbFavorite);
-            tbFavorite.setOnCheckedChangeListener(this);
 
             imageManager = new ImageManager();
 
@@ -173,10 +168,12 @@ public class PokemonDetailActivity extends AppCompatActivity {
                 //Call the API only if the pokemon is not in the DB
                 if (tmp.getMovesList() == null) {
                     // Get the detail of the pokemon
+                    Log.d("POKE", "volley");
                     volley.getPokemonDetail();
-                } else  {
+                } else {
+                    Log.d("POKE", "db");
                     pokemon = tmp;
-                    EvolutionDetail ev = new Gson().fromJson(pokemon.getEvolutionChain(), EvolutionDetail.class);
+                    EvolutionDetail ev = tmp.getEvolutionDetail();
 
                     handler.post(() -> {
                         fillEvolution(ev);
@@ -225,11 +222,12 @@ public class PokemonDetailActivity extends AppCompatActivity {
                     .build());
 
             //set the favorite star
-            if (pokemon.getFavorite())
+            if (pokemon.getFavorite()) {
                 tbFavorite.setChecked(true);
-            else
+            } else {
                 tbFavorite.setChecked(false);
-
+            }
+            tbFavorite.setOnCheckedChangeListener(this);
             //set the loading views to visible
             clLoading.setVisibility(View.VISIBLE);
             clBody.setVisibility(View.INVISIBLE);
@@ -425,12 +423,10 @@ public class PokemonDetailActivity extends AppCompatActivity {
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
             // if tap on favorite star
             if (buttonView.getId() == R.id.tbFavorite) {
-                // if pokemon is already in fav
-                if (pokemon.getFavorite()) {
-                    favoritesManager.removePokemonFromFav(pokemon);
-                    tbFavorite.setChecked(false);
+                if (isChecked) {
+                    favoritesManager.addPokemonToFav(pokemon);
                 } else {
-
+                    favoritesManager.removePokemonFromFav(pokemon);
                 }
             }
         }

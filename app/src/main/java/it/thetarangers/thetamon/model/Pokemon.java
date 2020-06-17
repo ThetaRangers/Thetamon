@@ -478,6 +478,40 @@ public class Pokemon implements Parcelable {
         dest.writeInt(isFavorite ? 1 : 0);
     }
 
+    public void setAll(Pokemon pokemon) {
+        this.id = pokemon.getId();
+        this.abilityArray = pokemon.getAbilityArray();
+        this.abilityList = pokemon.getAbilityList();
+        this.attack = pokemon.getAttack();
+        this.averageColor = pokemon.getAverageColor();
+        this.captureRate = pokemon.getCaptureRate();
+        this.defense = pokemon.getDefense();
+        this.specialDefense = pokemon.getSpecialDefense();
+        this.evolutionChain = pokemon.getEvolutionChain();
+        this.flavorText = pokemon.getFlavorText();
+        this.genderRate = pokemon.getGenderRate();
+        this.growthRate = pokemon.getGrowthRate();
+        this.habitat = pokemon.getHabitat();
+        this.height = pokemon.getHeight();
+        this.hp = pokemon.getHp();
+        this.isFavorite = pokemon.getFavorite();
+        this.moveArray = pokemon.getMoveArray();
+        this.movesList = pokemon.getMovesList();
+        this.name = pokemon.getName();
+        this.specialAttack = pokemon.getSpecialAttack();
+        this.speed = pokemon.getSpeed();
+        this.sprites = pokemon.getSprites();
+        this.type1 = pokemon.getType1();
+        this.type2 = pokemon.getType2();
+        this.url = pokemon.getUrl();
+        this.urlEvolutionChain = pokemon.getUrlEvolutionChain();
+        this.weight = pokemon.getWeight();
+    }
+
+    public EvolutionDetail getEvolutionDetail() {
+        return new Gson().fromJson(this.getEvolutionChain(), EvolutionDetail.class);
+    }
+
     /*
     @Entity(primaryKeys = {"pokemonId", "moveId"})
     class PokemonCrossMoves {
