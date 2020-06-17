@@ -157,8 +157,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_medium"
+                android:layout_marginEnd="@dimen/iv_expand_side"
                 android:text="@string/label_flavor"
-                app:layout_constraintEnd_toEndOf="@+id/tvEffect"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvPower" />
         </androidx.constraintlayout.widget.ConstraintLayout>
