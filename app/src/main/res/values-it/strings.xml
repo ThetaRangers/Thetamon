@@ -63,4 +63,8 @@
     <string name="evo_trade_specie">scambiato con</string>
     <string name="evo_upside_down">con la console capovolta</string>
     <string name="evo_overworld_rain">mentre piove</string>
+    <string name="deselect_all">Deselaziona</string>
+    <string name="remove_all_from_favourites">Rimuovi preferiti</string>
+    <string name="add_all_to_favourites">Aggiungi ai preferiti</string>
+    <string name="label_team">Il nostro Team:</string>
 </resources>

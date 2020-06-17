@@ -29,7 +29,6 @@ public class EvolutionDetail {
     private String trade_species;
     private String trigger;
     private Boolean turn_upside_down;
-    private String nextPokemonString;
 
     @Ignore
     private List<EvolutionDetail> nextPokemon;

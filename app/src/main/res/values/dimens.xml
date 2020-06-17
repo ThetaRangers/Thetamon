@@ -20,4 +20,6 @@
     <dimen name="icon_size">32dp</dimen>
     <dimen name="iv_expand_side">20dp</dimen>
     <dimen name="iv_damage_class_width">46dp</dimen>
+    <dimen name="sprite_about_size">200dp</dimen>
+    <dimen name="margin_gigamax">32dp</dimen>
 </resources>
