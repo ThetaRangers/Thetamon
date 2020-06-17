@@ -1,5 +1,6 @@
 package it.thetarangers.thetamon.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ActionMode;
@@ -21,10 +22,12 @@ import com.simplecityapps.recyclerview_fastscroll.interfaces.OnFastScrollStateCh
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import it.thetarangers.thetamon.R;
 import it.thetarangers.thetamon.activities.PokedexActivity;
+import it.thetarangers.thetamon.activities.PokemonDetailActivity;
 import it.thetarangers.thetamon.adapters.PokedexAdapter;
 import it.thetarangers.thetamon.database.DaoThread;
 import it.thetarangers.thetamon.favorites.FavoritesManager;
@@ -126,9 +129,25 @@ public class FragmentPokedex extends Fragment implements SelectorCallback, Poked
     }
 
     @Override
-    public void onActivityResultCallback(int requestCode, int resultCode) {
-        if (requestCode == PokedexAdapter.REQ_CODE)
+    public void onActivityResultCallback(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == PokedexAdapter.REQ_CODE) {
+            if (data != null) {
+                @SuppressWarnings("unchecked")
+                HashMap<Integer, Boolean> pokemons = (HashMap<Integer, Boolean>) data
+                        .getSerializableExtra(PokemonDetailActivity.POKEMONS);
+                if (pokemons != null) {
+                    for (HashMap.Entry<Integer, Boolean> entry : pokemons.entrySet()) {
+                        for (Pokemon pokemon2 : holder.adapter.pokemonList) {
+                            if (entry.getKey() == pokemon2.getId()) {
+                                pokemon2.setFavorite(entry.getValue());
+                            }
+                        }
+                    }
+                    holder.adapter.notifyDataSetChanged();
+                }
+            }
             holder.adapter.setClickable(true);
+        }
     }
 
     class Callback implements android.view.ActionMode.Callback {

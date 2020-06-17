@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
@@ -24,6 +25,7 @@ import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.shape.CornerFamily;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -45,10 +47,16 @@ import it.thetarangers.thetamon.utilities.VolleyEvolutionChain;
 import it.thetarangers.thetamon.utilities.VolleyPokemonDetail;
 
 public class PokemonDetailActivity extends AppCompatActivity {
+
+    public static final String POKEMONS = "pokemons";
+    public static int RESULT_OK = 42;
+    public static int REQUEST_CODE = 42;
+
     Pokemon pokemon;
     Handler handler;
     List<Move> moves;
     FavoritesManager favoritesManager = new FavoritesManager(this);
+    Intent result;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +66,41 @@ public class PokemonDetailActivity extends AppCompatActivity {
         // built from parcelable
         pokemon = getIntent().getParcelableExtra("pokemon");
 
+        result = new Intent();
+
         handler = new Handler();
         new Holder();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (data != null) {
+            @SuppressWarnings("unchecked")
+            HashMap<Integer, Boolean> tmp = (HashMap<Integer, Boolean>) data.getSerializableExtra(POKEMONS);
+            if (tmp != null) {
+                @SuppressWarnings("unchecked")
+                HashMap<Integer, Boolean> current = (HashMap<Integer, Boolean>) result.getSerializableExtra(POKEMONS);
+                if (current == null) {
+                    current = new HashMap<>();
+                }
+                // Merge the two HashMaps
+                current.putAll(tmp);
+                result.putExtra(POKEMONS, current);
+                setResult(RESULT_OK, result);
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void updateIntent() {
+        @SuppressWarnings("unchecked")
+        HashMap<Integer, Boolean> toSend = (HashMap<Integer, Boolean>) result.getSerializableExtra(POKEMONS);
+        if (toSend == null) {
+            toSend = new HashMap<>();
+        }
+        toSend.put(pokemon.getId(), pokemon.getFavorite());
+        result.putExtra(POKEMONS, toSend);
+        setResult(RESULT_OK, result);
     }
 
     class Holder implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
@@ -221,13 +262,6 @@ public class PokemonDetailActivity extends AppCompatActivity {
                     .setBottomRightCorner(CornerFamily.ROUNDED, radius)
                     .build());
 
-            //set the favorite star
-            if (pokemon.getFavorite()) {
-                tbFavorite.setChecked(true);
-            } else {
-                tbFavorite.setChecked(false);
-            }
-            tbFavorite.setOnCheckedChangeListener(this);
             //set the loading views to visible
             clLoading.setVisibility(View.VISIBLE);
             clBody.setVisibility(View.INVISIBLE);
@@ -265,6 +299,14 @@ public class PokemonDetailActivity extends AppCompatActivity {
             DaoThread daoThread = new DaoThread();
 
             daoThread.getMoveDetails(PokemonDetailActivity.this, moves, handler, this::enableButton);
+
+            //set the favorite star
+            if (pokemon.getFavorite()) {
+                tbFavorite.setChecked(true);
+            } else {
+                tbFavorite.setChecked(false);
+            }
+            tbFavorite.setOnCheckedChangeListener(this);
 
         }
 
@@ -410,7 +452,7 @@ public class PokemonDetailActivity extends AppCompatActivity {
                     Intent data = new Intent(PokemonDetailActivity.this, PokemonDetailActivity.class);
                     data.putExtra("pokemon", pokemon);
 
-                    startActivity(data);
+                    startActivityForResult(data, REQUEST_CODE);
                 });
             };
 
@@ -428,6 +470,7 @@ public class PokemonDetailActivity extends AppCompatActivity {
                 } else {
                     favoritesManager.removePokemonFromFav(pokemon);
                 }
+                updateIntent();
             }
         }
     }

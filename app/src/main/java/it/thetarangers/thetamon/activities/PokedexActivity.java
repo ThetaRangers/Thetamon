@@ -105,7 +105,7 @@ public class PokedexActivity extends AppCompatActivity {
                 if (key == R.id.item_pokedex) {
                     OnActivityResultCallback callback = (OnActivityResultCallback) fragments.get(key);
                     assert callback != null;
-                    callback.onActivityResultCallback(requestCode, resultCode);
+                    callback.onActivityResultCallback(requestCode, resultCode, data);
                 }
                 break;
             }
@@ -145,7 +145,7 @@ public class PokedexActivity extends AppCompatActivity {
     }
 
     public interface OnActivityResultCallback {
-        void onActivityResultCallback(int requestCode, int resultCode);
+        void onActivityResultCallback(int requestCode, int resultCode, @Nullable Intent data);
     }
 
     class Holder implements NavigationView.OnNavigationItemSelectedListener {

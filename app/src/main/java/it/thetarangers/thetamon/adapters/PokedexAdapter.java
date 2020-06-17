@@ -37,7 +37,7 @@ import it.thetarangers.thetamon.utilities.TypeTextViewManager;
 public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHolder>
         implements FastScrollRecyclerView.SectionedAdapter {
     public static Integer REQ_CODE = 42;
-    private List<Pokemon> pokemonList;
+    public List<Pokemon> pokemonList;
     private Activity context;
     private Boolean isClickable;
 
