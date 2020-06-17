@@ -117,7 +117,7 @@ public class FragmentMoves extends BottomSheetDialogFragment {
             Move move = moveList.get(position);
 
 
-            if(isSearched[position]) {
+            if (isSearched[position]) {
                 fillMoveDetails(holder, move);
             }
 
@@ -154,6 +154,12 @@ public class FragmentMoves extends BottomSheetDialogFragment {
                         R.drawable.iv_special_background));
             }
 
+            if (isExpanded) {
+                holder.ivExpand.setRotation(180);
+            } else {
+                holder.ivExpand.setRotation(0);
+            }
+
             TypeTextViewManager.moveTextViewInit(requireContext(), move, holder.tvMoveType);
         }
 
@@ -164,7 +170,7 @@ public class FragmentMoves extends BottomSheetDialogFragment {
 
         private void fillMoveDetails(MoveHolder holder, Move move) {
             if (move.getPower() == null) {
-                holder.tvPower.setText(String.format("%s: -", getResources().getString(R.string.label_power)));
+                holder.tvPower.setText(String.format("%s: —", getResources().getString(R.string.label_power)));
             } else {
                 holder.tvPower.setText(StringManager.formatFromR(requireContext(), R.string.label_power, move.getPower()));
             }
@@ -198,6 +204,7 @@ public class FragmentMoves extends BottomSheetDialogFragment {
             TextView tvFlavor;
             ImageView ivDamageClass;
             ConstraintLayout clHidden;
+            ImageView ivExpand;
 
             public MoveHolder(@NonNull View itemView) {
                 super(itemView);
@@ -213,6 +220,7 @@ public class FragmentMoves extends BottomSheetDialogFragment {
                 tvAccuracy = itemView.findViewById(R.id.tvAccuracy);
                 tvEffect = itemView.findViewById(R.id.tvEffect);
                 tvFlavor = itemView.findViewById(R.id.tvFlavor);
+                ivExpand = itemView.findViewById(R.id.ivExpand);
 
                 itemView.setOnClickListener(this);
             }
