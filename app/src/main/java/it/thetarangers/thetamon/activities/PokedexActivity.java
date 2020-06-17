@@ -100,10 +100,10 @@ public class PokedexActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        for (Integer key : fragments.keySet()) {
-            if (Objects.requireNonNull(fragments.get(key)).isAdded()) {
-                if (key == R.id.item_pokedex) {
-                    OnActivityResultCallback callback = (OnActivityResultCallback) fragments.get(key);
+        for (HashMap.Entry<Integer, Fragment> entry : fragments.entrySet()) {
+            if (entry.getValue().isAdded()) {
+                if (entry.getKey() == R.id.item_pokedex) {
+                    OnActivityResultCallback callback = (OnActivityResultCallback) entry.getValue();
                     assert callback != null;
                     callback.onActivityResultCallback(requestCode, resultCode, data);
                 }
