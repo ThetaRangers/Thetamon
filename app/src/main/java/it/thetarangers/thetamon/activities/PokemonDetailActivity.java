@@ -23,6 +23,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.shape.CornerFamily;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -139,8 +140,13 @@ public class PokemonDetailActivity extends AppCompatActivity {
             VolleyEvolutionChain volleyEvolutionChain = new VolleyEvolutionChain(PokemonDetailActivity.this) {
                 @Override
                 public void fill(EvolutionDetail evolutionDetail) {
-                    fillEvolution(evolutionDetail);
+                    pokemon.setEvolutionChain(evolutionDetail.toJSON());
+                    DaoThread thread = new DaoThread();
 
+                    // Save pokemon when the API is called
+                    thread.savePokemon(PokemonDetailActivity.this, pokemon);
+
+                    fillEvolution(evolutionDetail);
                     // Fill the view with details when all information are available
                     Holder.this.afterDetails();
                 }
@@ -153,10 +159,6 @@ public class PokemonDetailActivity extends AppCompatActivity {
                     PokemonDetailActivity.this.pokemon = pokemon;
 
                     pokemon.encode();
-                    DaoThread thread = new DaoThread();
-
-                    // Save pokemon when the API is called
-                    thread.savePokemon(PokemonDetailActivity.this, pokemon);
 
                     volleyEvolutionChain.getEvolutionChain(pokemon.getUrlEvolutionChain());
                 }
@@ -166,15 +168,20 @@ public class PokemonDetailActivity extends AppCompatActivity {
                 PokemonDao dao = PokemonDb.getInstance(PokemonDetailActivity.this).pokemonDao();
                 Pokemon tmp = dao.getPokemonFromId(pokemon.getId()).get(0);
 
-                Log.d("Tokyo", "Sono il pokemon del DB e sono un favorito: " + )
+                Log.d("Tokyo", "Sono il pokemon del DB e sono un favorito: ");
 
                 //Call the API only if the pokemon is not in the DB
                 if (tmp.getMovesList() == null) {
                     // Get the detail of the pokemon
                     volley.getPokemonDetail();
-                } else {
+                } else  {
                     pokemon = tmp;
-                    volleyEvolutionChain.getEvolutionChain(pokemon.getUrlEvolutionChain());
+                    EvolutionDetail ev = new Gson().fromJson(pokemon.getEvolutionChain(), EvolutionDetail.class);
+
+                    handler.post(() -> {
+                        fillEvolution(ev);
+                        Holder.this.afterDetails();
+                    });
                 }
             });
 

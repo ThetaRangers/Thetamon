@@ -71,6 +71,8 @@ public class Pokemon implements Parcelable {
 
     private String urlEvolutionChain;
 
+    private String evolutionChain;
+
     @Ignore
     private List<Move> movesList;
 
@@ -434,6 +436,14 @@ public class Pokemon implements Parcelable {
 
     public void setMoveArray(String moveArray) {
         this.moveArray = moveArray;
+    }
+
+    public String getEvolutionChain() {
+        return evolutionChain;
+    }
+
+    public void setEvolutionChain(String evolutionChain) {
+        this.evolutionChain = evolutionChain;
     }
 
     @Override
