@@ -26,6 +26,7 @@ import java.util.Locale;
 
 import it.thetarangers.thetamon.R;
 import it.thetarangers.thetamon.activities.PokemonDetailActivity;
+import it.thetarangers.thetamon.favorites.FavoritesManager;
 import it.thetarangers.thetamon.listener.SelectorCallback;
 import it.thetarangers.thetamon.listener.SelectorListener;
 import it.thetarangers.thetamon.model.Pokemon;
@@ -36,7 +37,7 @@ import it.thetarangers.thetamon.utilities.TypeTextViewManager;
 public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHolder>
         implements FastScrollRecyclerView.SectionedAdapter {
     public static Integer REQ_CODE = 42;
-    private List<Pokemon> pokemonList;
+    public List<Pokemon> pokemonList;
     private Activity context;
     private Boolean isClickable;
 
@@ -177,6 +178,7 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHold
             tvType1 = itemView.findViewById(R.id.tvType1);
             tvType2 = itemView.findViewById(R.id.tvType2);
             tbFavorite = itemView.findViewById(R.id.tbFavorite);
+            tbFavorite.setOnClickListener(this);
         }
 
         @Override
@@ -184,23 +186,31 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHold
             if (!isClickable)
                 return;
 
-            if (selectList.selectedSize() > 0)
-                selectList.onLongClick(v);
-            else {
-                Intent data = new Intent(context, PokemonDetailActivity.class);
-                data.putExtra("pokemon", actualPokemon);
+            if (v.getId() == R.id.cvPokemon) {
+                if (selectList.selectedSize() > 0)
+                    selectList.onLongClick(v);
+                else {
+                    Intent data = new Intent(context, PokemonDetailActivity.class);
+                    data.putExtra("pokemon", actualPokemon);
 
-                ActivityOptions options = ActivityOptions
-                        .makeSceneTransitionAnimation(context,
-                                Pair.create(imageView, "cardExpansion"),
-                                Pair.create(ivSprite, "imageExpansion"),
-                                Pair.create(tvId, "transId"),
-                                Pair.create(tvName, "transName"));
+                    ActivityOptions options = ActivityOptions
+                            .makeSceneTransitionAnimation(context,
+                                    Pair.create(imageView, "cardExpansion"),
+                                    Pair.create(ivSprite, "imageExpansion"),
+                                    Pair.create(tvId, "transId"),
+                                    Pair.create(tvName, "transName"));
 
-                setClickable(false);
-                context.startActivityForResult(data, REQ_CODE, options.toBundle());
+                    setClickable(false);
+                    context.startActivityForResult(data, REQ_CODE, options.toBundle());
+                }
+            } else if (v.getId() == R.id.tbFavorite) {
+                FavoritesManager fm = new FavoritesManager(context);
+                if (tbFavorite.isChecked()) {
+                    fm.addPokemonToFav(actualPokemon);
+                } else {
+                    fm.removePokemonFromFav(actualPokemon);
+                }
             }
         }
     }
 }
-

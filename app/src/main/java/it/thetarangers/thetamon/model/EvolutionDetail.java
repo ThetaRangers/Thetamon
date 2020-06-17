@@ -1,16 +1,14 @@
 package it.thetarangers.thetamon.model;
 
 import android.content.Context;
-import android.content.res.Resources;
-import android.util.Log;
 
-import org.json.JSONObject;
+import androidx.room.Ignore;
 
-import java.lang.reflect.Field;
+import com.google.gson.Gson;
+
 import java.util.List;
 
 import it.thetarangers.thetamon.R;
-import it.thetarangers.thetamon.utilities.StringManager;
 
 public class EvolutionDetail {
     private Integer gender;
@@ -32,10 +30,17 @@ public class EvolutionDetail {
     private String trigger;
     private Boolean turn_upside_down;
 
+    @Ignore
     private List<EvolutionDetail> nextPokemon;
     private String name;
 
     private String evolutionCondition = "";
+
+    public String toJSON() {
+        Gson gson = new Gson();
+
+        return gson.toJson(this);
+    }
 
     public Integer getGender() {
         return gender;

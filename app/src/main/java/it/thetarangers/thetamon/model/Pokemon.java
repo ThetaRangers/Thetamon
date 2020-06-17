@@ -5,12 +5,9 @@ import android.os.Parcelable;
 import android.util.Log;
 
 import androidx.room.ColumnInfo;
-import androidx.room.Embedded;
 import androidx.room.Entity;
 import androidx.room.Ignore;
-import androidx.room.Junction;
 import androidx.room.PrimaryKey;
-import androidx.room.Relation;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -26,6 +23,17 @@ import java.util.List;
 @Entity(tableName = "Pokemon")
 public class Pokemon implements Parcelable {
 
+    public static final Creator<Pokemon> CREATOR = new Creator<Pokemon>() {
+        @Override
+        public Pokemon createFromParcel(Parcel in) {
+            return new Pokemon(in);
+        }
+
+        @Override
+        public Pokemon[] newArray(int size) {
+            return new Pokemon[size];
+        }
+    };
     @PrimaryKey
     private int id;
     @ColumnInfo(name = "name")
@@ -65,18 +73,14 @@ public class Pokemon implements Parcelable {
     private String habitat;
     private String moveArray;
     private String abilityArray;
-
     @ColumnInfo(defaultValue = "false")
     private boolean isFavorite;
-
     private String urlEvolutionChain;
-
+    private String evolutionChain;
     @Ignore
     private List<Move> movesList;
-
     @Ignore
     private List<Ability> abilityList;
-
     @Ignore
     private HashMap<String, String> sprites;
 
@@ -116,18 +120,6 @@ public class Pokemon implements Parcelable {
         isFavorite = in.readInt() != 0;
     }
 
-    public static final Creator<Pokemon> CREATOR = new Creator<Pokemon>() {
-        @Override
-        public Pokemon createFromParcel(Parcel in) {
-            return new Pokemon(in);
-        }
-
-        @Override
-        public Pokemon[] newArray(int size) {
-            return new Pokemon[size];
-        }
-    };
-
     public Pokemon() {
 
     }
@@ -136,7 +128,7 @@ public class Pokemon implements Parcelable {
         List<JSONObject> moveArray = new ArrayList<>();
 
         Gson gson = new Gson();
-        for(int i = 0; i < this.movesList.size(); i++) {
+        for (int i = 0; i < this.movesList.size(); i++) {
             String move = gson.toJson(this.movesList.get(i));
             try {
                 moveArray.add(new JSONObject(move));
@@ -153,7 +145,7 @@ public class Pokemon implements Parcelable {
         List<JSONObject> abilityArray = new ArrayList<>();
         Gson gson = new Gson();
 
-        for(int i = 0; i < this.abilityList.size(); i++) {
+        for (int i = 0; i < this.abilityList.size(); i++) {
             String move = gson.toJson(this.abilityList.get(i));
             try {
                 abilityArray.add(new JSONObject(move));
@@ -287,7 +279,7 @@ public class Pokemon implements Parcelable {
 
     public List<Move> getMovesList() {
         Gson gson = new Gson();
-        if(movesList == null) {
+        if (movesList == null) {
             Type listType = new TypeToken<List<Move>>() {
             }.getType();    //Setting up the type for the conversion
 
@@ -319,7 +311,7 @@ public class Pokemon implements Parcelable {
 
     public List<Ability> getAbilityList() {
         Gson gson = new Gson();
-        if(abilityList == null) {
+        if (abilityList == null) {
             Log.d("HALO", "STO RECUPERANDO " + abilityArray);
             Type listType = new TypeToken<List<Ability>>() {
             }.getType();    //Setting up the type for the conversion
@@ -436,6 +428,14 @@ public class Pokemon implements Parcelable {
         this.moveArray = moveArray;
     }
 
+    public String getEvolutionChain() {
+        return evolutionChain;
+    }
+
+    public void setEvolutionChain(String evolutionChain) {
+        this.evolutionChain = evolutionChain;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -466,6 +466,40 @@ public class Pokemon implements Parcelable {
         dest.writeTypedList(movesList);
         dest.writeTypedList(abilityList);
         dest.writeInt(isFavorite ? 1 : 0);
+    }
+
+    public void setAll(Pokemon pokemon) {
+        this.id = pokemon.getId();
+        this.abilityArray = pokemon.getAbilityArray();
+        this.abilityList = pokemon.getAbilityList();
+        this.attack = pokemon.getAttack();
+        this.averageColor = pokemon.getAverageColor();
+        this.captureRate = pokemon.getCaptureRate();
+        this.defense = pokemon.getDefense();
+        this.specialDefense = pokemon.getSpecialDefense();
+        this.evolutionChain = pokemon.getEvolutionChain();
+        this.flavorText = pokemon.getFlavorText();
+        this.genderRate = pokemon.getGenderRate();
+        this.growthRate = pokemon.getGrowthRate();
+        this.habitat = pokemon.getHabitat();
+        this.height = pokemon.getHeight();
+        this.hp = pokemon.getHp();
+        this.isFavorite = pokemon.getFavorite();
+        this.moveArray = pokemon.getMoveArray();
+        this.movesList = pokemon.getMovesList();
+        this.name = pokemon.getName();
+        this.specialAttack = pokemon.getSpecialAttack();
+        this.speed = pokemon.getSpeed();
+        this.sprites = pokemon.getSprites();
+        this.type1 = pokemon.getType1();
+        this.type2 = pokemon.getType2();
+        this.url = pokemon.getUrl();
+        this.urlEvolutionChain = pokemon.getUrlEvolutionChain();
+        this.weight = pokemon.getWeight();
+    }
+
+    public EvolutionDetail getEvolutionDetail() {
+        return new Gson().fromJson(this.getEvolutionChain(), EvolutionDetail.class);
     }
 
     /*

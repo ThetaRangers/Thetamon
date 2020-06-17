@@ -17,6 +17,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
@@ -25,6 +26,7 @@ import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.shape.CornerFamily;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -46,10 +48,16 @@ import it.thetarangers.thetamon.utilities.VolleyEvolutionChain;
 import it.thetarangers.thetamon.utilities.VolleyPokemonDetail;
 
 public class PokemonDetailActivity extends AppCompatActivity {
+
+    public static final String POKEMONS = "pokemons";
+    public static int RESULT_OK = 42;
+    public static int REQUEST_CODE = 42;
+
     Pokemon pokemon;
     Handler handler;
     List<Move> moves;
     FavoritesManager favoritesManager = new FavoritesManager(this);
+    Intent result;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,10 +67,41 @@ public class PokemonDetailActivity extends AppCompatActivity {
         // built from parcelable
         pokemon = getIntent().getParcelableExtra("pokemon");
 
-        Log.d("Tokyo", "Sono della detail e il fav è " + pokemon.getFavorite());
+        result = new Intent();
 
         handler = new Handler();
         new Holder();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (data != null) {
+            @SuppressWarnings("unchecked")
+            HashMap<Integer, Boolean> tmp = (HashMap<Integer, Boolean>) data.getSerializableExtra(POKEMONS);
+            if (tmp != null) {
+                @SuppressWarnings("unchecked")
+                HashMap<Integer, Boolean> current = (HashMap<Integer, Boolean>) result.getSerializableExtra(POKEMONS);
+                if (current == null) {
+                    current = new HashMap<>();
+                }
+                // Merge the two HashMaps
+                current.putAll(tmp);
+                result.putExtra(POKEMONS, current);
+                setResult(RESULT_OK, result);
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void updateIntent() {
+        @SuppressWarnings("unchecked")
+        HashMap<Integer, Boolean> toSend = (HashMap<Integer, Boolean>) result.getSerializableExtra(POKEMONS);
+        if (toSend == null) {
+            toSend = new HashMap<>();
+        }
+        toSend.put(pokemon.getId(), pokemon.getFavorite());
+        result.putExtra(POKEMONS, toSend);
+        setResult(RESULT_OK, result);
     }
 
     class Holder implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
@@ -80,6 +119,13 @@ public class PokemonDetailActivity extends AppCompatActivity {
         final TextView tvSpeed;
         final TextView tvFlavorText;
         final LinearLayout llAbilities;
+        final ProgressBar pbHp;
+        final ProgressBar pbAttack;
+        final ProgressBar pbDefense;
+        final ProgressBar pbSpecialAttack;
+        final ProgressBar pbSpecialDefense;
+        final ProgressBar pbSpeed;
+
 
         final TextView tvLoading, tvType1, tvType2;
 
@@ -109,6 +155,13 @@ public class PokemonDetailActivity extends AppCompatActivity {
             tvSpecialDefense = findViewById(R.id.tvSpecialDefense);
             tvSpeed = findViewById(R.id.tvSpeed);
 
+            pbHp = findViewById(R.id.pbHp);
+            pbAttack = findViewById(R.id.pbAttack);
+            pbDefense = findViewById(R.id.pbDefense);
+            pbSpecialAttack = findViewById(R.id.pbSpecialAttack);
+            pbSpecialDefense = findViewById(R.id.pbSpecialDefense);
+            pbSpeed = findViewById(R.id.pbSpeed);
+
             tvFlavorText = findViewById(R.id.tvFlavorText);
 
             tvLoading = findViewById(R.id.tvLoading);
@@ -129,7 +182,6 @@ public class PokemonDetailActivity extends AppCompatActivity {
             clLoading = findViewById(R.id.clLoading);
 
             tbFavorite = findViewById(R.id.tbFavorite);
-            tbFavorite.setOnCheckedChangeListener(this);
 
             imageManager = new ImageManager();
 
@@ -139,8 +191,13 @@ public class PokemonDetailActivity extends AppCompatActivity {
             VolleyEvolutionChain volleyEvolutionChain = new VolleyEvolutionChain(PokemonDetailActivity.this) {
                 @Override
                 public void fill(EvolutionDetail evolutionDetail) {
-                    fillEvolution(evolutionDetail);
+                    pokemon.setEvolutionChain(evolutionDetail.toJSON());
+                    DaoThread thread = new DaoThread();
 
+                    // Save pokemon when the API is called
+                    thread.savePokemon(PokemonDetailActivity.this, pokemon);
+
+                    fillEvolution(evolutionDetail);
                     // Fill the view with details when all information are available
                     Holder.this.afterDetails();
                 }
@@ -153,10 +210,6 @@ public class PokemonDetailActivity extends AppCompatActivity {
                     PokemonDetailActivity.this.pokemon = pokemon;
 
                     pokemon.encode();
-                    DaoThread thread = new DaoThread();
-
-                    // Save pokemon when the API is called
-                    thread.savePokemon(PokemonDetailActivity.this, pokemon);
 
                     volleyEvolutionChain.getEvolutionChain(pokemon.getUrlEvolutionChain());
                 }
@@ -166,15 +219,22 @@ public class PokemonDetailActivity extends AppCompatActivity {
                 PokemonDao dao = PokemonDb.getInstance(PokemonDetailActivity.this).pokemonDao();
                 Pokemon tmp = dao.getPokemonFromId(pokemon.getId()).get(0);
 
-                Log.d("Tokyo", "Sono il pokemon del DB e sono un favorito: " + )
+                Log.d("Tokyo", "Sono il pokemon del DB e sono un favorito: ");
 
                 //Call the API only if the pokemon is not in the DB
                 if (tmp.getMovesList() == null) {
                     // Get the detail of the pokemon
+                    Log.d("POKE", "volley");
                     volley.getPokemonDetail();
                 } else {
+                    Log.d("POKE", "db");
                     pokemon = tmp;
-                    volleyEvolutionChain.getEvolutionChain(pokemon.getUrlEvolutionChain());
+                    EvolutionDetail ev = tmp.getEvolutionDetail();
+
+                    handler.post(() -> {
+                        fillEvolution(ev);
+                        Holder.this.afterDetails();
+                    });
                 }
             });
 
@@ -217,12 +277,6 @@ public class PokemonDetailActivity extends AppCompatActivity {
                     .setBottomRightCorner(CornerFamily.ROUNDED, radius)
                     .build());
 
-            //set the favorite star
-            if (pokemon.getFavorite())
-                tbFavorite.setChecked(true);
-            else
-                tbFavorite.setChecked(false);
-
             //set the loading views to visible
             clLoading.setVisibility(View.VISIBLE);
             clBody.setVisibility(View.INVISIBLE);
@@ -246,11 +300,18 @@ public class PokemonDetailActivity extends AppCompatActivity {
             //Fill text views with pokemon's details
             tvHabitat.setText(String.format(Locale.getDefault(), "%s: %s", res.getString(R.string.label_habitat), StringManager.capitalize(pokemon.getHabitat())));
             tvHp.setText(String.format(Locale.getDefault(), "%s: %d", res.getString(R.string.label_hp), pokemon.getHp()));
+            pbHp.setProgress(pokemon.getHp());
             tvAttack.setText(String.format(Locale.getDefault(), "%s: %d", res.getString(R.string.label_attack), pokemon.getAttack()));
+            pbAttack.setProgress(pokemon.getAttack());
             tvDefense.setText(String.format(Locale.getDefault(), "%s: %d", res.getString(R.string.label_defense), pokemon.getDefense()));
+            pbDefense.setProgress(pokemon.getDefense());
             tvSpecialAttack.setText(String.format(Locale.getDefault(), "%s: %d", res.getString(R.string.label_special_attack), pokemon.getSpecialAttack()));
+            pbSpecialAttack.setProgress(pokemon.getSpecialAttack());
             tvSpecialDefense.setText(String.format(Locale.getDefault(), "%s: %d", res.getString(R.string.label_special_defense), pokemon.getSpecialDefense()));
+            pbSpecialDefense.setProgress(pokemon.getSpecialDefense());
             tvSpeed.setText(String.format(Locale.getDefault(), "%s: %d", res.getString(R.string.label_speed), pokemon.getSpeed()));
+            pbSpeed.setProgress(pokemon.getSpeed());
+
             tvFlavorText.setText(StringManager.format(pokemon.getFlavorText()));
 
             fillAbilities(pokemon);
@@ -260,6 +321,14 @@ public class PokemonDetailActivity extends AppCompatActivity {
             DaoThread daoThread = new DaoThread();
 
             daoThread.getMoveDetails(PokemonDetailActivity.this, moves, handler, this::enableButton);
+
+            //set the favorite star
+            if (pokemon.getFavorite()) {
+                tbFavorite.setChecked(true);
+            } else {
+                tbFavorite.setChecked(false);
+            }
+            tbFavorite.setOnCheckedChangeListener(this);
 
         }
 
@@ -405,7 +474,7 @@ public class PokemonDetailActivity extends AppCompatActivity {
                     Intent data = new Intent(PokemonDetailActivity.this, PokemonDetailActivity.class);
                     data.putExtra("pokemon", pokemon);
 
-                    startActivity(data);
+                    startActivityForResult(data, REQUEST_CODE);
                 });
             };
 
@@ -418,13 +487,12 @@ public class PokemonDetailActivity extends AppCompatActivity {
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
             // if tap on favorite star
             if (buttonView.getId() == R.id.tbFavorite) {
-                // if pokemon is already in fav
-                if (pokemon.getFavorite()) {
-                    favoritesManager.removePokemonFromFav(pokemon);
-                    tbFavorite.setChecked(false);
+                if (isChecked) {
+                    favoritesManager.addPokemonToFav(pokemon);
                 } else {
-
+                    favoritesManager.removePokemonFromFav(pokemon);
                 }
+                updateIntent();
             }
         }
     }

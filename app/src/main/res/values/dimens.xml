@@ -17,7 +17,9 @@
     <dimen name="type_card_vertical_padding">4dp</dimen>
     <dimen name="pokemon_detail_image_radius">50dp</dimen>
     <dimen name="detail_sprite_padding">8dp</dimen>
-    <dimen name="icon_size">32dp</dimen>
+    <dimen name="icon_size">28dp</dimen>
     <dimen name="iv_expand_side">20dp</dimen>
     <dimen name="iv_damage_class_width">46dp</dimen>
+    <dimen name="sprite_about_size">200dp</dimen>
+    <dimen name="margin_gigamax">32dp</dimen>
 </resources>

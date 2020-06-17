@@ -1,12 +1,14 @@
 package it.thetarangers.thetamon.favorites;
 
 import android.content.Context;
-import android.util.Log;
 
 import java.util.List;
 
 import it.thetarangers.thetamon.database.DaoThread;
+import it.thetarangers.thetamon.model.EvolutionDetail;
 import it.thetarangers.thetamon.model.Pokemon;
+import it.thetarangers.thetamon.utilities.VolleyEvolutionChain;
+import it.thetarangers.thetamon.utilities.VolleyPokemonDetail;
 
 public class FavoritesManager {
 
@@ -20,12 +22,36 @@ public class FavoritesManager {
 
     public void addPokemonToFav(Pokemon pokemon) {
 
-        // TODO check if data are present and if its in fav
-        // and if not download and set all the data
-
-        // set true to fav
+        // Set true to fav
         pokemon.setFavorite(true);
-        daoThread.setPokemonFav(context, pokemon, true);
+
+        // Download details if not already in db
+        if (pokemon.getMovesList() == null) {
+
+            VolleyEvolutionChain volleyEvolutionChain = new VolleyEvolutionChain(context) {
+                @Override
+                public void fill(EvolutionDetail evolutionDetail) {
+                    pokemon.setEvolutionChain(evolutionDetail.toJSON());
+                    DaoThread thread = new DaoThread();
+
+                    // Save pokemon when the API is called
+                    thread.savePokemon(context, pokemon);
+                }
+            };
+
+            VolleyPokemonDetail vm = new VolleyPokemonDetail(context, pokemon) {
+                @Override
+                public void fill(Pokemon pokemonDetail) {
+                    pokemon.setAll(pokemonDetail);
+                    pokemon.encode();
+                    volleyEvolutionChain.getEvolutionChain(pokemon.getUrlEvolutionChain());
+                }
+            };
+
+            vm.getPokemonDetail();
+        } else {
+            daoThread.setPokemonFav(context, pokemon, true);
+        }
     }
 
     public void addPokemonToFav(List<Pokemon> pokemons) {

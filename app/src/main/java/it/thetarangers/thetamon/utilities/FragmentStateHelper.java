@@ -33,8 +33,8 @@ public class FragmentStateHelper {
     public Bundle saveHelperState() {
         Bundle state = new Bundle();
 
-        for (Integer key : fragmentSavedStates.keySet()) {
-            state.putParcelable(key.toString(), fragmentSavedStates.get(key));
+        for (HashMap.Entry<Integer, Fragment.SavedState> entry : fragmentSavedStates.entrySet()) {
+            state.putParcelable(entry.getKey().toString(), entry.getValue());
         }
 
         return state;
