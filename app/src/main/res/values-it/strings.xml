@@ -67,4 +67,6 @@
     <string name="remove_all_from_favourites">Rimuovi preferiti</string>
     <string name="add_all_to_favourites">Aggiungi ai preferiti</string>
     <string name="label_team">Il nostro Team:</string>
+    <string name="label_gender">Rateo di genere</string>
+    <string name="label_genderless">Senza genere</string>
 </resources>

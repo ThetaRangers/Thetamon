@@ -107,6 +107,14 @@
                     android:textOn=""
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageButton
+                    android:id="@+id/button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="?attr/homeAsUpIndicator" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -211,6 +219,32 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                    android:id="@+id/tvGenderRate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_gender"
+                    app:layout_constraintBottom_toBottomOf="@+id/pbGender"
+                    app:layout_constraintEnd_toStartOf="@+id/guideline6"
+                    app:layout_constraintTop_toTopOf="@+id/pbGender" />
+
+                <ProgressBar
+                    android:id="@+id/pbGender"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_small"
+                    android:layout_marginTop="@dimen/margin_medium"
+                    android:max="8"
+                    android:min="0"
+                    android:progress="3"
+                    android:progressBackgroundTint="#002AFF"
+                    android:progressBackgroundTintMode="src_over"
+                    android:progressTint="#FF00BF"
+                    app:layout_constraintEnd_toStartOf="@+id/guideline5"
+                    app:layout_constraintStart_toStartOf="@+id/guideline6"
+                    app:layout_constraintTop_toBottomOf="@+id/tvFlavorText" />
+
+                <TextView
                     android:id="@+id/tvFlavorText"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -229,7 +263,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_large"
                     app:layout_constraintEnd_toStartOf="@+id/guideline6"
-                    app:layout_constraintTop_toBottomOf="@+id/tvFlavorText"
+                    app:layout_constraintTop_toBottomOf="@+id/pbGender"
                     tools:visibility="visible" />
 
                 <ProgressBar

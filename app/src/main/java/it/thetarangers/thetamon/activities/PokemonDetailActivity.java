@@ -118,6 +118,7 @@ public class PokemonDetailActivity extends AppCompatActivity {
         final TextView tvSpecialDefense;
         final TextView tvSpeed;
         final TextView tvFlavorText;
+        final TextView tvGender;
         final LinearLayout llAbilities;
         final ProgressBar pbHp;
         final ProgressBar pbAttack;
@@ -125,6 +126,7 @@ public class PokemonDetailActivity extends AppCompatActivity {
         final ProgressBar pbSpecialAttack;
         final ProgressBar pbSpecialDefense;
         final ProgressBar pbSpeed;
+        final ProgressBar pbGender;
 
 
         final TextView tvLoading, tvType1, tvType2;
@@ -154,6 +156,7 @@ public class PokemonDetailActivity extends AppCompatActivity {
             tvSpecialAttack = findViewById(R.id.tvSpecialAttack);
             tvSpecialDefense = findViewById(R.id.tvSpecialDefense);
             tvSpeed = findViewById(R.id.tvSpeed);
+            tvGender = findViewById(R.id.tvGenderRate);
 
             pbHp = findViewById(R.id.pbHp);
             pbAttack = findViewById(R.id.pbAttack);
@@ -161,6 +164,7 @@ public class PokemonDetailActivity extends AppCompatActivity {
             pbSpecialAttack = findViewById(R.id.pbSpecialAttack);
             pbSpecialDefense = findViewById(R.id.pbSpecialDefense);
             pbSpeed = findViewById(R.id.pbSpeed);
+            pbGender = findViewById(R.id.pbGender);
 
             tvFlavorText = findViewById(R.id.tvFlavorText);
 
@@ -171,6 +175,15 @@ public class PokemonDetailActivity extends AppCompatActivity {
             btnMoves = findViewById(R.id.btnMoves);
             btnMoves.setOnClickListener(this);
             btnMoves.setEnabled(false);
+
+            findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(PokemonDetailActivity.this, PokedexActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                }
+            });
 
             llAbilities = findViewById(R.id.llAbilities);
 
@@ -311,6 +324,17 @@ public class PokemonDetailActivity extends AppCompatActivity {
             pbSpecialDefense.setProgress(pokemon.getSpecialDefense());
             tvSpeed.setText(String.format(Locale.getDefault(), "%s: %d", res.getString(R.string.label_speed), pokemon.getSpeed()));
             pbSpeed.setProgress(pokemon.getSpeed());
+
+            int genderRate = pokemon.getGenderRate();
+            double genderPerc = (genderRate / 8.0) * 100;
+            if(genderRate == -1) {
+                tvGender.setText(PokemonDetailActivity.this.getString(R.string.label_genderless));
+                pbGender.setProgress(8);
+                pbGender.getProgressDrawable().setTint(PokemonDetailActivity.this.getColor(R.color.colorGenderLess));
+            } else {
+                tvGender.setText(String.format(Locale.getDefault(), "%s: %3.1fF %3.1fM", "Gender rate", genderPerc, (100 - genderPerc)));
+                pbGender.setProgress(genderRate);
+            }
 
             tvFlavorText.setText(StringManager.format(pokemon.getFlavorText()));
 

@@ -62,4 +62,6 @@
     <color name="colorStarStroke">#FFFFFF</color>
     <color name="colorStarSelected">#FCE205</color>
     <color name="colorStarUnselected">#555555</color>
+
+    <color name="colorGenderLess">#999999</color>
 </resources>
