@@ -3,6 +3,7 @@ package it.thetarangers.thetamon.fragments;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,7 +15,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.HashMap;
@@ -29,7 +29,6 @@ import it.thetarangers.thetamon.favorites.FavoritesManager;
 import it.thetarangers.thetamon.listener.SelectorCallback;
 import it.thetarangers.thetamon.model.Pokemon;
 import it.thetarangers.thetamon.viewmodel.FavoriteListViewModel;
-import android.view.ActionMode;
 
 public class FragmentFavorites extends Fragment implements SelectorCallback, PokedexActivity.OnActivityResultCallback {
     private Holder holder;
@@ -61,11 +60,11 @@ public class FragmentFavorites extends Fragment implements SelectorCallback, Pok
 
     @Override
     public void onSelect(int size) {
-        if(actionMode != null){
-            if(size == 0)
+        if (actionMode != null) {
+            if (size == 0)
                 actionMode.finish();
             else
-                actionMode.setTitle(getString(R.string.menu_start_title)+" "+size + getString(R.string.menu_end_title));
+                actionMode.setTitle(getString(R.string.menu_start_title) + " " + size + getString(R.string.menu_end_title));
             return;
         }
 
@@ -91,36 +90,41 @@ public class FragmentFavorites extends Fragment implements SelectorCallback, Pok
                     holder.adapter.notifyDataSetChanged();
                 }
             }
-            holder.adapter.setClickable(true);
             daoThread.getFavoritePokemon(getContext(), favoriteListViewModel);
         }
 
     }
 
-    class FavoritesCallback implements android.view.ActionMode.Callback{
+    @Override
+    public void onResume() {
+        holder.adapter.setClickable(true);
+        super.onResume();
+    }
+
+    class FavoritesCallback implements android.view.ActionMode.Callback {
 
         FavoritesManager favoritesManager = new FavoritesManager(requireContext());
 
         @Override
-        public boolean onCreateActionMode(ActionMode mode, Menu menu){
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             mode.getMenuInflater().inflate(R.menu.menu_action_mode, menu);
-            ((PokedexActivity)requireActivity()).lockDrawer();
+            ((PokedexActivity) requireActivity()).lockDrawer();
             //TODO hardcoded string
             MenuItem itemAdd = menu.getItem(0);
             itemAdd.setEnabled(false);
-            mode.setTitle(getString(R.string.menu_start_title)+ " 1" + getString(R.string.menu_end_title));
+            mode.setTitle(getString(R.string.menu_start_title) + " 1" + getString(R.string.menu_end_title));
             return true;
         }
 
         @Override
-        public boolean onPrepareActionMode(ActionMode mode, Menu menu){
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
             return false;
         }
 
         @Override
-        public boolean onActionItemClicked(ActionMode mode, MenuItem menuItem){
+        public boolean onActionItemClicked(ActionMode mode, MenuItem menuItem) {
             List<Pokemon> sel = holder.adapter.getSelected();
-            switch(menuItem.getItemId()){
+            switch (menuItem.getItemId()) {
                 case R.id.item_deselect:
                     mode.finish();
                     break;
@@ -138,9 +142,9 @@ public class FragmentFavorites extends Fragment implements SelectorCallback, Pok
         }
 
         @Override
-        public void onDestroyActionMode(ActionMode mode){
+        public void onDestroyActionMode(ActionMode mode) {
             holder.adapter.deselectAll();
-            ((PokedexActivity)requireActivity()).unlockDrawer();
+            ((PokedexActivity) requireActivity()).unlockDrawer();
             actionMode = null;
         }
     }

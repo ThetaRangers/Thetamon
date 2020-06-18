@@ -15,7 +15,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -147,8 +146,13 @@ public class FragmentPokedex extends Fragment implements SelectorCallback, Poked
                     holder.adapter.notifyDataSetChanged();
                 }
             }
-            holder.adapter.setClickable(true);
         }
+    }
+
+    @Override
+    public void onResume() {
+        holder.adapter.setClickable(true);
+        super.onResume();
     }
 
     class PokedexCallback implements android.view.ActionMode.Callback {
