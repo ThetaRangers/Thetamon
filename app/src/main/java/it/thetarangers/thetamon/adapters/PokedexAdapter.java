@@ -43,14 +43,12 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHold
 
     private ImageManager imageManager = new ImageManager();
     private SelectorListener selectList;
-    private SelectorCallback call;
 
     //aggiustare chi crea l adapter
     public PokedexAdapter(Activity context, SelectorCallback call) {
         this.pokemonList = new ArrayList<>();
         this.context = context;
         isClickable = true;
-        this.call = call;
         this.selectList = new SelectorListener(call);
 
     }
@@ -79,26 +77,24 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHold
         return selected;
     }
 
-    public List<Pokemon> getPokemonList() {
-        return this.pokemonList;
-    }
-
     public void setPokemonList(List<Pokemon> pokemonList) {
         if (pokemonList.size() > 0) {
             this.pokemonList = pokemonList;
-            selectList.clearList();
             notifyDataSetChanged();
         } else {
-            if (context
-                    != null) {
-                Toast t = Toast.makeText(context
-                        ,
+            if (context != null) {
+                Toast t = Toast.makeText(context,
                         context
                                 .getString(R.string.no_pokemon_found),
                         Toast.LENGTH_SHORT);
                 t.show();
             }
         }
+    }
+
+    public void setFavoriteList(List<Pokemon> pokemonList) {
+        this.pokemonList = pokemonList;
+        notifyDataSetChanged();
     }
 
     @NonNull

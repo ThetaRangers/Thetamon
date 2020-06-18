@@ -72,7 +72,6 @@
     <string name="evo_trade_specie">traded with</string>
     <string name="evo_upside_down">while console is upside down</string>
     <string name="evo_overworld_rain">while it\'s raining</string>
-
     <string name="label_power">Power</string>
     <string name="label_accuracy">Accuracy</string>
     <string name="label_pp" translatable="false">PP</string>

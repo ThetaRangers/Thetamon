@@ -78,5 +78,5 @@
     <string name="label_reveal">Rivela</string>
     <string name="label_next">Prossimo</string>
     <string name="menu_start_title">Selezionati </string>
-    <string name="menu_end_title" translatable="false">/10 Pokémon</string>
+    <string name="menu_end_title">/10 Pokémon</string>
 </resources>

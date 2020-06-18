@@ -19,6 +19,10 @@ public class FavoriteListViewModel extends ViewModel {
         return pokemons;
     }
 
+    public void setFavorites(List<Pokemon> pokemons) {
+        this.pokemons.setValue(pokemons);
+    }
+
     public void setFavoritesAsynchronous(List<Pokemon> pokemons) {
         this.pokemons.postValue(pokemons);
     }
