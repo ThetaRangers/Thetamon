@@ -54,7 +54,7 @@ public abstract class VolleyAbility implements Response.ErrorListener, Response.
             Ability ability = gson.fromJson(response, Ability.class);
 
             JSONArray effects = jsonObject.getJSONArray("effect_entries");
-            JSONObject effectObj = null;
+            JSONObject effectObj;
 
             for (int index = 0; index < effects.length(); index++) {
                 effectObj = effects.getJSONObject(index);
@@ -70,8 +70,10 @@ public abstract class VolleyAbility implements Response.ErrorListener, Response.
                 JSONObject tmp = flavorTexts.getJSONObject(i);
 
                 if (lang.equals(tmp.getJSONObject("language").getString("name"))) {
-                    ability.setFlavor_text(String.format("%s version: %s",
-                            tmp.getString("flavor_text"), tmp.getJSONObject("version_group").getString("name")));
+                    ability.setFlavor_text(String.format("%s %s: %s",
+                            tmp.getString("flavor_text"),
+                            context.getString(R.string.version),
+                            tmp.getJSONObject("version_group").getString("name")));
                     break;
                 }
             }

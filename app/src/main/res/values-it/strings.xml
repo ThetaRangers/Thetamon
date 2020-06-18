@@ -69,4 +69,5 @@
     <string name="label_team">Il nostro Team:</string>
     <string name="label_gender">Rateo di genere</string>
     <string name="label_genderless">Senza genere</string>
+    <string name="version">Versione</string>
 </resources>

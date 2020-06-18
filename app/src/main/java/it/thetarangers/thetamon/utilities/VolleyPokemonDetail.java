@@ -93,7 +93,7 @@ public abstract class VolleyPokemonDetail implements Response.ErrorListener, Res
             //Get abilities
             JSONArray abilityJson = jsonObject.getJSONArray("abilities");
             List<Ability> abilityList = new ArrayList<>();
-            for(int i = 0; i < abilityJson.length(); i++){
+            for (int i = 0; i < abilityJson.length(); i++) {
                 JSONObject tempObj = abilityJson.getJSONObject(i);
                 JSONObject tempAbility = tempObj.getJSONObject("ability");
 
@@ -106,7 +106,7 @@ public abstract class VolleyPokemonDetail implements Response.ErrorListener, Res
             //Get stats
             JSONArray statJson = jsonObject.getJSONArray("stats");
             List<Integer> statList = new ArrayList<>();
-            for(int i = 0; i < statJson.length(); i++){
+            for (int i = 0; i < statJson.length(); i++) {
                 JSONObject tempObj = statJson.getJSONObject(i);
 
                 statList.add(tempObj.getInt("base_stat"));
@@ -160,7 +160,7 @@ public abstract class VolleyPokemonDetail implements Response.ErrorListener, Res
 
                 String evolutionChain = jsonObject.getJSONObject("evolution_chain").getString("url");
 
-                if(jsonObject.isNull("habitat")){
+                if (jsonObject.isNull("habitat")) {
                     habitat = context.getResources().getString(R.string.no_habitat);
                 } else {
                     habitat = jsonObject.getJSONObject("habitat").getString("name");
@@ -169,12 +169,14 @@ public abstract class VolleyPokemonDetail implements Response.ErrorListener, Res
                 String lang = context.getResources().getString(R.string.localization);
 
                 JSONArray flavorTexts = jsonObject.getJSONArray("flavor_text_entries");
-                for(int i = flavorTexts.length() - 1; i >= 0; i--){
+                for (int i = flavorTexts.length() - 1; i >= 0; i--) {
                     JSONObject tmp = flavorTexts.getJSONObject(i);
 
-                    if (lang.equals(tmp.getJSONObject("language").getString("name"))){
-                        pokemon.setFlavorText(String.format("%s version: %s",
-                                tmp.getString("flavor_text"), tmp.getJSONObject("version").getString("name")));
+                    if (lang.equals(tmp.getJSONObject("language").getString("name"))) {
+                        pokemon.setFlavorText(String.format("%s %s: %s",
+                                tmp.getString("flavor_text"),
+                                context.getString(R.string.version),
+                                tmp.getJSONObject("version").getString("name")));
                         break;
                     }
                 }
