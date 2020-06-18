@@ -332,7 +332,7 @@ public class PokemonDetailActivity extends AppCompatActivity {
                 pbGender.setProgress(8);
                 pbGender.getProgressDrawable().setTint(PokemonDetailActivity.this.getColor(R.color.colorGenderLess));
             } else {
-                tvGender.setText(String.format(Locale.getDefault(), "%s: %3.1fF %3.1fM", "Gender rate", genderPerc, (100 - genderPerc)));
+                tvGender.setText(String.format(Locale.getDefault(), "%3.1f%%♀ %3.1f%%♂",  genderPerc, (100 - genderPerc)));
                 pbGender.setProgress(genderRate);
             }
 

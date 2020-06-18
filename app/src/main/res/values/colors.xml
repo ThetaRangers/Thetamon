@@ -64,4 +64,6 @@
     <color name="colorStarUnselected">#555555</color>
 
     <color name="colorGenderLess">#999999</color>
+    <color name="colorMale">#002AFF</color>
+    <color name="colorFemale">#FF00BF</color>
 </resources>
