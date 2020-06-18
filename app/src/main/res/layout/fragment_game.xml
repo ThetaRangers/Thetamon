@@ -53,31 +53,34 @@
             android:id="@+id/btnNext"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_medium"
-            android:layout_marginEnd="@dimen/margin_large"
-            android:text="Next"
+            android:layout_marginTop="8dp"
+            android:text="@string/label_next"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ivBackground" />
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/btnReveal"
+            app:layout_constraintTop_toBottomOf="@+id/tilPokemonName" />
 
         <Button
             android:id="@+id/btnConfirm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="@dimen/margin_medium"
-            android:text="Confirm"
-            app:layout_constraintEnd_toStartOf="@+id/btnNext"
-            app:layout_constraintTop_toBottomOf="@+id/ivBackground" />
+            android:text="@string/label_confirm"
+            app:layout_constraintEnd_toStartOf="@+id/btnReveal"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tilPokemonName" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilPokemonName"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
             app:endIconMode="clear_text"
-            android:layout_marginStart="@dimen/margin_medium"
-            android:layout_marginEnd="@dimen/margin_medium"
-            app:layout_constraintEnd_toStartOf="@+id/btnConfirm"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ivBackground">
 
@@ -85,8 +88,8 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="@string/hint_game"
                 android:imeOptions="actionDone"
-                android:hint="insert pokemon name"
                 android:singleLine="true" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -94,11 +97,12 @@
             android:id="@+id/btnReveal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="13dp"
-            android:layout_marginEnd="71dp"
-            android:text="Reveal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnNext" />
+            android:layout_marginTop="8dp"
+            android:text="@string/label_reveal"
+            app:layout_constraintEnd_toStartOf="@+id/btnNext"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/btnConfirm"
+            app:layout_constraintTop_toBottomOf="@+id/tilPokemonName" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>
