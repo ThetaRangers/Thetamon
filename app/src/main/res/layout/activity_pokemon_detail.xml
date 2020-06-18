@@ -109,12 +109,12 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageButton
-                    android:id="@+id/button"
+                    android:id="@+id/ibtnBack"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="?attr/homeAsUpIndicator" />
+                    app:srcCompat="@drawable/ic_home" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -210,6 +210,15 @@
                     app:layout_constraintGuide_percent="0.4" />
 
                 <TextView
+                    android:id="@+id/tvLabelGenderRatio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_gender"
+                    app:layout_constraintBottom_toTopOf="@+id/tvGenderRate"
+                    app:layout_constraintEnd_toStartOf="@+id/guideline6"
+                    app:layout_constraintTop_toTopOf="@+id/pbGender" />
+
+                <TextView
                     android:id="@+id/tvHabitat"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -223,9 +232,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/label_gender"
-                    app:layout_constraintBottom_toBottomOf="@+id/pbGender"
-                    app:layout_constraintEnd_toStartOf="@+id/guideline6"
-                    app:layout_constraintTop_toTopOf="@+id/pbGender" />
+                    app:layout_constraintEnd_toEndOf="@+id/pbGender"
+                    app:layout_constraintStart_toStartOf="@+id/pbGender"
+                    app:layout_constraintTop_toBottomOf="@+id/pbGender" />
 
                 <ProgressBar
                     android:id="@+id/pbGender"
@@ -237,12 +246,12 @@
                     android:max="8"
                     android:min="0"
                     android:progress="3"
-                    android:progressBackgroundTint="#002AFF"
+                    android:progressBackgroundTint="@color/colorMale"
                     android:progressBackgroundTintMode="src_over"
-                    android:progressTint="#FF00BF"
+                    android:progressTint="@color/colorFemale"
                     app:layout_constraintEnd_toStartOf="@+id/guideline5"
                     app:layout_constraintStart_toStartOf="@+id/guideline6"
-                    app:layout_constraintTop_toBottomOf="@+id/tvFlavorText" />
+                    app:layout_constraintTop_toBottomOf="@+id/tvHabitat" />
 
                 <TextView
                     android:id="@+id/tvFlavorText"
@@ -255,7 +264,7 @@
                     android:textAlignment="textStart"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvHabitat" />
+                    app:layout_constraintTop_toBottomOf="@+id/tvGenderRate" />
 
                 <TextView
                     android:id="@+id/tvHp"
@@ -263,7 +272,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_large"
                     app:layout_constraintEnd_toStartOf="@+id/guideline6"
-                    app:layout_constraintTop_toBottomOf="@+id/pbGender"
+                    app:layout_constraintTop_toBottomOf="@+id/tvFlavorText"
                     tools:visibility="visible" />
 
                 <ProgressBar

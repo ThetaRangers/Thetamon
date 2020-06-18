@@ -11,6 +11,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -119,6 +120,7 @@ public class PokemonDetailActivity extends AppCompatActivity {
         final TextView tvSpeed;
         final TextView tvFlavorText;
         final TextView tvGender;
+        final ImageButton ibtnBack;
         final LinearLayout llAbilities;
         final ProgressBar pbHp;
         final ProgressBar pbAttack;
@@ -176,15 +178,8 @@ public class PokemonDetailActivity extends AppCompatActivity {
             btnMoves.setOnClickListener(this);
             btnMoves.setEnabled(false);
 
-            findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(PokemonDetailActivity.this, PokedexActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent);
-                }
-            });
-
+            ibtnBack = findViewById(R.id.ibtnBack);
+            ibtnBack.setOnClickListener(this);
             llAbilities = findViewById(R.id.llAbilities);
 
             llEvolution1 = findViewById(R.id.llEvolution1);
@@ -327,12 +322,12 @@ public class PokemonDetailActivity extends AppCompatActivity {
 
             int genderRate = pokemon.getGenderRate();
             double genderPerc = (genderRate / 8.0) * 100;
-            if(genderRate == -1) {
+            if (genderRate == -1) {
                 tvGender.setText(PokemonDetailActivity.this.getString(R.string.label_genderless));
                 pbGender.setProgress(8);
                 pbGender.getProgressDrawable().setTint(PokemonDetailActivity.this.getColor(R.color.colorGenderLess));
             } else {
-                tvGender.setText(String.format(Locale.getDefault(), "%s: %3.1fF %3.1fM", "Gender rate", genderPerc, (100 - genderPerc)));
+                tvGender.setText(String.format(Locale.getDefault(), "%3.1f%%♀ %3.1f%%♂", genderPerc, (100 - genderPerc)));
                 pbGender.setProgress(genderRate);
             }
 
@@ -364,8 +359,7 @@ public class PokemonDetailActivity extends AppCompatActivity {
                 args.putParcelableArrayList(FragmentMoves.MOVES, (ArrayList<? extends Parcelable>) moves);
                 fragmentMoves.setArguments(args);
                 fragmentMoves.show(getSupportFragmentManager(), FragmentMoves.TAG);
-            }
-            if (v.getId() == R.id.cvAbility) {
+            } else if (v.getId() == R.id.cvAbility) {
                 FragmentAbility fragmentAbility = new FragmentAbility();
 
                 TextView tv = v.findViewById(R.id.tvAbility);
@@ -374,6 +368,10 @@ public class PokemonDetailActivity extends AppCompatActivity {
                 arg.putString("name", StringManager.decapitalize(tv.getText().toString()));
                 fragmentAbility.setArguments(arg);
                 fragmentAbility.show(getSupportFragmentManager(), FragmentAbility.TAG);
+            } else if (v.getId() == R.id.ibtnBack) {
+                Intent intent = new Intent(PokemonDetailActivity.this, PokedexActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
             }
         }
 
