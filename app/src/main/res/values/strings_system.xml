@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="sprites_front" translatable="false">/sprites_front</string>
+    <string name="sprites_front" translatable="false">/images</string>
     <string name="extension" translatable="false">.png</string>
     <string name="color_type" translatable="false">colorType</string>
     <string name="url" translatable="false">https://pokeapi.co/api/v2/pokemon?limit=10000</string>
     <string name="url_all_moves" translatable="false">https://pokeapi.co/api/v2/move?limit=10000</string>
     <string name="url_type" translatable="false">https://pokeapi.co/api/v2/type/%s</string>
-    <string name="url_sprites" translatable="false">https://github.com/ThetaRangers/Thetamon/blob/master/sprites.zip?raw=true</string>
+    <string name="url_sprites" translatable="false">https://github.com/ThetaRangers/Thetamon/blob/master/images.zip?raw=true</string>
     <string name="url_species" translatable="false">https://pokeapi.co/api/v2/pokemon-species/%d</string>
-    <string name="sprites_temp_path" translatable="false">Sprites</string>
-    <string name="sprites_archive" translatable="false">sprites.zip</string>
+    <string name="sprites_temp_path" translatable="false">Images</string>
+    <string name="sprites_archive" translatable="false">images.zip</string>
     <string name="preferences_name" translatable="false">it.thetarangers.thetamon</string>
     <string name="first_use_pref" translatable="false">first_use</string>
     <string name="night_mode_pref" translatable="false">night_mode</string>
