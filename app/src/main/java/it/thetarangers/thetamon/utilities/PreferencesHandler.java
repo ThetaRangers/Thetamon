@@ -31,10 +31,9 @@ public class PreferencesHandler {
         return sharedPreferences.getString(context.getString(R.string.night_mode_pref), context.getString(R.string.system_enum));
     }
 
-    public static synchronized void setIsNightMode(Context context, String value) {
-        SharedPreferences.Editor editor = getSharedPreferences(context).edit();
-        editor.putString(context.getString(R.string.night_mode_pref), value);
-        editor.apply();
+    public static synchronized Boolean isVolumeOn(Context context) {
+        SharedPreferences sharedPreferences = getSharedPreferences(context);
+        return sharedPreferences.getBoolean(context.getString(R.string.volume_pref), true);
     }
 
 }

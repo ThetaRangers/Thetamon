@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -16,20 +18,24 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.HashMap;
+import java.util.List;
 
 import it.thetarangers.thetamon.R;
 import it.thetarangers.thetamon.activities.PokedexActivity;
 import it.thetarangers.thetamon.activities.PokemonDetailActivity;
 import it.thetarangers.thetamon.adapters.PokedexAdapter;
 import it.thetarangers.thetamon.database.DaoThread;
+import it.thetarangers.thetamon.favorites.FavoritesManager;
 import it.thetarangers.thetamon.listener.SelectorCallback;
 import it.thetarangers.thetamon.model.Pokemon;
 import it.thetarangers.thetamon.viewmodel.FavoriteListViewModel;
+import android.view.ActionMode;
 
 public class FragmentFavorites extends Fragment implements SelectorCallback, PokedexActivity.OnActivityResultCallback {
     Holder holder;
     FavoriteListViewModel favoriteListViewModel;
     DaoThread daoThread;
+    ActionMode actionMode = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -55,6 +61,16 @@ public class FragmentFavorites extends Fragment implements SelectorCallback, Pok
 
     @Override
     public void onSelect(int size) {
+        if(actionMode != null){
+            if(size == 0)
+                actionMode.finish();
+            else
+                //TODO hardcoded string
+                actionMode.setTitle("Selected "+size+"/10 pokemons");
+            return;
+        }
+
+        actionMode = requireActivity().startActionMode(new FragmentFavorites.FavoritesCallback());
 
     }
 
@@ -80,6 +96,54 @@ public class FragmentFavorites extends Fragment implements SelectorCallback, Pok
             daoThread.getFavoritePokemon(getContext(), favoriteListViewModel);
         }
 
+    }
+
+    class FavoritesCallback implements android.view.ActionMode.Callback{
+
+        FavoritesManager favoritesManager = new FavoritesManager(requireContext());
+
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu){
+            mode.getMenuInflater().inflate(R.menu.menu_action_mode, menu);
+            ((PokedexActivity)requireActivity()).lockDrawer();
+            //TODO hardcoded string
+            MenuItem itemAdd = menu.getItem(0);
+            itemAdd.setEnabled(false);
+            mode.setTitle("Selected 1/10 pokemons");
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu){
+            return false;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem menuItem){
+            List<Pokemon> sel = holder.adapter.getSelected();
+            switch(menuItem.getItemId()){
+                case R.id.item_deselect:
+                    mode.finish();
+                    break;
+
+                case R.id.item_removeAll:
+                    favoritesManager.removePokemonFromFav(sel);
+                    mode.finish();
+                    //TODO optional reload recycler view
+
+                    break;
+                default:
+                    break;
+            }
+            return false;
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode){
+            holder.adapter.deselectAll();
+            ((PokedexActivity)requireActivity()).unlockDrawer();
+            actionMode = null;
+        }
     }
 
     class Holder {

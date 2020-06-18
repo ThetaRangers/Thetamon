@@ -29,6 +29,7 @@ import it.thetarangers.thetamon.database.PokemonDao;
 import it.thetarangers.thetamon.database.PokemonDb;
 import it.thetarangers.thetamon.model.Pokemon;
 import it.thetarangers.thetamon.utilities.ImageManager;
+import it.thetarangers.thetamon.utilities.PreferencesHandler;
 import it.thetarangers.thetamon.utilities.StringManager;
 
 public class FragmentGame extends Fragment {
@@ -55,17 +56,24 @@ public class FragmentGame extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         holder = new Holder(view);
+
         mp = MediaPlayer.create(getContext(), R.raw.game);
-        mp.setVolume((float) 1.5, (float) 1.5);
+        if (PreferencesHandler.isVolumeOn(requireContext()))
+            mp.setVolume(1.5f, 1.5f);
+        else
+            mp.setVolume(0f, 0f);
+
         if (savedInstanceState == null) {
             startGame();
         } else {
             pokemon = savedInstanceState.getParcelable(POKEMON);
             isCorrect = savedInstanceState.getBoolean(IS_CORRECT);
             loadImages(false);
-            if(isCorrect){
-             holder.tilPokemonName.getEditText().setText(StringManager.capitalize(pokemon.getName()));
+            if (isCorrect) {
+                Objects.requireNonNull(holder.tilPokemonName.getEditText())
+                        .setText(StringManager.capitalize(pokemon.getName()));
             }
         }
     }
@@ -208,9 +216,10 @@ public class FragmentGame extends Fragment {
 
         }
 
-        public void reveal(){
+        public void reveal() {
             isCorrect = true;
-            holder.tilPokemonName.getEditText().setText(StringManager.capitalize(pokemon.getName()));
+            Objects.requireNonNull(holder.tilPokemonName.getEditText())
+                    .setText(StringManager.capitalize(pokemon.getName()));
             win();
         }
 
