@@ -44,7 +44,7 @@ public abstract class PokemonDao {
     @Query("SELECT * FROM Pokemon ORDER BY RANDOM() LIMIT 1;")
     public abstract Pokemon getRandomPokemon();
 
-    @Query("SELECT * FROM Pokemon WHERE name LIKE :name LIMIT 1;")
+    @Query("SELECT * FROM Pokemon WHERE name LIKE :name ORDER BY LENGTH(name) LIMIT 1;")
     public abstract Pokemon getPokemonFromNameInterface(String name);
 
     public Pokemon getPokemonFromName(String name) {
