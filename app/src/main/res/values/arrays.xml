@@ -10,4 +10,8 @@
         <item name="light">@string/light_enum</item>
         <item name="dark">@string/dark_enum</item>
     </string-array>
+    <string-array name = "volume_pref">
+        <item name = "volumeOn">@string/preferences_volumeOn</item>
+        <item name = "volumeOff">@string/preferences_volumeOff</item>
+    </string-array>
 </resources>

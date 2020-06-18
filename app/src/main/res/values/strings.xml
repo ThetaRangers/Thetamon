@@ -85,4 +85,8 @@
     <string name="label_genderless">Genderless</string>
     <string name="label_capture_rate">Capture Rate</string>
     <string name="version">Version</string>
+    <string name="preferences_volumeOn" translatable="false">ON</string>
+    <string name="preferences_volumeOff" translatable="false">OFF</string>
+    <string name="volume_summary">Allow to enable and disable app volume</string>
+    <string name="volume_title" translatable="false">Volume</string>
 </resources>
