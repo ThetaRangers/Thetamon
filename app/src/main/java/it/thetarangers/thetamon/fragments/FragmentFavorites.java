@@ -32,10 +32,10 @@ import it.thetarangers.thetamon.viewmodel.FavoriteListViewModel;
 import android.view.ActionMode;
 
 public class FragmentFavorites extends Fragment implements SelectorCallback, PokedexActivity.OnActivityResultCallback {
-    Holder holder;
-    FavoriteListViewModel favoriteListViewModel;
-    DaoThread daoThread;
-    ActionMode actionMode = null;
+    private Holder holder;
+    private FavoriteListViewModel favoriteListViewModel;
+    private DaoThread daoThread;
+    private ActionMode actionMode = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
