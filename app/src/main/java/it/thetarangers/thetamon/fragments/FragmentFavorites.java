@@ -65,8 +65,7 @@ public class FragmentFavorites extends Fragment implements SelectorCallback, Pok
             if(size == 0)
                 actionMode.finish();
             else
-                //TODO hardcoded string
-                actionMode.setTitle("Selected "+size+"/10 pokemons");
+                actionMode.setTitle(getString(R.string.menu_start_title)+" "+size + getString(R.string.menu_end_title));
             return;
         }
 
@@ -109,7 +108,7 @@ public class FragmentFavorites extends Fragment implements SelectorCallback, Pok
             //TODO hardcoded string
             MenuItem itemAdd = menu.getItem(0);
             itemAdd.setEnabled(false);
-            mode.setTitle("Selected 1/10 pokemons");
+            mode.setTitle(getString(R.string.menu_start_title)+ " 1" + getString(R.string.menu_end_title));
             return true;
         }
 

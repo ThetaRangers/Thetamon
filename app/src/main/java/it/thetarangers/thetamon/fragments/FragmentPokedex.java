@@ -3,7 +3,6 @@ package it.thetarangers.thetamon.fragments;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -121,8 +120,7 @@ public class FragmentPokedex extends Fragment implements SelectorCallback, Poked
             if (size == 0)
                 actionMode.finish();
             else
-                //TODO hardcoded string
-                actionMode.setTitle("Selected " + size + "/10 pokemons");
+                actionMode.setTitle(getString(R.string.menu_start_title)+" "+size + getString(R.string.menu_end_title));
             return;
 
         }
@@ -162,9 +160,7 @@ public class FragmentPokedex extends Fragment implements SelectorCallback, Poked
             mode.getMenuInflater().inflate(R.menu.menu_action_mode, menu);
             ((PokedexActivity) requireActivity()).lockDrawer();
             holder.onFastScrollStart();
-            //TODO hardcoded string
-            mode.setTitle("Selected 1/10 pokemons");
-            Log.d("POKE", "inflated");
+            mode.setTitle(getString(R.string.menu_start_title)+ " 1" + getString(R.string.menu_end_title));
             return true;
         }
 

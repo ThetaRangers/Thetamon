@@ -73,4 +73,6 @@
     <string name="label_capture_rate">Tasso di cattura</string>
     <string name="label_moves">Mostra mosse</string>
     <string name="label_evolution_chain">Catena evolutiva</string>
+    <string name="menu_start_title">Selezionati </string>
+    <string name="menu_end_title" translatable="false">/10 Pokémon</string>
 </resources>

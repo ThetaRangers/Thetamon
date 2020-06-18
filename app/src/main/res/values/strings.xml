@@ -88,4 +88,6 @@
     <string name="label_moves">Show moves</string>
     <string name="label_evolution_chain">Evolution chain</string>
     <string name="volume_title" translatable="false">Volume</string>
+    <string name="menu_start_title">Selected </string>
+    <string name="menu_end_title">/10 Pokémons</string>
 </resources>
