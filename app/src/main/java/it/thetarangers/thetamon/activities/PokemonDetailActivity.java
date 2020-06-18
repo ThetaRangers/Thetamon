@@ -120,6 +120,7 @@ public class PokemonDetailActivity extends AppCompatActivity {
         final TextView tvSpeed;
         final TextView tvFlavorText;
         final TextView tvGender;
+        final TextView tvCaptureRate;
         final ImageButton ibtnBack;
         final LinearLayout llAbilities;
         final ProgressBar pbHp;
@@ -159,6 +160,7 @@ public class PokemonDetailActivity extends AppCompatActivity {
             tvSpecialDefense = findViewById(R.id.tvSpecialDefense);
             tvSpeed = findViewById(R.id.tvSpeed);
             tvGender = findViewById(R.id.tvGenderRate);
+            tvCaptureRate = findViewById(R.id.tvCaptureRate);
 
             pbHp = findViewById(R.id.pbHp);
             pbAttack = findViewById(R.id.pbAttack);
@@ -319,6 +321,8 @@ public class PokemonDetailActivity extends AppCompatActivity {
             pbSpecialDefense.setProgress(pokemon.getSpecialDefense());
             tvSpeed.setText(String.format(Locale.getDefault(), "%s: %d", res.getString(R.string.label_speed), pokemon.getSpeed()));
             pbSpeed.setProgress(pokemon.getSpeed());
+
+            tvCaptureRate.setText(String.format(Locale.getDefault(), "%s: %d", res.getString(R.string.label_capture_rate), pokemon.getCaptureRate()));
 
             int genderRate = pokemon.getGenderRate();
             double genderPerc = (genderRate / 8.0) * 100;

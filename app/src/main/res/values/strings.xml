@@ -83,5 +83,6 @@
     <string name="label_powered" translatable="false">Powered by:</string>
     <string name="label_gender">Gender ratio</string>
     <string name="label_genderless">Genderless</string>
+    <string name="label_capture_rate">Capture Rate</string>
     <string name="version">Version</string>
 </resources>
