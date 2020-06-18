@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Thetamon</string>
+    <string name="app_name">Theta Dex</string>
     <string name="no_pokemon_found">No pokemon found</string>
     <string name="pokemon_search_string">Insert Name or id</string>
     <string name="volley_error">Error in reaching PokeApi</string>
