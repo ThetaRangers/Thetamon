@@ -87,8 +87,5 @@
     <string name="version">Version</string>
     <string name="label_moves">Show moves</string>
     <string name="label_evolution_chain">Evolution chain</string>
-    <string name="preferences_volumeOn" translatable="false">ON</string>
-    <string name="preferences_volumeOff" translatable="false">OFF</string>
-    <string name="volume_summary">Allow to enable and disable app volume</string>
     <string name="volume_title" translatable="false">Volume</string>
 </resources>

@@ -20,11 +20,10 @@
         app:summary="@string/reset_data_summary"
         app:title="@string/reset_data" />
 
-    <ListPreference
-        app:defaultValue="1.5"
-        app:entryValues="@array/volume_pref"
-        app:key = "@string/volume_pref"
-        app:summary="@string/volume_summary"
-        app:title ="@string/volume_title"
-        />
+    <SwitchPreferenceCompat
+        app:defaultValue="true"
+        app:icon="@drawable/ic_volume"
+        app:key="@string/volume_pref"
+        app:title="@string/volume_title" />
+
 </PreferenceScreen>
