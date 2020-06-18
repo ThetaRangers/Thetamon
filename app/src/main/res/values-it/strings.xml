@@ -79,4 +79,15 @@
     <string name="label_next">Prossimo</string>
     <string name="menu_start_title">Selezionati </string>
     <string name="menu_end_title">/10 Pokémon</string>
+    <string name="content_description_ibtnBack">Bottone schermata principale</string>
+    <string name="content_description_ivBack">Sprite dietro di default</string>
+    <string name="content_description_ivBackShiny">Sprite dietro shiny</string>
+    <string name="content_description_ivFront">Sprite fronte di default</string>
+    <string name="content_description_ivFrontShiny">Sprite fronte shiny</string>
+    <string name="content_description_ivImage">Immagine del Pokémon</string>
+    <string name="placeholder_capture_rate">Tasso di cattura</string>
+    <string name="placeholder_habitat">Habitat: erba</string>
+    <string name="content_description_ivAnim">Animazione di caricamento</string>
+    <string name="content_description_ivDamageClass">Immagine del tipo di danno della mossa</string>
+    <string name="content_description_ivExpand">Bottono di espandi e collassa</string>
 </resources>

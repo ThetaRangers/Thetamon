@@ -75,7 +75,7 @@
     <string name="label_power">Power</string>
     <string name="label_accuracy">Accuracy</string>
     <string name="label_pp" translatable="false">PP</string>
-    <string name="deselect_all">Deselect</string>
+    <string name="deselect_all">Deselect all</string>
     <string name="remove_all_from_favourites">Remove from favorites</string>
     <string name="add_all_to_favourites">Add to favorites</string>
     <string name="label_team">Our Team:</string>
@@ -96,4 +96,24 @@
     <string name="label_sprites" translatable="false">Sprites</string>
     <string name="label_default" translatable="false">Default</string>
     <string name="label_shiny" translatable="false">Shiny</string>
+    <string name="content_description_ivImage">Image of the Pokémon</string>
+    <string name="content_description_ivFront">Front default sprite</string>
+    <string name="content_description_ivBack">back default sprite</string>
+    <string name="content_description_ivFrontShiny">Front shiny sprite</string>
+    <string name="content_description_ivBackShiny">back shiny sprite</string>
+    <string name="content_description_ibtnBack">Home button</string>
+    <string name="placeholder_capture_rate">Capture rate</string>
+    <string name="placeholder_habitat">Habitat: grass</string>
+    <string name="content_description_ivAnim">Loading animation</string>
+    <string name="content_description_pokeApiLogo" translatable="false">Poké API Logo</string>
+    <string name="content_description_daniele" translatable="false">Daniele Happiny Avatar</string>
+    <string name="content_description_lorenzo" translatable="false">Lorenzo Togepi Avatar</string>
+    <string name="content_description_marco" translatable="false">Marco Mine Jr Avatar</string>
+    <string name="content_description_giuseppe" translatable="false">Giuseppe Chingling Avatar</string>
+    <string name="daniele" translatable="false">Daniele Ferrarelli</string>
+    <string name="lorenzo" translatable="false">Lorenzo Valeriani</string>
+    <string name="marco" translatable="false">Marco Ferri</string>
+    <string name="giuseppe" translatable="false">Giuseppe Marseglia</string>
+    <string name="content_description_ivExpand">Expand and collapse button</string>
+    <string name="content_description_ivDamageClass">Image of the damage type of the move</string>
 </resources>
