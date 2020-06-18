@@ -426,7 +426,7 @@
                     android:text="@string/label_ability"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvSpeed" />
+                    app:layout_constraintTop_toBottomOf="@+id/ivFront" />
 
                 <TextView
                     android:id="@+id/tvEvolution"
@@ -494,7 +494,30 @@
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toEndOf="@+id/llEvolution2"
                     app:layout_constraintTop_toBottomOf="@id/tvEvolution"
-                    app:layout_constraintVertical_bias="0.0" />
+                    app:layout_constraintVertical_bias="0.0" >
+
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/ivFront"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_marginTop="@dimen/margin_gigamax"
+                    android:scaleType="fitCenter"
+                    app:layout_constraintEnd_toStartOf="@+id/ivBack"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/pbSpeed"
+                    app:srcCompat="@drawable/pikachu" />
+
+                <ImageView
+                    android:id="@+id/ivBack"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:scaleType="fitCenter"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/ivFront"
+                    app:layout_constraintTop_toTopOf="@+id/ivFront"
+                    app:srcCompat="@drawable/pikachu" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

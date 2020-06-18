@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.util.Log;
@@ -25,6 +26,9 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.shape.CornerFamily;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.RequestCreator;
+import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,6 +47,7 @@ import it.thetarangers.thetamon.model.EvolutionDetail;
 import it.thetarangers.thetamon.model.Move;
 import it.thetarangers.thetamon.model.Pokemon;
 import it.thetarangers.thetamon.utilities.ImageManager;
+import it.thetarangers.thetamon.utilities.PicassoTarget;
 import it.thetarangers.thetamon.utilities.StringManager;
 import it.thetarangers.thetamon.utilities.TypeTextViewManager;
 import it.thetarangers.thetamon.utilities.VolleyEvolutionChain;
@@ -219,6 +224,15 @@ public class PokemonDetailActivity extends AppCompatActivity {
                     // Set the reference to pokemon with details and call holder method
                     PokemonDetailActivity.this.pokemon = pokemon;
 
+                    ImageView ivFront = findViewById(R.id.ivFront);
+                    RequestCreator front = Picasso.get().load(pokemon.getSprites().get("front_default"));
+                    PicassoTarget target = new PicassoTarget("front_" + pokemon.getName());
+                    front.into(ivFront);
+                    front.into(target);
+
+                    ImageView ivBack = findViewById(R.id.ivBack);
+                    Picasso.get().load(pokemon.getSprites().get("front_shiny")).into(ivBack);
+
                     pokemon.encode();
 
                     volleyEvolutionChain.getEvolutionChain(pokemon.getUrlEvolutionChain());
@@ -234,15 +248,16 @@ public class PokemonDetailActivity extends AppCompatActivity {
                 //Call the API only if the pokemon is not in the DB
                 if (tmp.getMovesList() == null) {
                     // Get the detail of the pokemon
-                    Log.d("POKE", "volley");
                     volley.getPokemonDetail();
                 } else {
-                    Log.d("POKE", "db");
+
                     pokemon = tmp;
                     EvolutionDetail ev = tmp.getEvolutionDetail();
-
                     handler.post(() -> {
                         fillEvolution(ev);
+                        ImageView ivFront = findViewById(R.id.ivFront);
+                        Picasso.get().load(Environment.getExternalStorageDirectory().getPath() + "/" + "front_"+pokemon.getName()).into(ivFront);
+
                         Holder.this.afterDetails();
                     });
                 }

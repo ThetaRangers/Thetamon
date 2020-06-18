@@ -77,6 +77,8 @@ public class Pokemon implements Parcelable {
     private boolean isFavorite;
     private String urlEvolutionChain;
     private String evolutionChain;
+    private String front;
+    private String front_shiny;
     @Ignore
     private List<Move> movesList;
     @Ignore
@@ -179,6 +181,22 @@ public class Pokemon implements Parcelable {
         } else {
             this.type2 = type;
         }
+    }
+
+    public String getFront() {
+        return front;
+    }
+
+    public void setFront(String front) {
+        this.front = front;
+    }
+
+    public String getFront_shiny() {
+        return front_shiny;
+    }
+
+    public void setFront_shiny(String front_shiny) {
+        this.front_shiny = front_shiny;
     }
 
     public boolean getFavorite() {
