@@ -313,8 +313,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_medium"
-                    android:progress="45"
                     android:max="255"
+                    android:progress="45"
                     android:progressTint="@color/colorAttack"
                     app:layout_constraintBottom_toBottomOf="@+id/tvAttack"
                     app:layout_constraintEnd_toStartOf="@+id/guideline5"
@@ -335,8 +335,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_medium"
-                    android:progress="45"
                     android:max="255"
+                    android:progress="45"
                     android:progressTint="@color/colorSpecialDefense"
                     app:layout_constraintBottom_toBottomOf="@+id/tvSpecialDefense"
                     app:layout_constraintEnd_toStartOf="@+id/guideline5"
@@ -357,8 +357,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_medium"
-                    android:progress="45"
                     android:max="255"
+                    android:progress="45"
                     android:progressTint="@color/colorSpeed"
                     app:layout_constraintBottom_toBottomOf="@+id/tvSpeed"
                     app:layout_constraintEnd_toStartOf="@+id/guideline5"
@@ -379,8 +379,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_medium"
-                    android:progress="45"
                     android:max="255"
+                    android:progress="45"
                     android:progressTint="@color/colorSpecialAttack"
                     app:layout_constraintBottom_toBottomOf="@+id/tvSpecialAttack"
                     app:layout_constraintEnd_toStartOf="@+id/guideline5"
@@ -401,8 +401,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_medium"
-                    android:progress="45"
                     android:max="255"
+                    android:progress="45"
                     app:layout_constraintBottom_toBottomOf="@+id/tvDefense"
                     app:layout_constraintEnd_toStartOf="@+id/guideline5"
                     app:layout_constraintStart_toStartOf="@+id/guideline6" />
@@ -413,7 +413,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="Show moves"
+                    android:text="@string/label_moves"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/llAbilities" />
@@ -427,6 +427,16 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tvSpeed" />
+
+                <TextView
+                    android:id="@+id/tvEvolution"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_large"
+                    android:text="@string/label_evolution_chain"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/btnMoves" />
 
                 <LinearLayout
                     android:id="@+id/llAbilities"
@@ -453,7 +463,7 @@
                     app:layout_constraintEnd_toStartOf="@+id/llEvolution2"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/btnMoves"
+                    app:layout_constraintTop_toBottomOf="@id/tvEvolution"
                     app:layout_constraintVertical_bias="0.0" />
 
                 <LinearLayout
@@ -468,7 +478,7 @@
                     app:layout_constraintEnd_toStartOf="@+id/llEvolution3"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toEndOf="@+id/llEvolution1"
-                    app:layout_constraintTop_toBottomOf="@id/btnMoves"
+                    app:layout_constraintTop_toBottomOf="@id/tvEvolution"
                     app:layout_constraintVertical_bias="0.0" />
 
                 <LinearLayout
@@ -483,7 +493,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toEndOf="@+id/llEvolution2"
-                    app:layout_constraintTop_toBottomOf="@id/btnMoves"
+                    app:layout_constraintTop_toBottomOf="@id/tvEvolution"
                     app:layout_constraintVertical_bias="0.0" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
