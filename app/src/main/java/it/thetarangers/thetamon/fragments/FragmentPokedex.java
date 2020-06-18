@@ -1,6 +1,7 @@
 package it.thetarangers.thetamon.fragments;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ActionMode;
@@ -14,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -234,7 +236,18 @@ public class FragmentPokedex extends Fragment implements SelectorCallback, Poked
             init(fabReset);
 
             rvPokedex = fp.findViewById(R.id.rvPokedex);
-            rvPokedex.setLayoutManager(new LinearLayoutManager(getContext()));
+
+            int orientation = getResources().getConfiguration().orientation;
+            int columns;
+            if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                // In landscape
+                columns = 2;
+            } else {
+                // In portrait
+                columns = 1;
+            }
+
+            rvPokedex.setLayoutManager(new GridLayoutManager(getContext(), columns));
             adapter = new PokedexAdapter(getActivity(), FragmentPokedex.this);
             adapter.setStateRestorationPolicy(RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY);
 

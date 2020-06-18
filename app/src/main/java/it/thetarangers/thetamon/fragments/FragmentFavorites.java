@@ -1,6 +1,7 @@
 package it.thetarangers.thetamon.fragments;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -87,7 +89,18 @@ public class FragmentFavorites extends Fragment implements SelectorCallback, Pok
         Holder(View view) {
             rvFavorites = view.findViewById(R.id.rvFavorites);
 
-            rvFavorites.setLayoutManager(new LinearLayoutManager(getContext()));
+
+            int orientation = getResources().getConfiguration().orientation;
+            int columns;
+            if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                // In landscape
+                columns = 2;
+            } else {
+                // In portrait
+                columns = 1;
+            }
+
+            rvFavorites.setLayoutManager(new GridLayoutManager(getContext(), columns));
             adapter = new PokedexAdapter(getActivity(), FragmentFavorites.this);
             rvFavorites.setAdapter(adapter);
         }
