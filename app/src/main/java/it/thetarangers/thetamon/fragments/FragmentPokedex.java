@@ -119,12 +119,13 @@ public class FragmentPokedex extends Fragment implements SelectorCallback, Poked
             if (size == 0)
                 actionMode.finish();
             else
+                //TODO hardcoded string
                 actionMode.setTitle("Selected " + size + "/10 pokemons");
             return;
 
         }
 
-        actionMode = requireActivity().startActionMode(new Callback());
+        actionMode = requireActivity().startActionMode(new PokedexCallback());
 
     }
 
@@ -150,7 +151,7 @@ public class FragmentPokedex extends Fragment implements SelectorCallback, Poked
         }
     }
 
-    class Callback implements android.view.ActionMode.Callback {
+    class PokedexCallback implements android.view.ActionMode.Callback {
 
         FavoritesManager favoritesManager = new FavoritesManager(requireContext());
 
@@ -159,6 +160,7 @@ public class FragmentPokedex extends Fragment implements SelectorCallback, Poked
             mode.getMenuInflater().inflate(R.menu.menu_action_mode, menu);
             ((PokedexActivity) requireActivity()).lockDrawer();
             holder.onFastScrollStart();
+            //TODO hardcoded string
             mode.setTitle("Selected 1/10 pokemons");
             Log.d("POKE", "inflated");
             return true;
@@ -243,39 +245,39 @@ public class FragmentPokedex extends Fragment implements SelectorCallback, Poked
 
         }
 
-        public boolean rotateFab(final View v, boolean rotate) {
+        private boolean rotateFab(final View v, boolean rotate) {
             v.animate().setDuration(200).rotation(rotate ? 135f : 0f);
             return rotate;
         }
 
-        public void showIn(final View v) {
+        private void showIn(final View v) {
             v.setAlpha(0f);
             v.setTranslationY(v.getHeight());
             v.animate().setDuration(200).translationY(0).alpha(1f).start();
             v.setEnabled(true);
         }
 
-        public void showOut(final View v) {
+        private void showOut(final View v) {
             v.setAlpha(1f);
             v.setTranslationY(0);
             v.animate().setDuration(200).translationY(v.getHeight()).alpha(0f).start();
             v.setEnabled(false);
         }
 
-        public void init(final View v) {
+        private void init(final View v) {
             v.setTranslationY(0);
             v.animate().setDuration(0).translationY(v.getHeight()).alpha(0f).start();
             v.setEnabled(false);
         }
 
-        public void collapseFab() {
+        private void collapseFab() {
             showOut(fabFilter);
             showOut(fabSearch);
             showOut(fabReset);
             isOpen = rotateFab(fabAdd, !isOpen);
         }
 
-        public void openFab() {
+        private void openFab() {
             showIn(fabFilter);
             showIn(fabSearch);
             showIn(fabReset);
