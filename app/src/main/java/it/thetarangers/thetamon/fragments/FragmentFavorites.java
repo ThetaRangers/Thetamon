@@ -75,7 +75,9 @@ public class FragmentFavorites extends Fragment implements SelectorCallback, Pok
                 }
             }
             holder.adapter.setClickable(true);
+            daoThread.getFavoritePokemon(getContext(), favoriteListViewModel);
         }
+
     }
 
     class Holder {
