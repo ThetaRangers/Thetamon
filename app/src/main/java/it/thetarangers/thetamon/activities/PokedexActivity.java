@@ -102,7 +102,7 @@ public class PokedexActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         for (HashMap.Entry<Integer, Fragment> entry : fragments.entrySet()) {
             if (entry.getValue().isAdded()) {
-                if (entry.getKey() == R.id.item_pokedex) {
+                if (entry.getKey() == R.id.item_pokedex || entry.getKey() == R.id.item_favorites) {
                     OnActivityResultCallback callback = (OnActivityResultCallback) entry.getValue();
                     assert callback != null;
                     callback.onActivityResultCallback(requestCode, resultCode, data);

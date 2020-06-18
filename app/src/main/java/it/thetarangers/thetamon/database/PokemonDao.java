@@ -55,6 +55,5 @@ public abstract class PokemonDao {
     public abstract void setPokemonFav(int pid, boolean fav);
 
     @Query("SELECT * FROM Pokemon WHERE isFavorite = 1")
-    public abstract List<Pokemon> getFavoritePowemons();
-
+    public abstract List<Pokemon> getFavoritePokemons();
 }

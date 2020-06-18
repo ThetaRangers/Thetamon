@@ -7,6 +7,7 @@ import java.util.List;
 
 import it.thetarangers.thetamon.model.Move;
 import it.thetarangers.thetamon.model.Pokemon;
+import it.thetarangers.thetamon.viewmodel.FavoriteListViewModel;
 import it.thetarangers.thetamon.viewmodel.PokemonListViewModel;
 
 public class DaoThread {
@@ -157,6 +158,20 @@ public class DaoThread {
             PokemonDao dao = db.pokemonDao();
 
             dao.setPokemonFav(pokemon.getId(), fav);
+        };
+
+        new Thread(runnable).start();
+    }
+
+    public void getFavoritePokemon(final Context context, FavoriteListViewModel viewModel) {
+
+        Runnable runnable = () -> {
+            PokemonDb db = PokemonDb.getInstance(context);
+            PokemonDao dao = db.pokemonDao();
+
+            List<Pokemon> tempList = dao.getFavoritePokemons();
+
+            viewModel.setFavoritesAsynchronous(tempList);
         };
 
         new Thread(runnable).start();
