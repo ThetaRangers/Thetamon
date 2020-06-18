@@ -43,7 +43,7 @@ public class FragmentGame extends Fragment {
     ImageManager imageManager = new ImageManager();
     MediaPlayer mp;
 
-    Boolean isCorrect;
+    boolean isCorrect;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -64,6 +64,9 @@ public class FragmentGame extends Fragment {
             pokemon = savedInstanceState.getParcelable(POKEMON);
             isCorrect = savedInstanceState.getBoolean(IS_CORRECT);
             loadImages(false);
+            if(isCorrect){
+             holder.tilPokemonName.getEditText().setText(StringManager.capitalize(pokemon.getName()));
+            }
         }
     }
 
@@ -79,6 +82,7 @@ public class FragmentGame extends Fragment {
             holder.win();
             isCorrect = true;
             Toast.makeText(getContext(), getString(R.string.game_correct), Toast.LENGTH_LONG).show();
+            holder.btnReveal.setEnabled(false);
         } else {
             holder.tilPokemonName.setError(getString(R.string.game_error));
         }
@@ -122,12 +126,12 @@ public class FragmentGame extends Fragment {
         Objects.requireNonNull(holder.tilPokemonName.getEditText()).getText().clear();
     }
 
-
     class Holder implements View.OnClickListener, EditText.OnEditorActionListener {
         final ImageView ivPokemon;
         final Button btnConfirm;
         final Button btnNext;
         final TextInputLayout tilPokemonName;
+        final Button btnReveal;
 
         Holder(View fv) {
             ivPokemon = fv.findViewById(R.id.ivPokemon);
@@ -136,6 +140,9 @@ public class FragmentGame extends Fragment {
 
             btnConfirm = fv.findViewById(R.id.btnConfirm);
             btnConfirm.setOnClickListener(this);
+
+            btnReveal = fv.findViewById(R.id.btnReveal);
+            btnReveal.setOnClickListener(this);
 
             tilPokemonName = fv.findViewById(R.id.tilPokemonName);
             Objects.requireNonNull(tilPokemonName.getEditText()).setOnEditorActionListener(this);
@@ -155,6 +162,7 @@ public class FragmentGame extends Fragment {
             switch (v.getId()) {
                 case R.id.btnNext:
                     btnConfirm.setEnabled(true);
+                    btnReveal.setEnabled(true);
                     tilPokemonName.setError(null);
                     Objects.requireNonNull(holder.tilPokemonName.getEditText()).setEnabled(true);
                     startGame();
@@ -162,6 +170,9 @@ public class FragmentGame extends Fragment {
                 case R.id.btnConfirm:
                     Objects.requireNonNull(tilPokemonName.getEditText())
                             .onEditorAction(EditorInfo.IME_ACTION_DONE);
+                    break;
+                case R.id.btnReveal:
+                    reveal();
                     break;
                 default:
                     break;
@@ -192,7 +203,17 @@ public class FragmentGame extends Fragment {
             tilPokemonName.setError(null);
             ivPokemon.setImageBitmap(bitmapNormal);
             btnConfirm.setEnabled(false);
+            btnReveal.setEnabled(false);
             Objects.requireNonNull(tilPokemonName.getEditText()).setEnabled(false);
+
         }
+
+        public void reveal(){
+            isCorrect = true;
+            holder.tilPokemonName.getEditText().setText(StringManager.capitalize(pokemon.getName()));
+            win();
+        }
+
+
     }
 }
