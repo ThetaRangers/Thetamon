@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="sprites_front" translatable="false">/images</string>
+    <string name="images" translatable="false">/images</string>
     <string name="extension" translatable="false">.png</string>
     <string name="color_type" translatable="false">colorType</string>
     <string name="url" translatable="false">https://pokeapi.co/api/v2/pokemon?limit=10000</string>
@@ -21,4 +21,8 @@
     <string name="url_damage_classes" translatable="false">https://pokeapi.co/api/v2/move-damage-class/%d</string>
     <string name="db_name" translatable="false">pokemonDb</string>
     <string name="volume_pref" translatable="false">volume_mode</string>
+    <string name="sprite_front" translatable="false">/sprite_front</string>
+    <string name="sprite_front_shiny" translatable="false">/sprite_front_shiny</string>
+    <string name="sprite_back" translatable="false">/sprite_back</string>
+    <string name="sprite_back_shiny" translatable="false">/sprite_back_shiny</string>
 </resources>

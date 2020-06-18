@@ -124,7 +124,7 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHold
             return;
 
         holder.ivSprite.setImageBitmap(imageManager.loadFromDisk(
-                context.getFilesDir() + context.getString(R.string.sprites_front),
+                context.getFilesDir() + context.getString(R.string.images),
                 pokemon.getId() + context.getString(R.string.extension)));
 
         TypeTextViewManager typeTextViewManager = new TypeTextViewManager(pokemon, holder.tvType1, holder.tvType2);
@@ -166,7 +166,7 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHold
             cvPokemon.setOnClickListener(this);
             cvPokemon.setOnLongClickListener(selectList);
 
-            ivSprite = itemView.findViewById(R.id.ivSprite);
+            ivSprite = itemView.findViewById(R.id.ivImage);
             imageView = itemView.findViewById(R.id.imageView);
 
             tvName = itemView.findViewById(R.id.tvName);
@@ -191,10 +191,8 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHold
 
                     ActivityOptions options = ActivityOptions
                             .makeSceneTransitionAnimation(context,
-                                    Pair.create(imageView, "cardExpansion"),
-                                    Pair.create(ivSprite, "imageExpansion"),
-                                    Pair.create(tvId, "transId"),
-                                    Pair.create(tvName, "transName"));
+                                    Pair.create(ivSprite, "imageExpansion"));
+
 
                     setClickable(false);
                     context.startActivityForResult(data, REQ_CODE, options.toBundle());

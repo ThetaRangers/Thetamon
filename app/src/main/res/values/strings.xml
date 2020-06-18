@@ -93,4 +93,7 @@
     <string name="label_next">Next</string>
     <string name="menu_start_title">Selected </string>
     <string name="menu_end_title">/10 Pokémons</string>
+    <string name="label_sprites" translatable="false">Sprites</string>
+    <string name="label_default" translatable="false">Default</string>
+    <string name="label_shiny" translatable="false">Shiny</string>
 </resources>

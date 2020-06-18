@@ -22,4 +22,5 @@
     <dimen name="iv_damage_class_width">46dp</dimen>
     <dimen name="sprite_about_size">200dp</dimen>
     <dimen name="margin_gigamax">32dp</dimen>
+    <dimen name="sprite_size">128dp</dimen>
 </resources>

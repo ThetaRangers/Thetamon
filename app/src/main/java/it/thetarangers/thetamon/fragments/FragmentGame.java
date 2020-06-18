@@ -116,7 +116,7 @@ public class FragmentGame extends Fragment {
 
             bitmapNormal = imageManager.loadFromDisk(
                     requireContext().getFilesDir() +
-                            requireContext().getString(R.string.sprites_front),
+                            requireContext().getString(R.string.images),
                     pokemon.getId() + requireContext().getString(R.string.extension));
 
             bitmapObscure = holder.darkenBitmap(bitmapNormal);
