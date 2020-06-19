@@ -326,7 +326,7 @@ public class FragmentPokedex extends Fragment implements SelectorCallback, Poked
                         v.setVisibility(View.GONE);
                 }
             });
-            v.setVisibility(View.GONE);
+            showOut(v);
         }
 
         //show out all buttons
