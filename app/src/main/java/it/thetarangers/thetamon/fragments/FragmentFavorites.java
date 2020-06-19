@@ -59,8 +59,10 @@ public class FragmentFavorites extends Fragment implements SelectorCallback {
         daoThread.getFavoritePokemon(getContext(), favoriteListViewModel);
     }
 
+    //implements callback interface
     @Override
     public void onSelect(int size) {
+        //if actionMode already exists check if size is 0 and close actionMode or just change actionMode title
         if (actionMode != null) {
             if (size == 0)
                 actionMode.finish();
@@ -68,13 +70,14 @@ public class FragmentFavorites extends Fragment implements SelectorCallback {
                 actionMode.setTitle(getString(R.string.menu_start_title) + " " + size + getString(R.string.menu_end_title));
             return;
         }
-
+        //if actionMode does't exist create it
         actionMode = requireActivity().startActionMode(new FragmentFavorites.FavoritesCallback());
 
     }
 
     @Override
     public void onResume() {
+        //if fragment is resumed reload favorites
         daoThread.getFavoritePokemon(getContext(), favoriteListViewModel);
         holder.adapter.setClickable(true);
         super.onResume();
@@ -82,11 +85,13 @@ public class FragmentFavorites extends Fragment implements SelectorCallback {
 
     @Override
     public void onDetach() {
+        //if fragment is detached notify fragment pokedex favorites changes
         notifyPokedex();
         super.onDetach();
     }
 
-    public void notifyPokedex() {
+    //update pokemon list view model with favorite list changes
+    private void notifyPokedex() {
         List<Pokemon> pokemons = pokemonListViewModel.getPokemonList();
         List<Pokemon> favorites = favoriteListViewModel.getFavoriteList();
         for (Pokemon pokemon : pokemons) {
@@ -102,15 +107,17 @@ public class FragmentFavorites extends Fragment implements SelectorCallback {
         pokemonListViewModel.setPokemons(pokemons);
     }
 
+    //inner class that implements the ActionMode.Callback for ActionMode managment
     class FavoritesCallback implements android.view.ActionMode.Callback {
 
         FavoritesManager favoritesManager = new FavoritesManager(requireContext());
 
+
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            //inflate menu on action mode creation
             mode.getMenuInflater().inflate(R.menu.menu_action_mode, menu);
             ((PokedexActivity) requireActivity()).lockDrawer();
-            //TODO hardcoded string
             MenuItem itemAdd = menu.getItem(0);
             itemAdd.setEnabled(false);
             mode.setTitle(getString(R.string.menu_start_title) + " 1" + getString(R.string.menu_end_title));
@@ -122,6 +129,7 @@ public class FragmentFavorites extends Fragment implements SelectorCallback {
             return false;
         }
 
+        //Manage click on menu items
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem menuItem) {
             List<Pokemon> sel = holder.adapter.getSelected();
@@ -133,8 +141,6 @@ public class FragmentFavorites extends Fragment implements SelectorCallback {
                 case R.id.item_removeAll:
                     favoritesManager.removePokemonFromFav(sel);
                     mode.finish();
-                    //TODO optional reload recycler view
-
                     break;
                 default:
                     break;
@@ -142,6 +148,8 @@ public class FragmentFavorites extends Fragment implements SelectorCallback {
             return false;
         }
 
+
+        //Called when ActionMode is destroyed
         @Override
         public void onDestroyActionMode(ActionMode mode) {
             holder.adapter.deselectAll();
@@ -167,6 +175,7 @@ public class FragmentFavorites extends Fragment implements SelectorCallback {
                 columns = 1;
             }
 
+            //set layout manager and adapter to recycler view
             rvFavorites.setLayoutManager(new GridLayoutManager(getContext(), columns));
             adapter = new PokedexAdapter(getActivity(), FragmentFavorites.this);
             rvFavorites.setAdapter(adapter);

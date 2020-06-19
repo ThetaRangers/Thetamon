@@ -31,7 +31,7 @@ public class FragmentSearch extends BottomSheetDialogFragment {
 
     public static String TAG = "FragmentSearch";
 
-    PokemonListViewModel pokemonListViewModel;
+    private PokemonListViewModel pokemonListViewModel;
     Holder holder;
 
     @Override
@@ -53,6 +53,8 @@ public class FragmentSearch extends BottomSheetDialogFragment {
         behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
     }
 
+
+    //search pokemon from DB
     private void search(String query) {
         pokemonListViewModel.setFilters(new ArrayList<>());
         DaoThread daoThread = new DaoThread(pokemonListViewModel);
@@ -70,7 +72,7 @@ public class FragmentSearch extends BottomSheetDialogFragment {
         final TextInputLayout tilSearch;
         final ImageView ivSearch;
 
-        public Holder(View fs) {
+        private Holder(View fs) {
             tilSearch = fs.findViewById(R.id.tilSearch);
             Objects.requireNonNull(tilSearch.getEditText()).setOnEditorActionListener(this);
 
@@ -80,6 +82,7 @@ public class FragmentSearch extends BottomSheetDialogFragment {
 
         @Override
         public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+            //search string with DONE keyboard button
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 search(Objects.requireNonNull(tilSearch.getEditText()).getText().toString());
             }
@@ -88,7 +91,7 @@ public class FragmentSearch extends BottomSheetDialogFragment {
 
         @Override
         public void onClick(View v) {
-
+            //search string with search button
             if (v.getId() == R.id.ivSearch) {
                 Objects.requireNonNull(tilSearch.getEditText())
                         .onEditorAction(EditorInfo.IME_ACTION_DONE);

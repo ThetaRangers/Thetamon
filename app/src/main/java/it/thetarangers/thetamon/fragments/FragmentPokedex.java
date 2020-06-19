@@ -66,6 +66,7 @@ public class FragmentPokedex extends Fragment implements SelectorCallback, Poked
             fill(true); // Load all pokemons
     }
 
+    //reload all pokedex and clear filters
     private void fill(Boolean isFirstTime) {
         DaoThread daoThread = new DaoThread(pokemonListViewModel);
         daoThread.getPokemonsFromName(getContext(), "");
@@ -74,9 +75,8 @@ public class FragmentPokedex extends Fragment implements SelectorCallback, Poked
             pokemonListViewModel.setFilters(new ArrayList<>()); // Clear filters
     }
 
+    //filter pokemons by type
     private void filter(List<String> filters) {
-        // TODO refactor please i'm dirty
-        // TODO put this in FragmentFilter and save filtered list in ViewModel ?
         List<Pokemon> tmp = new ArrayList<>();
         List<Pokemon> pokemonList = pokemonListViewModel.getPokemonList();
         String type1;
@@ -96,13 +96,13 @@ public class FragmentPokedex extends Fragment implements SelectorCallback, Poked
 
         for (int i = 0; i < pokemonList.size(); i++) {
             Pokemon pokemon = pokemonList.get(i);
-
+            //if selected only a type
             if (type2 != null) {
                 if ((type1.equals(pokemon.getType1()) && type2.equals(pokemon.getType2())) ||
                         (type2.equals(pokemon.getType1()) && type1.equals(pokemon.getType2()))) {
                     tmp.add(pokemon);
                 }
-            } else {
+            } else { //if selected two types
                 if (type1.equals(pokemon.getType1()) || type1.equals(pokemon.getType2())) {
                     tmp.add(pokemon);
                 }
@@ -112,10 +112,11 @@ public class FragmentPokedex extends Fragment implements SelectorCallback, Poked
         holder.adapter.setPokemonList(tmp);
     }
 
+    //implements callback interface
     @Override
     public void onSelect(int size) {
+        //if actionMode already exists check if size is 0 and close actionMode or just change actionMode title
         if (actionMode != null) {
-
             if (size == 0)
                 actionMode.finish();
             else
@@ -123,18 +124,21 @@ public class FragmentPokedex extends Fragment implements SelectorCallback, Poked
             return;
 
         }
-
+        //if actionMode does't exist create it
         actionMode = requireActivity().startActionMode(new PokedexCallback());
 
     }
 
+    //implements pokedex activity callback
     @Override
     public void onActivityResultCallback(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == PokedexAdapter.REQ_CODE) {
             if (data != null) {
+                //get favorite changes of child activities
                 @SuppressWarnings("unchecked")
                 HashMap<Integer, Boolean> pokemons = (HashMap<Integer, Boolean>) data
                         .getSerializableExtra(PokemonDetailActivity.POKEMONS);
+                //apply them on fragment recycler view
                 if (pokemons != null) {
                     for (HashMap.Entry<Integer, Boolean> entry : pokemons.entrySet()) {
                         for (Pokemon pokemon2 : holder.adapter.pokemonList) {
@@ -151,16 +155,19 @@ public class FragmentPokedex extends Fragment implements SelectorCallback, Poked
 
     @Override
     public void onResume() {
+        //reset recycler view as clickable
         holder.adapter.setClickable(true);
         super.onResume();
     }
 
+    //inner class that implements the ActionMode.Callback for ActionMode managment
     class PokedexCallback implements android.view.ActionMode.Callback {
 
         FavoritesManager favoritesManager = new FavoritesManager(requireContext());
 
         @Override
         public boolean onCreateActionMode(android.view.ActionMode mode, Menu menu) {
+            //inflate menu on action mode creation
             mode.getMenuInflater().inflate(R.menu.menu_action_mode, menu);
             ((PokedexActivity) requireActivity()).lockDrawer();
             holder.onFastScrollStart();
@@ -173,6 +180,8 @@ public class FragmentPokedex extends Fragment implements SelectorCallback, Poked
             return false;
         }
 
+
+        //Manage click on menu items
         @Override
         public boolean onActionItemClicked(android.view.ActionMode mode, MenuItem item) {
             List<Pokemon> sel = holder.adapter.getSelected();
@@ -199,6 +208,7 @@ public class FragmentPokedex extends Fragment implements SelectorCallback, Poked
             return false;
         }
 
+        //Called when ActionMode is destroyed
         @Override
         public void onDestroyActionMode(android.view.ActionMode mode) {
             holder.adapter.deselectAll();
@@ -219,9 +229,10 @@ public class FragmentPokedex extends Fragment implements SelectorCallback, Poked
         boolean isOpen;
 
         Holder(View fp) {
-
+            //if floating buttons are showed or not
             isOpen = false;
 
+            //set all view elements
             fabAdd = fp.findViewById(R.id.fabAdd);
             fabAdd.setOnClickListener(this);
 
@@ -249,6 +260,7 @@ public class FragmentPokedex extends Fragment implements SelectorCallback, Poked
                 columns = 1;
             }
 
+            //set adpater, layout manager and fastScrollBar manager to recycler view
             rvPokedex.setLayoutManager(new GridLayoutManager(getContext(), columns));
             adapter = new PokedexAdapter(getActivity(), FragmentPokedex.this);
             adapter.setStateRestorationPolicy(RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY);
@@ -258,11 +270,13 @@ public class FragmentPokedex extends Fragment implements SelectorCallback, Poked
 
         }
 
+        //main floating button rotation
         private boolean rotateFab(final View v, boolean rotate) {
             v.animate().setDuration(200).rotation(rotate ? 135f : 0f);
             return rotate;
         }
 
+        //show with animation and enable a hidden button
         private void showIn(final View v) {
             v.setAlpha(0f);
             v.setTranslationY(v.getHeight());
@@ -270,6 +284,7 @@ public class FragmentPokedex extends Fragment implements SelectorCallback, Poked
             v.setEnabled(true);
         }
 
+        //hide with animation and disable a visible button
         private void showOut(final View v) {
             v.setAlpha(1f);
             v.setTranslationY(0);
@@ -277,12 +292,14 @@ public class FragmentPokedex extends Fragment implements SelectorCallback, Poked
             v.setEnabled(false);
         }
 
+        //init button position
         private void init(final View v) {
             v.setTranslationY(0);
             v.animate().setDuration(0).translationY(v.getHeight()).alpha(0f).start();
             v.setEnabled(false);
         }
 
+        //show out all buttons
         private void collapseFab() {
             showOut(fabFilter);
             showOut(fabSearch);
@@ -290,6 +307,7 @@ public class FragmentPokedex extends Fragment implements SelectorCallback, Poked
             isOpen = rotateFab(fabAdd, !isOpen);
         }
 
+        //show in all buttons
         private void openFab() {
             showIn(fabFilter);
             showIn(fabSearch);
@@ -301,21 +319,21 @@ public class FragmentPokedex extends Fragment implements SelectorCallback, Poked
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.fabAdd:
-                    if (isOpen) {
+                    if (isOpen) { //open or collapse fab
                         collapseFab();
                     } else {
                         openFab();
                     }
                     break;
-                case R.id.fabFilter:
+                case R.id.fabFilter: //create filter fragment
                     new FragmentFilter().show(getParentFragmentManager(), FragmentFilter.TAG);
                     collapseFab();
                     break;
-                case R.id.fabSearch:
+                case R.id.fabSearch: //create search fragment
                     new FragmentSearch().show(getParentFragmentManager(), FragmentSearch.TAG);
                     collapseFab();
                     break;
-                case R.id.fabReset:
+                case R.id.fabReset: //reset search and filters
                     fill(false);
                     collapseFab();
                     break;
@@ -324,6 +342,7 @@ public class FragmentPokedex extends Fragment implements SelectorCallback, Poked
             }
         }
 
+        //hide all buttons on fast scroll
         @Override
         public void onFastScrollStart() {
             fabAdd.setVisibility(View.GONE);
@@ -332,6 +351,7 @@ public class FragmentPokedex extends Fragment implements SelectorCallback, Poked
             fabReset.setVisibility(View.GONE);
         }
 
+        //show all buttons when fast scroll stop
         @Override
         public void onFastScrollStop() {
             fabAdd.setVisibility(View.VISIBLE);
