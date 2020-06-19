@@ -42,6 +42,7 @@ public class PokedexActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pokedex);
 
+        // Create all fragments and store them in the HashMap
         fragments = new HashMap<>();
         fragments.put(R.id.item_pokedex, new FragmentPokedex());
         fragments.put(R.id.item_favorites, new FragmentFavorites());
@@ -87,9 +88,11 @@ public class PokedexActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        // If the drawer is open close it
         if (holder.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             holder.drawerLayout.closeDrawer(GravityCompat.START);
         } else if (checkedItemId != R.id.item_pokedex) {
+            // Goes back to the Pokedex and update drawer
             // Easier than handling BackStack
             holder.onNavigationItemSelected(holder.navView.getMenu().findItem(R.id.item_pokedex));
             holder.navView.setCheckedItem(R.id.item_pokedex);
@@ -127,6 +130,7 @@ public class PokedexActivity extends AppCompatActivity {
                 .commitNowAllowingStateLoss();
     }
 
+    // Used to change the Theme of the app
     public void switchTheme(String val) {
         if (val.equals(getString(R.string.light_enum)))
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
