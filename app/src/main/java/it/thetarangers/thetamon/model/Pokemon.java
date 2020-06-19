@@ -2,7 +2,6 @@ package it.thetarangers.thetamon.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -17,7 +16,6 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 @Entity(tableName = "Pokemon")
@@ -81,9 +79,8 @@ public class Pokemon implements Parcelable {
     private List<Move> movesList;
     @Ignore
     private List<Ability> abilityList;
-    @Ignore
-    private HashMap<String, String> sprites;
 
+    @Ignore
     public Pokemon(int id, String name) {
         this.id = id;
         this.name = name;
@@ -94,6 +91,7 @@ public class Pokemon implements Parcelable {
         this.name = name;
     }
 
+    @Ignore
     protected Pokemon(Parcel in) {
         id = in.readInt();
         name = in.readString();
@@ -315,7 +313,6 @@ public class Pokemon implements Parcelable {
     public List<Ability> getAbilityList() {
         Gson gson = new Gson();
         if (abilityList == null) {
-            Log.d("HALO", "STO RECUPERANDO " + abilityArray);
             Type listType = new TypeToken<List<Ability>>() {
             }.getType();    //Setting up the type for the conversion
 
@@ -392,14 +389,6 @@ public class Pokemon implements Parcelable {
 
     public void setHabitat(String habitat) {
         this.habitat = habitat;
-    }
-
-    public HashMap<String, String> getSprites() {
-        return sprites;
-    }
-
-    public void setSprites(HashMap<String, String> sprites) {
-        this.sprites = sprites;
     }
 
     public String getUrlEvolutionChain() {
@@ -480,7 +469,6 @@ public class Pokemon implements Parcelable {
         this.name = pokemon.getName();
         this.specialAttack = pokemon.getSpecialAttack();
         this.speed = pokemon.getSpeed();
-        this.sprites = pokemon.getSprites();
         this.type1 = pokemon.getType1();
         this.type2 = pokemon.getType2();
         this.url = pokemon.getUrl();
@@ -492,21 +480,4 @@ public class Pokemon implements Parcelable {
         return new Gson().fromJson(this.getEvolutionChain(), EvolutionDetail.class);
     }
 
-    /*
-    @Entity(primaryKeys = {"pokemonId", "moveId"})
-    class PokemonCrossMoves {
-        public int pokemonId;
-        public int moveId;
-    }
-
-    public class PokemonWithMoves {
-        @Embedded public Pokemon pokemon;
-        @Relation(
-                parentColumn = "pokemonId",
-                entityColumn = "moveId",
-                associateBy = @Junction(PokemonCrossMoves.class)
-        )
-        public List<Move> moves;
-    }
-     */
 }
