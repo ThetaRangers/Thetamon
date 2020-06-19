@@ -18,16 +18,7 @@ public abstract class PokemonDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     public abstract void insertPokemon(Pokemon pokemon);
-/*
-    @Insert
-    public abstract void insertPokemonWithMoves(Pokemon.PokemonWithMoves pokemonWithMoves);
 
-    @Transaction
-    @Query("SELECT * FROM Pokemon WHERE id = :id ")
-    public abstract Pokemon.PokemonWithMoves getPokemonWithMoves(int id);
-
-    public
-*/
     @Query("DELETE FROM Pokemon")
     public abstract void deleteAll();
 
@@ -38,6 +29,7 @@ public abstract class PokemonDao {
     abstract List<Pokemon> getPokemonsFromNameInterface(String name);
 
     public List<Pokemon> getPokemonsFromName(String name) {
+        // Add special char % that is used to search part of name
         return getPokemonsFromNameInterface(StringManager.decapitalize(name) + "%");
     }
 
@@ -48,6 +40,7 @@ public abstract class PokemonDao {
     public abstract Pokemon getPokemonFromNameInterface(String name);
 
     public Pokemon getPokemonFromName(String name) {
+        // Add special char % that is used to search part of name
         return getPokemonFromNameInterface(name + "%");
     }
 

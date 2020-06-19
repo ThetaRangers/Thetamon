@@ -20,6 +20,7 @@ public abstract class PokemonDb extends RoomDatabase {
 
     }
 
+    // Single access to database
     static public PokemonDb getInstance(Context context) {
         if (instance == null) {
             instance = Room.databaseBuilder(context.getApplicationContext(),
