@@ -124,6 +124,7 @@ public class Pokemon implements Parcelable {
 
     }
 
+    // Convert moves to JSON format
     private void encodeMoves() {
         List<JSONObject> moveArray = new ArrayList<>();
 
@@ -141,6 +142,7 @@ public class Pokemon implements Parcelable {
         this.moveArray = array.toString();
     }
 
+    // Convert abilities to JSON format
     private void encodeAbilities() {
         List<JSONObject> abilityArray = new ArrayList<>();
         Gson gson = new Gson();
@@ -158,6 +160,7 @@ public class Pokemon implements Parcelable {
         this.abilityArray = array.toString();
     }
 
+    // Convert lists to JSON format
     public void encode() {
         this.encodeAbilities();
         this.encodeMoves();

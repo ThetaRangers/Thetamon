@@ -2,7 +2,10 @@ package it.thetarangers.thetamon.utilities;
 
 import android.content.Context;
 
+import java.util.Locale;
+
 public class StringManager {
+    // Convert from DB notation to a more legible notation
     public static String capitalize(String in) {
         String[] tmp = in.split("-");
 
@@ -20,6 +23,7 @@ public class StringManager {
         return out.toString();
     }
 
+    // Convert to DB notation
     public static String decapitalize(String in) {
         return in.toLowerCase().replace(" ", "-");
     }
@@ -29,7 +33,7 @@ public class StringManager {
     }
 
     public static String formatFromR(Context context, int id, int value) {
-        return String.format("%s: %d", context.getResources().getString(id), value);
+        return String.format(Locale.getDefault(), "%s: %d", context.getResources().getString(id), value);
     }
 
     public static String formatFromR(Context context, int id, String value) {

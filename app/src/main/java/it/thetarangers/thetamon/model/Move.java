@@ -80,12 +80,12 @@ public class Move implements Parcelable, Comparable<Move> {
         this.id = id;
     }
 
+    // Set id from parsed string
     public int setIdFromUrl() {
         String temp = this.url;
         temp = temp.substring("https://pokeapi.co/api/v2/move/".length());
         temp = temp.substring(0, temp.length() - 1);
 
-        //Set id from parsed string
         return this.id = Integer.parseInt(temp);
     }
 

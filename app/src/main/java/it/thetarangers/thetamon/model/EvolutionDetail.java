@@ -206,6 +206,7 @@ public class EvolutionDetail {
         this.evolutionCondition += ", " + condition;
     }
 
+    // Format text for the trigger
     public String getTriggerFormat(Context context) {
         String result = "";
         switch (this.getTrigger()) {
