@@ -57,10 +57,12 @@ public class PokedexActivity extends AppCompatActivity {
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
+        // If the activity is first started
         if (savedInstanceState == null) {
             switchFragment(fragments.get(R.id.item_pokedex));
             checkedItemId = R.id.item_pokedex;
         } else {
+            // Restore the state of all fragments
             Bundle helperState = savedInstanceState.getBundle(HELPER);
             assert helperState != null;
             fragmentStateHelper.restoreHelperState(helperState);
@@ -78,7 +80,7 @@ public class PokedexActivity extends AppCompatActivity {
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         // Save current Fragment's state
         saveCurrentState();
-        // Save the state all Fragments
+        // Save the state of all Fragments
         outState.putBundle(HELPER, fragmentStateHelper.saveHelperState());
         // Save the state of NavigationDrawer
         outState.putInt(CHECKED_ITEM, checkedItemId);
@@ -103,6 +105,7 @@ public class PokedexActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        // Forward activity result to child fragments
         for (HashMap.Entry<Integer, Fragment> entry : fragments.entrySet()) {
             if (entry.getValue().isAdded()) {
                 if (entry.getKey() == R.id.item_pokedex) {
