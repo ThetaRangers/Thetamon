@@ -25,7 +25,7 @@
     <string name="reset_data_summary">Download all resources and clear local database</string>
     <string name="reset_data_confirm" translatable="false">RESET</string>
     <string name="reset_data_exit">EXIT</string>
-    <string name="reset_data_dialog">By clicking on \"RESET\" you will lose all of your favorite Pokémons!</string>
+    <string name="reset_data_dialog">By clicking on \"RESET\" you will lose all of your favorite Pokémons and the application will close!</string>
     <string name="warning">Warning!</string>
     <string name="label_habitat" translatable="false">Habitat</string>
     <string name="stat_hp" translatable="false">Hp</string>

@@ -11,10 +11,25 @@ import java.io.IOException;
 
 public class ImageManager {
 
-    public Bitmap loadFromDisk (String path, String filename) {
+    public Bitmap loadFromDisk(String path, String filename) {
 
         File f = new File(path, filename);
         try (FileInputStream fileInputStream = new FileInputStream(f)) {
+            try (BufferedInputStream bufferedInputStream =
+                         new BufferedInputStream(fileInputStream)) {
+                return BitmapFactory.decodeStream(bufferedInputStream);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Bitmap loadBitmap(File file) {
+
+        try (FileInputStream fileInputStream = new FileInputStream(file)) {
             try (BufferedInputStream bufferedInputStream =
                          new BufferedInputStream(fileInputStream)) {
                 return BitmapFactory.decodeStream(bufferedInputStream);

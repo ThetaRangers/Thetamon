@@ -6,11 +6,11 @@
     <string name="pokemon_search_string">inserisci nome o id</string>
     <string name="volley_error">Errore nella richiesta a PokeApi</string>
     <string name="not_found">Nessun pokemon trovato</string>
-    <string name="downloading">Download delle risorse…</string>
+    <string name="downloading">Download risorse…</string>
     <string name="error_unzip">Errore nella decompressione del file</string>
     <string name="error_download">Errore nel download delle risorse</string>
-    <string name="extracting">Estrazione Risorse…</string>
-    <string name="updating_db">Aggiornamento Database…</string>
+    <string name="extracting">Estrazione risorse…</string>
+    <string name="updating_db">Aggiornamento database…</string>
     <string name="night_mode">Modalità Notte</string>
     <string name="night_mode_summary">La modalità notte mostra colori scuri nella maggior parte della UI</string>
     <string name="system">Predefinito di sistema</string>
@@ -22,7 +22,7 @@
     <string name="reset_data">Resetta Dati</string>
     <string name="reset_data_summary">Download di tutte le risorse e pulizia del database</string>
     <string name="reset_data_exit">ESCI</string>
-    <string name="reset_data_dialog">Cliccando su \"RESET\" perderai tutti i tuoi Pokémon preferiti!</string>
+    <string name="reset_data_dialog">Cliccando su \"RESET\" perderai tutti i tuoi Pokémon preferiti e l\'applicazione sarà chiusa!</string>
     <string name="warning">Attenzione!</string>
     <string name="no_habitat">Sconosciuto</string>
     <string name="fetchingResult">Caricando dati dall\'API, attendi per favore…</string>

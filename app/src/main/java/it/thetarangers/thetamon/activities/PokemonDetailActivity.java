@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -25,8 +24,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.shape.CornerFamily;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.RequestCreator;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -46,7 +43,6 @@ import it.thetarangers.thetamon.model.EvolutionDetail;
 import it.thetarangers.thetamon.model.Move;
 import it.thetarangers.thetamon.model.Pokemon;
 import it.thetarangers.thetamon.utilities.ImageManager;
-import it.thetarangers.thetamon.utilities.PicassoTarget;
 import it.thetarangers.thetamon.utilities.StringManager;
 import it.thetarangers.thetamon.utilities.TypeTextViewManager;
 import it.thetarangers.thetamon.utilities.VolleyEvolutionChain;
@@ -150,7 +146,6 @@ public class PokemonDetailActivity extends AppCompatActivity {
         final ToggleButton tbFavorite;
 
         final ImageView ivFront, ivFrontShiny, ivBack, ivBackShiny;
-        final String frontUrl, frontShinyUrl, backUrl, backShinyUrl;
 
         ImageManager imageManager;
 
@@ -203,16 +198,6 @@ public class PokemonDetailActivity extends AppCompatActivity {
 
             imageManager = new ImageManager();
 
-            // Url of the sprites
-            frontUrl = getResources().getString(R.string.sprite_front) + pokemon.getId()
-                    + getResources().getString(R.string.extension);
-            frontShinyUrl = getResources().getString(R.string.sprite_front_shiny) + pokemon.getId()
-                    + getResources().getString(R.string.extension);
-            backUrl = getResources().getString(R.string.sprite_back) + pokemon.getId()
-                    + getResources().getString(R.string.extension);
-            backShinyUrl = getResources().getString(R.string.sprite_back_shiny) + pokemon.getId()
-                    + getResources().getString(R.string.extension);
-
             ivFront = findViewById(R.id.ivFront);
             ivFrontShiny = findViewById(R.id.ivFrontShiny);
             ivBack = findViewById(R.id.ivBack);
@@ -247,27 +232,6 @@ public class PokemonDetailActivity extends AppCompatActivity {
                     // Set the reference to pokemon with details
                     PokemonDetailActivity.this.pokemon = pokemon;
 
-                    // SAVE and fill the imageView
-                    RequestCreator front = Picasso.get().load(pokemon.getSprites().get("front_default"));
-                    PicassoTarget target = new PicassoTarget(frontUrl, PokemonDetailActivity.this);
-                    front.into(ivFront);
-                    front.into(target);
-
-                    RequestCreator frontShiny = Picasso.get().load(pokemon.getSprites().get("front_shiny"));
-                    PicassoTarget targetFrontShiny = new PicassoTarget(frontShinyUrl, PokemonDetailActivity.this);
-                    frontShiny.into(targetFrontShiny);
-                    frontShiny.into(ivFrontShiny);
-
-                    RequestCreator back = Picasso.get().load(pokemon.getSprites().get("back_default"));
-                    PicassoTarget targetBack = new PicassoTarget(backUrl, PokemonDetailActivity.this);
-                    back.into(targetBack);
-                    back.into(ivBack);
-
-                    RequestCreator backShiny = Picasso.get().load(pokemon.getSprites().get("back_shiny"));
-                    PicassoTarget targetBackShiny = new PicassoTarget(backShinyUrl, PokemonDetailActivity.this);
-                    backShiny.into(targetBackShiny);
-                    backShiny.into(ivBackShiny);
-
                     // Save the ability list and move list the pokemon class
                     // Used to store information in the DB
                     pokemon.encode();
@@ -292,12 +256,6 @@ public class PokemonDetailActivity extends AppCompatActivity {
                     EvolutionDetail ev = tmp.getEvolutionDetail();
                     handler.post(() -> {
                         fillEvolution(ev);
-                        ImageView ivFront = findViewById(R.id.ivFront);
-
-                        Picasso.get().load(new File(getExternalFilesDir(null) + frontUrl)).into(ivFront);
-                        Picasso.get().load(new File(getExternalFilesDir(null) + frontShinyUrl)).into(ivFrontShiny);
-                        Picasso.get().load(new File(getExternalFilesDir(null) + backUrl)).into(ivBack);
-                        Picasso.get().load(new File(getExternalFilesDir(null) + backShinyUrl)).into(ivBackShiny);
 
                         Holder.this.afterDetails();
                     });
@@ -305,6 +263,35 @@ public class PokemonDetailActivity extends AppCompatActivity {
             });
 
             thread.start();
+        }
+
+        private void setSprites() {
+            File fileFront = new File(getFilesDir() + getString(R.string.sprites_front),
+                    pokemon.getId() + getString(R.string.extension));
+            File fileFrontShiny = new File(getFilesDir() + getString(R.string.sprites_front_shiny),
+                    pokemon.getId() + getString(R.string.extension));
+            File fileBack = new File(getFilesDir() + getString(R.string.sprites_back),
+                    pokemon.getId() + getString(R.string.extension));
+            File fileBackShiny = new File(getFilesDir() + getString(R.string.sprites_back_shiny),
+                    pokemon.getId() + getString(R.string.extension));
+
+            if (fileFront.exists())
+                ivFront.setImageBitmap(imageManager.loadBitmap(fileFront));
+            else
+                ivFront.setVisibility(View.GONE);
+            if (fileFrontShiny.exists())
+                ivFrontShiny.setImageBitmap(imageManager.loadBitmap(fileFrontShiny));
+            else
+                ivFrontShiny.setVisibility(View.GONE);
+            if (fileBack.exists())
+                ivBack.setImageBitmap(imageManager.loadBitmap(fileBack));
+            else
+                ivBack.setVisibility(View.GONE);
+            if (fileBackShiny.exists())
+                ivBackShiny.setImageBitmap(imageManager.loadBitmap(fileBackShiny));
+            else {
+                ivBackShiny.setVisibility(View.GONE);
+            }
         }
 
         private void beforeDetails() {
@@ -317,12 +304,15 @@ public class PokemonDetailActivity extends AppCompatActivity {
             TypeTextViewManager typeTextViewManager = new TypeTextViewManager(pokemon, tvType1, tvType2);
             typeTextViewManager.setup();
 
-            //set the sprite part
+            //set the image part
             ivBackground.setBackgroundColor(Color.parseColor(pokemon.getAverageColor()));
 
             ivSprite.setImageBitmap(imageManager.loadFromDisk(
                     PokemonDetailActivity.this.getFilesDir() + PokemonDetailActivity.this.getString(R.string.images),
                     pokemon.getId() + PokemonDetailActivity.this.getString(R.string.extension)));
+
+            // set the sprites
+            setSprites();
 
             // programmatically resize the height of ivSprite based on screen height
             double resize = 0.25;
