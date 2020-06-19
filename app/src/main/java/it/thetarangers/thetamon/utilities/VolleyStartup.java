@@ -86,10 +86,10 @@ public abstract class VolleyStartup implements Response.ErrorListener, Response.
 
     @Override
     public void onErrorResponse(VolleyError error) {
-        //TODO make error Response
         Toast.makeText(context, R.string.volley_error, Toast.LENGTH_LONG).show();
     }
 
+    // Parse the pokemon list
     @Override
     public void onResponse(String response) {
         Gson gson = new Gson();
@@ -108,13 +108,13 @@ public abstract class VolleyStartup implements Response.ErrorListener, Response.
                 pokemonList.get(i).setIdFromUrl();
             }
 
-            //fill(pokemonList);
             getPokemonListWithTypes();
         } catch (JSONException exception) {
             exception.printStackTrace();
         }
     }
 
+    // Listener for the type api call
     class TypeListener implements Response.Listener<String> {
         Gson gson;
         int num;
@@ -135,6 +135,7 @@ public abstract class VolleyStartup implements Response.ErrorListener, Response.
                 JSONArray pokemons = jsonObject.getJSONArray("pokemon");
 
                 for (int i = 0; i < pokemons.length(); i++) {
+                    // Get the pokemon types
                     JSONObject object = pokemons.getJSONObject(i);
                     JSONObject pokemon = object.getJSONObject("pokemon");
 
@@ -144,6 +145,7 @@ public abstract class VolleyStartup implements Response.ErrorListener, Response.
                     int id = temp.setIdFromUrl() - 1;
 
                     if (id < POKEDEX_LENGTH) {
+                        // Set the pokemon type
                         pokemonList.get(id).setType(name, slot);
                     }
                 }
@@ -155,6 +157,7 @@ public abstract class VolleyStartup implements Response.ErrorListener, Response.
                 List<Move> moveTmp;
                 moveTmp = gson.fromJson(moves, listType);
                 for (Move m : moveTmp) {
+                    // Set type of the move
                     m.setIdFromUrl();
                     m.setType(name);
                 }
@@ -164,6 +167,7 @@ public abstract class VolleyStartup implements Response.ErrorListener, Response.
                 num++;
 
                 if (num == TYPES_NUMBER) {
+                    // If all api call are done fetch moves damage class
                     Collections.sort(moveList);
                     getMovesListWithDamageClass();
                 }
@@ -173,6 +177,7 @@ public abstract class VolleyStartup implements Response.ErrorListener, Response.
         }
     }
 
+    // Listener for the damage class api call
     class DamageClassListener implements Response.Listener<String> {
         Gson gson = new Gson();
         int num = 0;
@@ -193,13 +198,14 @@ public abstract class VolleyStartup implements Response.ErrorListener, Response.
                     int index = temp.setIdFromUrl() - 1;
 
                     if (index < 10000) // Ignore shadow moves
-                        moveList.get(index).setDamageClass(name);
+                        moveList.get(index).setDamageClass(name);   // Add damage type to moves
 
                 }
 
                 num++;
 
                 if (num == DAMAGE_CLASSES_NUMBER) {
+                    // Call the abstract method when done
                     fill(pokemonList, moveList);
                 }
 

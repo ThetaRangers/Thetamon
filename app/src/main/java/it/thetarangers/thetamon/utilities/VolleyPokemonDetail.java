@@ -1,7 +1,6 @@
 package it.thetarangers.thetamon.utilities;
 
 import android.content.Context;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -17,7 +16,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import it.thetarangers.thetamon.R;
@@ -40,7 +38,6 @@ public abstract class VolleyPokemonDetail implements Response.ErrorListener, Res
     public abstract void fill(Pokemon pokemon);
 
     public void getPokemonDetail() {
-        Log.d("POKE", "url " + pokemon.getUrl());
         StringRequest stringRequest = new StringRequest(Request.Method.GET, pokemon.getUrl(),
                 this,
                 this);
@@ -57,8 +54,7 @@ public abstract class VolleyPokemonDetail implements Response.ErrorListener, Res
 
     @Override
     public void onErrorResponse(VolleyError error) {
-        //TODO replace king
-        Toast.makeText(context, "Stringa di errore quì king", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, R.string.volley_error, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -69,9 +65,10 @@ public abstract class VolleyPokemonDetail implements Response.ErrorListener, Res
         try {
             JSONObject jsonObject = new JSONObject(response);
 
-            //Get moves list
+            // Get moves list
             JSONArray moves = jsonObject.getJSONArray("moves");
             for (int i = 0; i < moves.length(); i++) {
+                // Parse the moves
                 JSONObject tempObj = moves.getJSONObject(i);
                 JSONObject tempMove = tempObj.getJSONObject("move");
 
@@ -94,6 +91,7 @@ public abstract class VolleyPokemonDetail implements Response.ErrorListener, Res
             JSONArray abilityJson = jsonObject.getJSONArray("abilities");
             List<Ability> abilityList = new ArrayList<>();
             for (int i = 0; i < abilityJson.length(); i++) {
+                // Parse the abilities
                 JSONObject tempObj = abilityJson.getJSONObject(i);
                 JSONObject tempAbility = tempObj.getJSONObject("ability");
 
@@ -115,32 +113,14 @@ public abstract class VolleyPokemonDetail implements Response.ErrorListener, Res
             pokemon.setStats(statList.get(0), statList.get(1), statList.get(2), statList.get(3),
                     statList.get(4), statList.get(5));
 
-            //Get sprites url
-            //TODO set in pokemon
-            JSONObject spritesObj = jsonObject.getJSONObject("sprites");
-            Log.d("POKE", spritesObj.getString("front_default"));
-
-            //TODO how to set sprites?
-            HashMap<String, String> sprites = new HashMap<>();
-
-            sprites.put("back_default", spritesObj.getString("back_default"));
-            sprites.put("back_female", spritesObj.getString("back_female"));
-            sprites.put("back_shiny", spritesObj.getString("back_shiny"));
-            sprites.put("back_shiny_female", spritesObj.getString("back_shiny_female"));
-
-            sprites.put("front_default", spritesObj.getString("front_default"));
-            sprites.put("front_female", spritesObj.getString("front_female"));
-            sprites.put("front_shiny", spritesObj.getString("front_shiny"));
-            sprites.put("front_shiny_female", spritesObj.getString("front_shiny_female"));
-
-            pokemon.setSprites(sprites);
-
+            // When done fetching data call the api for the species details
             getPokemonSpeciesDetail();
         } catch (JSONException exception) {
             exception.printStackTrace();
         }
     }
 
+    // Listener for the species call
     class SpeciesListener implements Response.Listener<String> {
         Pokemon pokemon;
 
@@ -187,6 +167,7 @@ public abstract class VolleyPokemonDetail implements Response.ErrorListener, Res
                 pokemon.setHabitat(habitat);
                 pokemon.setUrlEvolutionChain(evolutionChain);
 
+                // Call the abstract method
                 fill(pokemon);
             } catch (JSONException exception) {
                 exception.printStackTrace();

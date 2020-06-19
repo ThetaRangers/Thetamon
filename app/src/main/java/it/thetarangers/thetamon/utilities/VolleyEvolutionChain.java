@@ -1,7 +1,6 @@
 package it.thetarangers.thetamon.utilities;
 
 import android.content.Context;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -10,7 +9,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,7 +22,6 @@ import it.thetarangers.thetamon.model.EvolutionDetail;
 
 public abstract class VolleyEvolutionChain implements Response.ErrorListener, Response.Listener<String> {
     Context context;
-    Gson gson = new Gson();
 
     protected VolleyEvolutionChain(Context context) {
         this.context = context;
@@ -35,8 +32,6 @@ public abstract class VolleyEvolutionChain implements Response.ErrorListener, Re
     public void getEvolutionChain(String chain) {
         RequestQueue requestQueue;
         requestQueue = Volley.newRequestQueue(context);
-
-        Log.d("POKE", chain);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET,
                 chain,
@@ -52,21 +47,20 @@ public abstract class VolleyEvolutionChain implements Response.ErrorListener, Re
 
     @Override
     public void onResponse(String response) {
-        List<EvolutionDetail> evolutions = null;
-
         try {
-            Log.d("POKE", "Madonna se trovo eevee");
-
             JSONObject jsonObject = new JSONObject(response);
 
             JSONObject chain = jsonObject.getJSONObject("chain");
 
-            //First evolution
+            // First pokemon
             EvolutionDetail firstEvolution = new EvolutionDetail();
+            // Get the first pokemon name
             firstEvolution.setName(chain.getJSONObject("species").getString("name"));
 
-            //Second evolution
+            // Second evolution
             JSONArray secondEvolvesTo = chain.getJSONArray("evolves_to");
+
+            // Check if there are evolutions
             if (secondEvolvesTo.length() != 0) {
                 List<EvolutionDetail> secondEvolutions = new ArrayList<>();
 
@@ -93,7 +87,7 @@ public abstract class VolleyEvolutionChain implements Response.ErrorListener, Re
 
                     secondEvolutions.add(ev);
                 }
-
+                // Add the evolutions to the first pokemon
                 firstEvolution.setNextPokemon(secondEvolutions);
             }
 

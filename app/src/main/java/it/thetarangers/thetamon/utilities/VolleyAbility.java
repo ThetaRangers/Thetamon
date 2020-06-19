@@ -49,6 +49,8 @@ public abstract class VolleyAbility implements Response.ErrorListener, Response.
 
         try {
             JSONObject jsonObject = new JSONObject(response);
+
+            // Get the current language of the app
             String lang = context.getResources().getString(R.string.localization);
 
             Ability ability = gson.fromJson(response, Ability.class);
@@ -57,8 +59,12 @@ public abstract class VolleyAbility implements Response.ErrorListener, Response.
             JSONObject effectObj;
 
             for (int index = 0; index < effects.length(); index++) {
+                // Get the correct version of the effect_entries
                 effectObj = effects.getJSONObject(index);
+
+                // Hardcoded en because the effect entry is not localized
                 if ("en".equals(effectObj.getJSONObject("language").getString("name"))) {
+                    // If language is correct then get the string
                     String effect = effectObj.getString("effect");
                     ability.setEffect(effect);
                     break;
@@ -69,6 +75,7 @@ public abstract class VolleyAbility implements Response.ErrorListener, Response.
             for (int i = flavorTexts.length() - 1; i >= 0; i--) {
                 JSONObject tmp = flavorTexts.getJSONObject(i);
 
+                // Get the correct version of the flavor_text_entries
                 if (lang.equals(tmp.getJSONObject("language").getString("name"))) {
                     ability.setFlavor_text(String.format("%s %s: %s",
                             tmp.getString("flavor_text"),

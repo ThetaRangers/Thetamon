@@ -60,16 +60,19 @@ public abstract class VolleyMove implements Response.ErrorListener, Response.Lis
             JSONObject effectObj = null;
 
             for (int index = 0; index < effects.length(); index++) {
+                // Get the correct version of the effect_entries
                 effectObj = effects.getJSONObject(index);
                 if ("en".equals(effectObj.getJSONObject("language").getString("name")))
                     break;
             }
 
             assert effectObj != null;
+            // Insert int the text the effect_chance
             String effect = effectObj.getString("effect");
             if (!jsonObject.isNull("effect_chance")) {
                 int effect_chance = jsonObject.getInt("effect_chance");
 
+                // If the effect contains an effect_chance
                 if (effect.contains("%")) {
                     String[] tmp1 = effect.split("\\$");
                     String[] tmp2 = tmp1[1].split("%");
@@ -82,6 +85,7 @@ public abstract class VolleyMove implements Response.ErrorListener, Response.Lis
 
             JSONArray flavorTexts = jsonObject.getJSONArray("flavor_text_entries");
             for (int i = flavorTexts.length() - 1; i >= 0; i--) {
+                // Get the correct version of the flavor_text_entries
                 JSONObject tmp = flavorTexts.getJSONObject(i);
 
                 if (lang.equals(tmp.getJSONObject("language").getString("name"))) {
