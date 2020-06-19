@@ -1,5 +1,7 @@
 package it.thetarangers.thetamon.fragments;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -120,7 +122,7 @@ public class FragmentPokedex extends Fragment implements SelectorCallback, Poked
             if (size == 0)
                 actionMode.finish();
             else
-                actionMode.setTitle(getString(R.string.menu_start_title)+" "+size + getString(R.string.menu_end_title));
+                actionMode.setTitle(getString(R.string.menu_start_title) + " " + size + getString(R.string.menu_end_title));
             return;
 
         }
@@ -171,7 +173,7 @@ public class FragmentPokedex extends Fragment implements SelectorCallback, Poked
             mode.getMenuInflater().inflate(R.menu.menu_action_mode, menu);
             ((PokedexActivity) requireActivity()).lockDrawer();
             holder.onFastScrollStart();
-            mode.setTitle(getString(R.string.menu_start_title)+ " 1" + getString(R.string.menu_end_title));
+            mode.setTitle(getString(R.string.menu_start_title) + " 1" + getString(R.string.menu_end_title));
             return true;
         }
 
@@ -227,14 +229,30 @@ public class FragmentPokedex extends Fragment implements SelectorCallback, Poked
         final FloatingActionButton fabFilter;
         final FloatingActionButton fabReset;
         boolean isOpen;
+        boolean isClickable;
 
         Holder(View fp) {
             //if floating buttons are showed or not
             isOpen = false;
 
+            isClickable = true;
+
             //set all view elements
             fabAdd = fp.findViewById(R.id.fabAdd);
             fabAdd.setOnClickListener(this);
+            fabAdd.animate().setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    isClickable = true;
+                    super.onAnimationEnd(animation);
+                }
+
+                @Override
+                public void onAnimationStart(Animator animation) {
+                    isClickable = false;
+                    super.onAnimationStart(animation);
+                }
+            });
 
             fabFilter = fp.findViewById(R.id.fabFilter);
             fabFilter.setOnClickListener(this);
@@ -270,33 +288,45 @@ public class FragmentPokedex extends Fragment implements SelectorCallback, Poked
 
         }
 
-        //main floating button rotation
+        // Main floating button rotation
         private boolean rotateFab(final View v, boolean rotate) {
             v.animate().setDuration(200).rotation(rotate ? 135f : 0f);
+
             return rotate;
         }
 
-        //show with animation and enable a hidden button
+        // Make button visible with animation
         private void showIn(final View v) {
+            v.setVisibility(View.VISIBLE);
             v.setAlpha(0f);
             v.setTranslationY(v.getHeight());
-            v.animate().setDuration(200).translationY(0).alpha(1f).start();
-            v.setEnabled(true);
+            v.animate()
+                    .setDuration(200)
+                    .translationY(0)
+                    .alpha(1f);
         }
 
-        //hide with animation and disable a visible button
+        // Hide with animation
         private void showOut(final View v) {
             v.setAlpha(1f);
             v.setTranslationY(0);
-            v.animate().setDuration(200).translationY(v.getHeight()).alpha(0f).start();
-            v.setEnabled(false);
+            v.animate()
+                    .setDuration(200)
+                    .translationY(v.getHeight())
+                    .alpha(0f);
         }
 
-        //init button position
+        // Init button visibility and listener
         private void init(final View v) {
-            v.setTranslationY(0);
-            v.animate().setDuration(0).translationY(v.getHeight()).alpha(0f).start();
-            v.setEnabled(false);
+            v.animate().setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+                    if (!isOpen)
+                        v.setVisibility(View.GONE);
+                }
+            });
+            v.setVisibility(View.GONE);
         }
 
         //show out all buttons
@@ -317,6 +347,8 @@ public class FragmentPokedex extends Fragment implements SelectorCallback, Poked
 
         @Override
         public void onClick(View v) {
+            if (!isClickable)
+                return;
             switch (v.getId()) {
                 case R.id.fabAdd:
                     if (isOpen) { //open or collapse fab
