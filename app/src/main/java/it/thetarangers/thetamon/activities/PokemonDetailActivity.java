@@ -78,6 +78,7 @@ public class PokemonDetailActivity extends AppCompatActivity {
         new Holder();
     }
 
+    // Used to retrieve the pokemons set to favorite if the user opens the details in the evolution tree
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (data != null) {
@@ -202,6 +203,7 @@ public class PokemonDetailActivity extends AppCompatActivity {
 
             imageManager = new ImageManager();
 
+            // Url of the sprites
             frontUrl = getResources().getString(R.string.sprite_front) + pokemon.getId()
                     + getResources().getString(R.string.extension);
             frontShinyUrl = getResources().getString(R.string.sprite_front_shiny) + pokemon.getId()
@@ -219,21 +221,26 @@ public class PokemonDetailActivity extends AppCompatActivity {
             // set everything before having the detail of the pokemon
             this.beforeDetails();
 
+            // This volley will search the evolutions of a pokemon
             VolleyEvolutionChain volleyEvolutionChain = new VolleyEvolutionChain(PokemonDetailActivity.this) {
                 @Override
                 public void fill(EvolutionDetail evolutionDetail) {
+                    // Save the evolution chain as a JSON in the DB
                     pokemon.setEvolutionChain(evolutionDetail.toJSON());
                     DaoThread thread = new DaoThread();
 
                     // Save pokemon when the API is called
                     thread.savePokemon(PokemonDetailActivity.this, pokemon);
 
+                    // Fill the view
                     fillEvolution(evolutionDetail);
-                    // Fill the view with details when all information are available
+
+                    // Fill the view with details when all information of the pokemon are available
                     Holder.this.afterDetails();
                 }
             };
 
+            // This volley will search the pokemons details
             VolleyPokemonDetail volley = new VolleyPokemonDetail(PokemonDetailActivity.this, pokemon) {
                 @Override
                 public void fill(Pokemon pokemon) {
@@ -261,24 +268,26 @@ public class PokemonDetailActivity extends AppCompatActivity {
                     backShiny.into(targetBackShiny);
                     backShiny.into(ivBackShiny);
 
+                    // Save the ability list and move list the pokemon class
+                    // Used to store information in the DB
                     pokemon.encode();
 
+                    // Once the evolution chain url is obtained call VolleyEvolutionChain
                     volleyEvolutionChain.getEvolutionChain(pokemon.getUrlEvolutionChain());
                 }
             };
 
             Thread thread = new Thread(() -> {
+                // Fetch the pokemon from the DB
                 PokemonDao dao = PokemonDb.getInstance(PokemonDetailActivity.this).pokemonDao();
                 Pokemon tmp = dao.getPokemonFromId(pokemon.getId()).get(0);
 
-                Log.d("Tokyo", "Sono il pokemon del DB e sono un favorito: ");
-
-                //Call the API only if the pokemon is not in the DB
+                // Call the API only if the pokemon does not have all the information in the DB
                 if (tmp.getMovesList() == null) {
                     // Get the detail of the pokemon
                     volley.getPokemonDetail();
                 } else {
-
+                    // Use the pokemon in the DB to fill the data
                     pokemon = tmp;
                     EvolutionDetail ev = tmp.getEvolutionDetail();
                     handler.post(() -> {
@@ -426,6 +435,7 @@ public class PokemonDetailActivity extends AppCompatActivity {
             }
         }
 
+        // Create cards for the ability list
         private void fillAbilities(Pokemon pokemon) {
             List<Ability> abilityList = pokemon.getAbilityList();
 
@@ -443,6 +453,7 @@ public class PokemonDetailActivity extends AppCompatActivity {
 
         }
 
+        // Fill the view for the evolutions
         private void fillEvolution(EvolutionDetail firstEvolution) {
             // Add card corresponding to first pokemon in EvolutionDetail
             MaterialCardView card = (MaterialCardView) View.inflate(PokemonDetailActivity.this, R.layout.item_evolution, null);
@@ -526,6 +537,7 @@ public class PokemonDetailActivity extends AppCompatActivity {
             }
         }
 
+        // Fill information of the evolution card
         private void fillCard(MaterialCardView card, EvolutionDetail evolutionDetail) {
 
             Pokemon pokemon = new Pokemon();
