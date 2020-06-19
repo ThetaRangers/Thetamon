@@ -17,6 +17,7 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Prefer
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        // Guarantees consistence with PreferencesHandler
         getPreferenceManager().setSharedPreferencesName(requireContext().getString(R.string.preferences_name));
         setPreferencesFromResource(R.xml.settings_pref, rootKey);
         Preference nightMode = findPreference(getString(R.string.night_mode_pref));
@@ -26,14 +27,14 @@ public class FragmentSettings extends PreferenceFragmentCompat implements Prefer
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
-        if (preference.getKey().equals(getString(R.string.night_mode_pref)))
+        if (preference.getKey().equals(getString(R.string.night_mode_pref))) // Instantly change theme on preference change
             ((PokedexActivity) requireActivity()).switchTheme((String) newValue);
         return true;
     }
 
     @Override
     public void onDisplayPreferenceDialog(Preference preference) {
-        if (preference.getKey().equals(getString(R.string.first_use_pref))) {
+        if (preference.getKey().equals(getString(R.string.first_use_pref))) { // Display custom dialog
             FragmentResetDataDialog dialogFragment = FragmentResetDataDialog
                     .newInstance(preference.getKey());
             dialogFragment.setTargetFragment(this, 0);
