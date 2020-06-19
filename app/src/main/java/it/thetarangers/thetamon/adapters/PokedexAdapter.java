@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.graphics.Color;
-import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,7 +43,6 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHold
     private ImageManager imageManager = new ImageManager();
     private SelectorListener selectList;
 
-    //aggiustare chi crea l adapter
     public PokedexAdapter(Activity context, SelectorCallback call) {
         this.pokemonList = new ArrayList<>();
         this.context = context;
@@ -67,11 +65,10 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHold
 
         List<Pokemon> selected = new ArrayList<>();
         List<Integer> selectIndex = selectList.getSelectedPosition();
-        Log.d("POKE", "in adapter");
+
         for (int i = 0; i < selectIndex.size(); i++) {
             Pokemon temp = pokemonList.get(selectIndex.get(i));
             selected.add(temp);
-            Log.d("POKE", "pokemon ID " + temp.getId() + "pokemon name " + temp.getName());
         }
 
         return selected;
@@ -79,19 +76,20 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHold
 
     public void setPokemonList(List<Pokemon> pokemonList) {
         if (pokemonList.size() > 0) {
+            // Set the pokemons list
             this.pokemonList = pokemonList;
             notifyDataSetChanged();
         } else {
+            // If the list is empty show Toast
             if (context != null) {
-                Toast t = Toast.makeText(context,
-                        context
-                                .getString(R.string.no_pokemon_found),
+                Toast t = Toast.makeText(context, context.getString(R.string.no_pokemon_found),
                         Toast.LENGTH_SHORT);
                 t.show();
             }
         }
     }
 
+    // Used to set the List in FragmentFavorite
     public void setFavoriteList(List<Pokemon> pokemonList) {
         this.pokemonList = pokemonList;
         notifyDataSetChanged();
@@ -123,10 +121,12 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHold
         if (context == null)
             return;
 
+        // Load image from disk
         holder.ivSprite.setImageBitmap(imageManager.loadFromDisk(
                 context.getFilesDir() + context.getString(R.string.images),
                 pokemon.getId() + context.getString(R.string.extension)));
 
+        // Setup the type's text
         TypeTextViewManager typeTextViewManager = new TypeTextViewManager(pokemon, holder.tvType1, holder.tvType2);
         typeTextViewManager.setup();
 
@@ -179,6 +179,8 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHold
 
         @Override
         public void onClick(View v) {
+            // Used to prevent the user from opening more than one PokemonDetailActivity
+            // when the animation is still playing
             if (!isClickable)
                 return;
 
@@ -186,6 +188,7 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHold
                 if (selectList.selectedSize() > 0)
                     selectList.onLongClick(v);
                 else {
+                    // Open the detail activity for the selected pokemon
                     Intent data = new Intent(context, PokemonDetailActivity.class);
                     data.putExtra("pokemon", actualPokemon);
 
@@ -198,6 +201,7 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHold
                     context.startActivityForResult(data, REQ_CODE, options.toBundle());
                 }
             } else if (v.getId() == R.id.tbFavorite) {
+                // When the star icon is pressed add the pokemon to favorites
                 FavoritesManager fm = new FavoritesManager(context);
                 if (tbFavorite.isChecked()) {
                     fm.addPokemonToFav(actualPokemon);
