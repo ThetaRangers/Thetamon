@@ -37,7 +37,7 @@ public class FragmentMoves extends BottomSheetDialogFragment {
     public static String MOVES = "moves";
     Holder holder;
     private List<Move> moveList;
-    private Boolean[] isSearched;
+    private Boolean[] isSearched;   // Boolean array to check if the text is already been fetched
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -111,6 +111,7 @@ public class FragmentMoves extends BottomSheetDialogFragment {
                     }
                 };
 
+                // If is not searched call the volley
                 vm.getMoveDetail(moveList.get(position));
             }
 
@@ -137,6 +138,7 @@ public class FragmentMoves extends BottomSheetDialogFragment {
 
             String damageClass = move.getDamageClass();
 
+            // Set icons for damage types
             if (damageClass.equals(MoveDamageClass.STATUS_NAME)) {
                 holder.ivDamageClass.setImageDrawable(ContextCompat.getDrawable(requireContext(),
                         R.drawable.status));
@@ -169,6 +171,7 @@ public class FragmentMoves extends BottomSheetDialogFragment {
         }
 
         private void fillMoveDetails(MoveHolder holder, Move move) {
+            // Fill move details when available
             if (move.getPower() == null) {
                 holder.tvPower.setText(String.format("%s: —", getResources().getString(R.string.label_power)));
             } else {

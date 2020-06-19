@@ -41,6 +41,7 @@ public class FragmentAbility extends BottomSheetDialogFragment {
 
         holder = new Holder(view);
 
+        // Call the volley to get information for this ability
         VolleyAbility volleyAbility = new VolleyAbility(getContext()) {
             @Override
             public void fill(Ability ability) {

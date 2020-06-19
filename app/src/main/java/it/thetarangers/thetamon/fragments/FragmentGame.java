@@ -59,7 +59,10 @@ public class FragmentGame extends Fragment {
 
         holder = new Holder(view);
 
+        // Start the title jingle
         mp = MediaPlayer.create(getContext(), R.raw.game);
+
+        // Check if the volume is enabled
         if (PreferencesHandler.isVolumeOn(requireContext()))
             mp.setVolume(1.5f, 1.5f);
         else
@@ -86,7 +89,9 @@ public class FragmentGame extends Fragment {
     }
 
     private void tryName(String name) {
+        // Check if the inserted name is correct
         if (pokemon.getName().equals(StringManager.decapitalize(name))) {
+            // Reveal the pokemon
             holder.win();
             isCorrect = true;
             Toast.makeText(getContext(), getString(R.string.game_correct), Toast.LENGTH_LONG).show();
@@ -109,16 +114,19 @@ public class FragmentGame extends Fragment {
 
         Thread thread = new Thread(() -> {
 
+            // Get random pokemon
             if (newPokemon) {
                 PokemonDao dao = PokemonDb.getInstance(getContext()).pokemonDao();
                 pokemon = dao.getRandomPokemon();
             }
 
+            // Load image from file system
             bitmapNormal = imageManager.loadFromDisk(
                     requireContext().getFilesDir() +
                             requireContext().getString(R.string.images),
                     pokemon.getId() + requireContext().getString(R.string.extension));
 
+            // Darken bitmap
             bitmapObscure = holder.darkenBitmap(bitmapNormal);
             handler.post(runnable);
         });
