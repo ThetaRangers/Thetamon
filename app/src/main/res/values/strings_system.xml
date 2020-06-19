@@ -10,7 +10,7 @@
     <string name="url_species" translatable="false">https://pokeapi.co/api/v2/pokemon-species/%d</string>
     <string name="sprites_temp_path" translatable="false">Images</string>
     <string name="sprites_archive" translatable="false">images.zip</string>
-    <string name="preferences_name" translatable="false">it.thetarangers.thetamon</string>
+    <string name="preferences_name" translatable="false">it.thetarangers.thetadex</string>
     <string name="first_use_pref" translatable="false">first_use</string>
     <string name="night_mode_pref" translatable="false">night_mode</string>
     <string name="system_enum" translatable="false">0</string>
