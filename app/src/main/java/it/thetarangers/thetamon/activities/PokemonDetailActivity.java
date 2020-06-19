@@ -301,8 +301,7 @@ public class PokemonDetailActivity extends AppCompatActivity {
             tvName.setText(StringManager.capitalize(pokemon.getName()));
 
             //set the type textViews
-            TypeTextViewManager typeTextViewManager = new TypeTextViewManager(pokemon, tvType1, tvType2);
-            typeTextViewManager.setup();
+            TypeTextViewManager.setup(PokemonDetailActivity.this, pokemon, tvType1, tvType2);
 
             //set the image part
             ivBackground.setBackgroundColor(Color.parseColor(pokemon.getAverageColor()));
