@@ -1,6 +1,5 @@
 package it.thetarangers.thetamon.database;
 
-import androidx.room.ColumnInfo;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
@@ -25,7 +24,7 @@ public abstract class MoveDao {
     @Query("SELECT type FROM MOVE WHERE name == :moveName")
     public abstract String getMoveType(String moveName);
 
-    @Query("SELECT id, type, damage_class FROM Move WHERE name == :moveName")
+    @Query("SELECT * FROM Move WHERE name == :moveName")
     public abstract Move getMoveDetails(String moveName);
 
     public List<Move> getMoveByName(String name) {

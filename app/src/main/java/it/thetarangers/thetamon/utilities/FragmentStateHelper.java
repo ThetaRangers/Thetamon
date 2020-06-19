@@ -17,6 +17,7 @@ public class FragmentStateHelper {
         this.fragmentManager = fragmentManager;
     }
 
+    // Restores a single Fragment's state
     public void restoreState(Fragment fragment, Integer key) {
         if (!fragment.isAdded()) {
             Fragment.SavedState savedState = fragmentSavedStates.get(key);
@@ -24,12 +25,14 @@ public class FragmentStateHelper {
         }
     }
 
+    // Saves a single Fragment's state
     public void saveState(Fragment fragment, Integer key) {
         if (fragment.isAdded()) {
             fragmentSavedStates.put(key, fragmentManager.saveFragmentInstanceState(fragment));
         }
     }
 
+    // Returns a bundle with all the SavedStates in it
     public Bundle saveHelperState() {
         Bundle state = new Bundle();
 
@@ -40,6 +43,7 @@ public class FragmentStateHelper {
         return state;
     }
 
+    // Restores all SavedStates from a bundle
     public void restoreHelperState(Bundle savedState) {
         fragmentSavedStates.clear();
         for (String key : savedState.keySet()) {

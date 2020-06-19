@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 
 import it.thetarangers.thetamon.R;
 
+// Contains static methods to deal with SharedPreferences, guarantees consistence with SettingsFragment
 public class PreferencesHandler {
 
     private PreferencesHandler() {
