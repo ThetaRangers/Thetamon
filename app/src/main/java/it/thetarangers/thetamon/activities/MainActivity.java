@@ -123,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void cleanUpExternal() {
+        // Delete external memory
         try {
             FileUtils.forceDelete(Objects.requireNonNull(getExternalFilesDir(null)));
         } catch (IOException e) {
@@ -148,6 +149,7 @@ public class MainActivity extends AppCompatActivity {
         TextView tvLoading;
 
         Holder() {
+            // Animate the loading screen
             ivAnim = findViewById(R.id.ivAnim);
             AnimationDrawable animation = (AnimationDrawable) ivAnim.getBackground();
             animation.start();
@@ -235,15 +237,19 @@ public class MainActivity extends AppCompatActivity {
         public void fill(List<Pokemon> pokemonList, List<Move> moveList) {
 
             Runnable update = () -> {
+                // Set the SharedPreferences
                 PreferencesHandler.setIsFirstUse(MainActivity.this, false);
 
+                // Start the PokedexActivity
                 Intent intent = new Intent(MainActivity.this, PokedexActivity.class);
                 startActivity(intent);
                 finish();
             };
 
+            // Fill the DB with the list of moves
             Thread threadMoves = new Thread(() -> {
                 DaoThread daoThread = new DaoThread();
+                // When done filling moves call update to start the PokedexActivity
                 daoThread.fillMoves(MainActivity.this, moveList, handler, update);
             });
 
