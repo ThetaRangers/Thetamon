@@ -22,7 +22,7 @@ public class PokemonListViewModel extends ViewModel {
 
     public void setPokemons(List<Pokemon> pokemons) {
         this.pokemons.setValue(pokemons);
-    } // TODO remove me ?
+    }
 
     public LiveData<List<String>> getFilters() {
         if (filters == null) {

@@ -46,13 +46,15 @@
                     android:visibility="visible"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvLoading" />
+                    app:layout_constraintTop_toBottomOf="@+id/tvLoading"
+                    app:layout_constraintVertical_bias="1.0" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/clSprite"
+                android:id="@+id/clImage"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -75,17 +77,18 @@
                     android:layout_height="0dp"
                     android:background="@color/colorOverlaySum"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/ivSprite"
+                    app:layout_constraintEnd_toEndOf="@+id/ivImage"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
-                    android:id="@+id/ivSprite"
+                    android:id="@+id/ivImage"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:layout_marginBottom="16dp"
                     android:adjustViewBounds="false"
+                    android:contentDescription="@string/content_description_ivImage"
                     android:cropToPadding="false"
                     android:scaleType="fitCenter"
                     android:transitionName="imageExpansion"
@@ -110,8 +113,13 @@
 
                 <ImageButton
                     android:id="@+id/ibtnBack"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="@dimen/icon_size"
+                    android:layout_marginStart="@dimen/margin_small"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:background="@android:color/transparent"
+                    android:clickable="true"
+                    android:contentDescription="@string/content_description_ibtnBack"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/ic_home" />
@@ -124,7 +132,7 @@
                 android:layout_marginTop="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/clSprite"
+                app:layout_constraintTop_toBottomOf="@+id/clImage"
                 tools:layout_height="wrap_content">
 
                 <TextView
@@ -133,7 +141,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/card_padding_vertical"
                     android:layout_marginEnd="@dimen/margin_medium"
-                    android:text="#123"
+                    android:text="@string/placeholder_id"
                     android:textSize="18sp"
                     android:transitionName="transId"
                     app:layout_constraintEnd_toStartOf="@+id/tvName"
@@ -147,7 +155,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_medium"
-                    android:text="Pikachu"
+                    android:text="@string/placeholder_name"
                     android:textSize="18sp"
                     android:transitionName="transName"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -214,7 +222,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_medium"
-                    android:text="TextView"
+                    android:text="@string/placeholder_capture_rate"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tvGenderRate" />
@@ -232,7 +240,7 @@
                     android:id="@+id/tvHabitat"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Vengo da casa"
+                    android:text="@string/placeholder_habitat"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -408,6 +416,86 @@
                     app:layout_constraintStart_toStartOf="@+id/guideline6" />
 
 
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/label_sprites"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvSpeed" />
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:text="@string/label_default"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:text="@string/label_shiny"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/ivFront" />
+
+                <ImageView
+                    android:id="@+id/ivFront"
+                    android:layout_width="@dimen/sprite_size"
+                    android:layout_height="@dimen/sprite_size"
+                    android:contentDescription="@string/content_description_ivFront"
+                    android:scaleType="fitCenter"
+                    app:layout_constraintEnd_toStartOf="@+id/ivBack"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView2"
+                    app:srcCompat="@drawable/pikachu" />
+
+                <ImageView
+                    android:id="@+id/ivFrontShiny"
+                    android:layout_width="@dimen/sprite_size"
+                    android:layout_height="@dimen/sprite_size"
+                    android:contentDescription="@string/content_description_ivFrontShiny"
+                    android:scaleType="fitCenter"
+                    app:layout_constraintEnd_toStartOf="@+id/ivBackShiny"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView3"
+                    app:srcCompat="@drawable/pikachu" />
+
+                <ImageView
+                    android:id="@+id/ivBack"
+                    android:layout_width="@dimen/sprite_size"
+                    android:layout_height="@dimen/sprite_size"
+                    android:contentDescription="@string/content_description_ivBack"
+                    android:scaleType="fitCenter"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/ivFront"
+                    app:layout_constraintTop_toTopOf="@+id/ivFront"
+                    app:srcCompat="@drawable/pikachu" />
+
+                <ImageView
+                    android:id="@+id/ivBackShiny"
+                    android:layout_width="@dimen/sprite_size"
+                    android:layout_height="@dimen/sprite_size"
+                    android:contentDescription="@string/content_description_ivBackShiny"
+                    android:scaleType="fitCenter"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/ivFrontShiny"
+                    app:layout_constraintTop_toTopOf="@+id/ivFrontShiny"
+                    app:srcCompat="@drawable/pikachu" />
+
                 <Button
                     android:id="@+id/btnMoves"
                     android:layout_width="wrap_content"
@@ -426,7 +514,7 @@
                     android:text="@string/label_ability"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/ivFront" />
+                    app:layout_constraintTop_toBottomOf="@+id/ivFrontShiny" />
 
                 <TextView
                     android:id="@+id/tvEvolution"
@@ -494,30 +582,7 @@
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toEndOf="@+id/llEvolution2"
                     app:layout_constraintTop_toBottomOf="@id/tvEvolution"
-                    app:layout_constraintVertical_bias="0.0" >
-
-                </LinearLayout>
-
-                <ImageView
-                    android:id="@+id/ivFront"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
-                    android:layout_marginTop="@dimen/margin_gigamax"
-                    android:scaleType="fitCenter"
-                    app:layout_constraintEnd_toStartOf="@+id/ivBack"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/pbSpeed"
-                    app:srcCompat="@drawable/pikachu" />
-
-                <ImageView
-                    android:id="@+id/ivBack"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
-                    android:scaleType="fitCenter"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/ivFront"
-                    app:layout_constraintTop_toTopOf="@+id/ivFront"
-                    app:srcCompat="@drawable/pikachu" />
+                    app:layout_constraintVertical_bias="0.0" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
 
         for (int i = 0; i < pokemons.size(); i++) {
             Bitmap bitmap = imageManager.loadFromDisk(getFilesDir() +
-                    getString(R.string.sprites_front), pokemons.get(i).getId() +
+                    getString(R.string.images), pokemons.get(i).getId() +
                     getString(R.string.extension));
 
             pokemons.get(i).setAverageColor(imageManager.getAverageColor(bitmap, 10));

@@ -1,6 +1,5 @@
 package it.thetarangers.thetamon.fragments;
 
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.ActionMode;
@@ -17,22 +16,22 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.HashMap;
 import java.util.List;
 
 import it.thetarangers.thetamon.R;
 import it.thetarangers.thetamon.activities.PokedexActivity;
-import it.thetarangers.thetamon.activities.PokemonDetailActivity;
 import it.thetarangers.thetamon.adapters.PokedexAdapter;
 import it.thetarangers.thetamon.database.DaoThread;
 import it.thetarangers.thetamon.favorites.FavoritesManager;
 import it.thetarangers.thetamon.listener.SelectorCallback;
 import it.thetarangers.thetamon.model.Pokemon;
 import it.thetarangers.thetamon.viewmodel.FavoriteListViewModel;
+import it.thetarangers.thetamon.viewmodel.PokemonListViewModel;
 
-public class FragmentFavorites extends Fragment implements SelectorCallback, PokedexActivity.OnActivityResultCallback {
+public class FragmentFavorites extends Fragment implements SelectorCallback {
     private Holder holder;
     private FavoriteListViewModel favoriteListViewModel;
+    private PokemonListViewModel pokemonListViewModel;
     private DaoThread daoThread;
     private ActionMode actionMode = null;
 
@@ -49,9 +48,11 @@ public class FragmentFavorites extends Fragment implements SelectorCallback, Pok
 
         holder = new Holder(view);
 
+        pokemonListViewModel = new ViewModelProvider(requireActivity()).get(PokemonListViewModel.class);
+
         favoriteListViewModel = new ViewModelProvider(requireActivity()).get(FavoriteListViewModel.class);
         favoriteListViewModel.getFavorites().observe(getViewLifecycleOwner(),
-                holder.adapter::setPokemonList);
+                holder.adapter::setFavoriteList);
 
         daoThread = new DaoThread();
 
@@ -73,32 +74,32 @@ public class FragmentFavorites extends Fragment implements SelectorCallback, Pok
     }
 
     @Override
-    public void onActivityResultCallback(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode == PokedexAdapter.REQ_CODE) {
-            if (data != null) {
-                @SuppressWarnings("unchecked")
-                HashMap<Integer, Boolean> pokemons = (HashMap<Integer, Boolean>) data
-                        .getSerializableExtra(PokemonDetailActivity.POKEMONS);
-                if (pokemons != null) {
-                    for (HashMap.Entry<Integer, Boolean> entry : pokemons.entrySet()) {
-                        for (Pokemon pokemon2 : holder.adapter.pokemonList) {
-                            if (entry.getKey() == pokemon2.getId()) {
-                                pokemon2.setFavorite(entry.getValue());
-                            }
-                        }
-                    }
-                    holder.adapter.notifyDataSetChanged();
-                }
-            }
-            daoThread.getFavoritePokemon(getContext(), favoriteListViewModel);
-        }
-
+    public void onResume() {
+        daoThread.getFavoritePokemon(getContext(), favoriteListViewModel);
+        holder.adapter.setClickable(true);
+        super.onResume();
     }
 
     @Override
-    public void onResume() {
-        holder.adapter.setClickable(true);
-        super.onResume();
+    public void onDetach() {
+        notifyPokedex();
+        super.onDetach();
+    }
+
+    public void notifyPokedex() {
+        List<Pokemon> pokemons = pokemonListViewModel.getPokemonList();
+        List<Pokemon> favorites = favoriteListViewModel.getFavoriteList();
+        for (Pokemon pokemon : pokemons) {
+            boolean fav = false;
+            for (Pokemon favorite : favorites) {
+                if (pokemon.getId() == favorite.getId()) {
+                    fav = favorite.getFavorite();
+                    break;
+                }
+            }
+            pokemon.setFavorite(fav);
+        }
+        pokemonListViewModel.setPokemons(pokemons);
     }
 
     class FavoritesCallback implements android.view.ActionMode.Callback {
@@ -155,7 +156,6 @@ public class FragmentFavorites extends Fragment implements SelectorCallback, Pok
 
         Holder(View view) {
             rvFavorites = view.findViewById(R.id.rvFavorites);
-
 
             int orientation = getResources().getConfiguration().orientation;
             int columns;
