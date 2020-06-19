@@ -19,10 +19,12 @@ public class FileUnzipper {
         try (ZipFile zipFile = new ZipFile(file)) {
             Enumeration<? extends ZipEntry> entries = zipFile.entries();
 
+            // Treat zip entries as an iterator
             while (entries.hasMoreElements()) {
                 ZipEntry entry = entries.nextElement();
                 File entryDestination = new File(outputDir, entry.getName());
 
+                // If the entry is a directory, create it in outputDir as well
                 if (entry.isDirectory()) {
                     if (!entryDestination.mkdir())
                         return false;
@@ -34,6 +36,7 @@ public class FileUnzipper {
                          FileOutputStream fileOutputStream = new FileOutputStream(entryDestination);
                          BufferedOutputStream out = new BufferedOutputStream(fileOutputStream)) {
 
+                        // If the entry is a file, copy it in outputDir
                         IOUtils.copy(in, out);
 
                     } catch (IOException e) {

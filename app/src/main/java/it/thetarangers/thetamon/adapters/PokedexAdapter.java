@@ -127,8 +127,7 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.ViewHold
                 pokemon.getId() + context.getString(R.string.extension)));
 
         // Setup the type's text
-        TypeTextViewManager typeTextViewManager = new TypeTextViewManager(pokemon, holder.tvType1, holder.tvType2);
-        typeTextViewManager.setup();
+        TypeTextViewManager.setup(context, pokemon, holder.tvType1, holder.tvType2);
 
         boolean isSelected = selectList.isSelected(position);
         if (isSelected)

@@ -156,28 +156,28 @@ public abstract class VolleyEvolutionChain implements Response.ErrorListener, Re
 
         // at affection XX
         if (!tmp.isNull("min_affection")) {
-            Integer minAffection = tmp.getInt("min_affection");
+            int minAffection = tmp.getInt("min_affection");
             ev.setMin_affection(minAffection);
             ev.addCondition(StringManager.formatFromR(context, R.string.evo_affection, minAffection));
         }
 
         // at beauty XX
         if (!tmp.isNull("min_beauty")) {
-            Integer minBeauty = tmp.getInt("min_beauty");
+            int minBeauty = tmp.getInt("min_beauty");
             ev.setMin_beauty(minBeauty);
             ev.addCondition(StringManager.formatFromR(context, R.string.evo_beauty, minBeauty));
         }
 
         // at happiness XX
         if (!tmp.isNull("min_happiness")) {
-            Integer minHappiness = tmp.getInt("min_happiness");
+            int minHappiness = tmp.getInt("min_happiness");
             ev.setMin_happiness(minHappiness);
             ev.addCondition(StringManager.formatFromR(context, R.string.evo_happiness, minHappiness));
         }
 
         // At level XX
         if (!tmp.isNull("min_level")) {
-            Integer minLevel = tmp.getInt("min_level");
+            int minLevel = tmp.getInt("min_level");
             ev.setMin_level(minLevel);
             ev.addCondition(StringManager.formatFromR(context, R.string.evo_level_up, minLevel));
         }

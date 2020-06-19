@@ -12,19 +12,8 @@ import it.thetarangers.thetamon.model.Pokemon;
 
 public class TypeTextViewManager {
 
-    private Pokemon pokemon;
-    private TextView tvType1, tvType2;
-    private Context context;
-
-    public TypeTextViewManager(Pokemon pokemon, TextView tvType1, TextView tvType2) {
-        this.pokemon = pokemon;
-        this.tvType1 = tvType1;
-        this.tvType2 = tvType2;
-        this.context = tvType1.getContext();
-    }
-
     // fill with text and color the type textViews
-    public void setup() {
+    public static void setup(Context context, Pokemon pokemon, TextView tvType1, TextView tvType2) {
         String type1 = pokemon.getType1();
         type1 = StringManager.capitalize(type1);
 

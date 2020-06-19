@@ -12,7 +12,7 @@ import java.io.IOException;
 public class ImageManager {
 
     public Bitmap loadFromDisk(String path, String filename) {
-
+        // Dummy exception handling: in our use case exceptions should not happen
         File f = new File(path, filename);
         try (FileInputStream fileInputStream = new FileInputStream(f)) {
             try (BufferedInputStream bufferedInputStream =
@@ -48,6 +48,7 @@ public class ImageManager {
         int blueColors = 0;
         int pixelCount = 0;
 
+        // Get color for each non transparent pixel
         for (int y = 0; y < bitmap.getHeight(); y += rate) {
             for (int x = 0; x < bitmap.getWidth(); x += rate) {
                 int c = bitmap.getPixel(x, y);
@@ -60,6 +61,7 @@ public class ImageManager {
             }
         }
 
+        // Compute the average color and return it
         int red = (redColors / pixelCount);
         int green = (greenColors / pixelCount);
         int blue = (blueColors / pixelCount);
