@@ -21,6 +21,7 @@ public class DaoThread {
         this.pokemonListViewModel = pokemonListViewModel;
     }
 
+    // Thread that saves the pokemon list with minimal information in the DB
     public void fill(final Context context, final List<Pokemon> pokemons,
                      Handler handler, Runnable update) {
         Runnable runnable = () -> {
@@ -37,6 +38,7 @@ public class DaoThread {
         new Thread(runnable).start();
     }
 
+    // Thread that save pokemon in the DB
     public void savePokemon(final Context context, final Pokemon pokemon) {
         Runnable runnable = () -> {
             PokemonDb db = PokemonDb.getInstance(context);
@@ -48,6 +50,7 @@ public class DaoThread {
         new Thread(runnable).start();
     }
 
+    // Thread that saves the move list with minimal information in the DB
     public void fillMoves(final Context context, final List<Move> moves,
                           Handler handler, Runnable update) {
         Runnable runnable = () -> {
@@ -62,24 +65,7 @@ public class DaoThread {
         new Thread(runnable).start();
     }
 
-    /*public void getMoveType(final Context context, List<Move> moves, Handler handler, Runnable update){
-        Runnable runnable = () -> {
-            PokemonDb db = PokemonDb.getInstance(context);
-            MoveDao dao = db.moveDao();
-            for (int i = 0; i < moves.size(); i++) {
-                String temp = dao.getMoveType(moves.get(i).getName());
-                moves.get(i).setType(temp);
-            }
-
-            if (handler != null) {
-                handler.post(update);
-            }
-
-            };
-
-        new Thread(runnable).start();
-    }*/
-
+    // Thread that fetch move details from the db
     public void getMoveDetails(final Context context, List<Move> moves, Handler handler, Runnable update) {
         Runnable runnable = () -> {
             PokemonDb db = PokemonDb.getInstance(context);
@@ -100,7 +86,8 @@ public class DaoThread {
         new Thread(runnable).start();
     }
 
-    public void getPokemonFromName(final Context context, final String query) {
+    // Thread that fetch the searched pokemons
+    public void getPokemonsFromName(final Context context, final String query) {
 
         Runnable runnable = () -> {
             PokemonDb db = PokemonDb.getInstance(context);
@@ -108,12 +95,14 @@ public class DaoThread {
 
             List<Pokemon> tempList = dao.getPokemonsFromName(query);
 
+            // Update live data
             pokemonListViewModel.setPokemonsAsynchronous(tempList);
         };
 
         new Thread(runnable).start();
     }
 
+    // Thread that fetch the searched pokemons from Id
     public void getPokemonFromId(final Context context, final int id) {
 
         Runnable runnable = () -> {
@@ -122,12 +111,14 @@ public class DaoThread {
 
             List<Pokemon> tempList = dao.getPokemonFromId(id);
 
+            // Update live data
             pokemonListViewModel.setPokemonsAsynchronous(tempList);
         };
 
         new Thread(runnable).start();
     }
 
+    // Thread that fetch pokemon details from the DB
     public void getPokemonFromName(final Context context, final Pokemon pokemon, Handler handler, Runnable update) {
 
         Runnable runnable = () -> {
@@ -151,6 +142,7 @@ public class DaoThread {
         new Thread(runnable).start();
     }
 
+    // Thread that sets the pokemon to favorite
     public void setPokemonFav(final Context context, final Pokemon pokemon, final boolean fav) {
 
         Runnable runnable = () -> {
@@ -163,6 +155,7 @@ public class DaoThread {
         new Thread(runnable).start();
     }
 
+    // Thread that fetch favorites pokemons from the DB
     public void getFavoritePokemon(final Context context, FavoriteListViewModel viewModel) {
 
         Runnable runnable = () -> {
@@ -171,6 +164,7 @@ public class DaoThread {
 
             List<Pokemon> tempList = dao.getFavoritePokemons();
 
+            // Update the live data
             viewModel.setFavoritesAsynchronous(tempList);
         };
 

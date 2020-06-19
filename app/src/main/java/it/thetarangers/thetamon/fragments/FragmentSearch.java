@@ -61,7 +61,7 @@ public class FragmentSearch extends BottomSheetDialogFragment {
             daoThread.getPokemonFromId(getContext(), Integer.parseInt(query));
         } catch (NumberFormatException e) {
             // Otherwise search by name
-            daoThread.getPokemonFromName(getContext(), query);
+            daoThread.getPokemonsFromName(getContext(), query);
         }
     }
 

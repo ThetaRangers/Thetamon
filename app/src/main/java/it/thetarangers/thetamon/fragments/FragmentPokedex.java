@@ -68,7 +68,7 @@ public class FragmentPokedex extends Fragment implements SelectorCallback, Poked
 
     private void fill(Boolean isFirstTime) {
         DaoThread daoThread = new DaoThread(pokemonListViewModel);
-        daoThread.getPokemonFromName(getContext(), "");
+        daoThread.getPokemonsFromName(getContext(), "");
 
         if (!isFirstTime)
             pokemonListViewModel.setFilters(new ArrayList<>()); // Clear filters
