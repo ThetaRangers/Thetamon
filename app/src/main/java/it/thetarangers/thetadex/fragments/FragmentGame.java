@@ -25,6 +25,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import java.util.Objects;
 
 import it.thetarangers.thetadex.R;
+import it.thetarangers.thetadex.activities.PokedexActivity;
 import it.thetarangers.thetadex.database.PokemonDao;
 import it.thetarangers.thetadex.database.PokemonDb;
 import it.thetarangers.thetadex.model.Pokemon;
@@ -175,6 +176,8 @@ public class FragmentGame extends Fragment {
 
         @Override
         public void onClick(View v) {
+            PokedexActivity parent = (PokedexActivity) requireActivity();
+            parent.hideKeyboard();
             switch (v.getId()) {
                 case R.id.btnNext:
                     btnConfirm.setEnabled(true);

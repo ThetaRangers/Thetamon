@@ -116,5 +116,6 @@
     <string name="giuseppe" translatable="false">Giuseppe Marseglia</string>
     <string name="content_description_ivExpand">Expand and collapse button</string>
     <string name="content_description_ivDamageClass">Image of the damage type of the move</string>
+    <string name="content_description_game">Who\'s that Pokémon background</string>
     <string name="error_storage">The application needs external storage to download resources</string>
 </resources>

@@ -14,6 +14,7 @@
             android:id="@+id/ivBackground"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
+            android:contentDescription="@string/content_description_game"
             android:scaleType="centerCrop"
             android:src="@drawable/whoisthatpokemon"
             app:layout_constraintBottom_toTopOf="@+id/guideline"
@@ -35,6 +36,7 @@
             android:layout_marginStart="@dimen/margin_medium"
             android:layout_marginTop="@dimen/margin_medium"
             android:layout_marginBottom="@dimen/margin_medium"
+            android:contentDescription="@string/content_description_ivImage"
             android:src="@drawable/pikachu"
             app:layout_constraintBottom_toBottomOf="@+id/ivBackground"
             app:layout_constraintEnd_toStartOf="@+id/guideline3"
@@ -79,7 +81,7 @@
             android:layout_marginStart="@dimen/margin_large"
             android:layout_marginTop="@dimen/margin_medium"
             android:layout_marginEnd="@dimen/margin_large"
-            app:endIconMode="clear_text"
+            app:endIconMode="none"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ivBackground">
@@ -90,6 +92,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_game"
                 android:imeOptions="actionDone"
+                android:inputType="textNoSuggestions|textCapSentences"
                 android:singleLine="true" />
         </com.google.android.material.textfield.TextInputLayout>
 

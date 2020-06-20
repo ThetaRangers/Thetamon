@@ -3,6 +3,8 @@ package it.thetarangers.thetadex.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -151,6 +153,18 @@ public class PokedexActivity extends AppCompatActivity {
         holder.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
     }
 
+    public void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(this);
+        }
+        if (imm != null)
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
     public interface OnActivityResultCallback {
         void onActivityResultCallback(int requestCode, int resultCode, @Nullable Intent data);
     }
@@ -196,6 +210,9 @@ public class PokedexActivity extends AppCompatActivity {
 
             // Commit Transaction
             switchFragment(newFragment);
+
+            // Close keyboard if open
+            hideKeyboard();
 
             // Close drawer
             drawerLayout.closeDrawer(GravityCompat.START);

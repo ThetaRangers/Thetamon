@@ -91,4 +91,5 @@
     <string name="content_description_ivDamageClass">Immagine del tipo di danno della mossa</string>
     <string name="content_description_ivExpand">Bottono di espandi e collassa</string>
     <string name="error_storage">L\'applicazione necessita di memoria esterna per scaricare le risorse</string>
+    <string name="content_description_game">Sfondo Who\'s that Pokémon</string>
 </resources>

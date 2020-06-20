@@ -17,6 +17,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -93,6 +94,27 @@ public class PokemonDetailActivity extends AppCompatActivity {
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        @SuppressWarnings("unchecked")
+        HashMap<Integer, Boolean> toSend = (HashMap<Integer, Boolean>) result.getSerializableExtra(POKEMONS);
+        if (toSend == null) {
+            toSend = new HashMap<>();
+        }
+        toSend.put(pokemon.getId(), pokemon.getFavorite());
+        outState.putSerializable(POKEMONS, toSend);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        @SuppressWarnings("unchecked")
+        HashMap<Integer, Boolean> pokemons = (HashMap<Integer, Boolean>) savedInstanceState.getSerializable(POKEMONS);
+        result.putExtra(POKEMONS, pokemons);
+        setResult(RESULT_OK, result);
+        super.onRestoreInstanceState(savedInstanceState);
     }
 
     private void updateIntent() {
