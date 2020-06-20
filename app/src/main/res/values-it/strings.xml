@@ -90,4 +90,5 @@
     <string name="content_description_ivAnim">Animazione di caricamento</string>
     <string name="content_description_ivDamageClass">Immagine del tipo di danno della mossa</string>
     <string name="content_description_ivExpand">Bottono di espandi e collassa</string>
+    <string name="error_storage">L\'applicazione necessita di memoria esterna per scaricare le risorse</string>
 </resources>

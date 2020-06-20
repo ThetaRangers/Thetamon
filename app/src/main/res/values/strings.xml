@@ -57,7 +57,7 @@
     <string name="evo_happiness">at happiness</string>
     <string name="evo_beauty">at beauty</string>
     <string name="evo_affection">at affection</string>
-    <string name="evo_held_item">helding item</string>
+    <string name="evo_held_item">holding item</string>
     <string name="evo_item">item</string>
     <string name="evo_time_of_day">time of day</string>
     <string name="evo_known_type_move">knowing a move of type</string>
@@ -116,4 +116,5 @@
     <string name="giuseppe" translatable="false">Giuseppe Marseglia</string>
     <string name="content_description_ivExpand">Expand and collapse button</string>
     <string name="content_description_ivDamageClass">Image of the damage type of the move</string>
+    <string name="error_storage">The application needs external storage to download resources</string>
 </resources>

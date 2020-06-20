@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -66,6 +67,11 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
+        // Check for external storage availability
+        if (!isExternalStorageWritable()) {
+            Toast.makeText(this, R.string.error_storage, Toast.LENGTH_LONG).show();
+            finish();
+        }
 
         holder = new Holder();
 
@@ -85,6 +91,10 @@ public class MainActivity extends AppCompatActivity {
         thread = new Thread(new MainActivityRunnable());
         thread.start();
 
+    }
+
+    private boolean isExternalStorageWritable() {
+        return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
     }
 
     // Blocking method
