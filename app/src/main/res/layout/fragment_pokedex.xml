@@ -69,9 +69,7 @@
                     android:layout_gravity="bottom|end"
                     android:layout_margin="@dimen/floating_button_margin"
                     android:clickable="true"
-                    app:backgroundTint="?android:colorPrimary"
-                    app:srcCompat="@drawable/ic_pokeball"
-                    app:tint="@android:color/white" />
+                    android:foreground="@drawable/fab_add_foreground" />
 
             </LinearLayout>
 
