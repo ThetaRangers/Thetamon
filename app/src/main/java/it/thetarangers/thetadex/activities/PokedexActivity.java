@@ -64,12 +64,16 @@ public class PokedexActivity extends AppCompatActivity {
             switchFragment(fragments.get(R.id.item_pokedex));
             checkedItemId = R.id.item_pokedex;
         } else {
+            // Get the attached Fragment
+            checkedItemId = savedInstanceState.getInt(CHECKED_ITEM);
+            Fragment currentFragment = getSupportFragmentManager()
+                    .findFragmentById(R.id.flMain);
+            fragments.put(checkedItemId, currentFragment);
+
             // Restore the state of all fragments
             Bundle helperState = savedInstanceState.getBundle(HELPER);
             assert helperState != null;
             fragmentStateHelper.restoreHelperState(helperState);
-
-            checkedItemId = savedInstanceState.getInt(CHECKED_ITEM);
         }
         holder.navView.setCheckedItem(checkedItemId);
         Objects.requireNonNull(holder.navView.getCheckedItem()).setEnabled(false);
