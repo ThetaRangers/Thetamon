@@ -42,7 +42,7 @@
                     android:id="@+id/fabSearch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
+                    android:layout_marginBottom="12dp"
                     android:foreground="@drawable/fab_search_foreground"
                     app:fabSize="mini" />
 
@@ -50,7 +50,7 @@
                     android:id="@+id/fabFilter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
+                    android:layout_marginBottom="12dp"
                     android:foreground="@drawable/fab_filter_foreground"
                     app:fabSize="mini" />
 
@@ -58,7 +58,7 @@
                     android:id="@+id/fabReset"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
+                    android:layout_marginBottom="12dp"
                     android:foreground="@drawable/fab_reset_foreground"
                     app:fabSize="mini" />
 
@@ -67,7 +67,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|end"
-                    android:layout_margin="@dimen/floating_button_margin"
+                    android:layout_marginBottom="@dimen/floating_button_margin"
+                    android:layout_marginEnd="@dimen/floating_button_margin"
+                    android:layout_marginStart="@dimen/floating_button_margin"
                     android:clickable="true"
                     android:foreground="@drawable/fab_add_foreground" />
 
